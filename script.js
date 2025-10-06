@@ -24,39 +24,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function sendMessage() {
+    function getApiBaseUrl() {
+        const isFile = location.protocol === 'file:';
+        if (isFile) return 'http://localhost:3001';
+        // If served from a different port than backend, prefer backend 3001
+        if (location.port && location.port !== '3001') return 'http://localhost:3001';
+        return '';
+    }
+
+    async function sendMessage() {
         const messageText = userInput.value.trim();
         if (messageText === '') return;
 
         appendMessage(messageText, 'user');
         userInput.value = '';
-        aiMessage.innerText = '...'; // Thinking indicator
+        aiMessage.innerText = '...';
+        sendBtn.disabled = true;
 
-        const API_KEY = GEMINI_API_KEY;
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${API_KEY}`;
+        try {
+            const response = await fetch(`${getApiBaseUrl()}/api/chat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: messageText })
+            });
 
-        fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{
-                        text: messageText
-                    }]
-                }]
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            const aiResponse = data.candidates[0].content.parts[0].text;
-            appendMessage(aiResponse, 'ai');
-        })
-        .catch(error => {
+            if (!response.ok) {
+                const errText = await response.text().catch(() => '');
+                throw new Error(`HTTP ${response.status} ${errText}`);
+            }
+
+            const data = await response.json();
+            appendMessage(data.reply || 'No reply', 'ai');
+        } catch (error) {
             console.error('Error:', error);
             appendMessage('Sorry, something went wrong.', 'ai');
-        });
+        } finally {
+            sendBtn.disabled = false;
+        }
     }
 
     function appendMessage(text, sender) {
