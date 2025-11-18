@@ -48,11 +48,30 @@ This portfolio is designed to be an engaging way to learn more about Manish Bisw
     ```bash
     npm start
     ```
-6.  **Open your browser and navigate to `http://localhost:3001`**
+6.  **Verify the server is healthy (optional):**
+    ```bash
+    curl http://localhost:3001/health
+    # { "ok": true }
+    ```
+7.  **Open the app:**
+    - Option A: Open `http://localhost:3001/index.html` in your browser (served by the backend)
+    - Option B: Open `index.html` directly from the filesystem; the frontend will call `http://localhost:3001/api/chat` automatically
 
 ## Usage
 
 Once the application is running, you can interact with the AI by typing a message in the chat input and clicking "Send" or pressing Enter. The AI will respond to your questions and comments.
+
+## Troubleshooting
+
+- **No response / error:**
+  - Ensure `GEMINI_API_KEY` is set in `.env` and the server was restarted.
+  - Check the server logs where you ran `npm start`.
+  - Test the backend: `curl -X POST http://localhost:3001/api/chat -H 'Content-Type: application/json' -d '{"message":"Hello"}'`
+- **CORS / Mixed Content issues:**
+  - Always use `http://localhost:3001` for the backend in local dev.
+  - The server enables CORS globally.
+- **Port already in use:**
+  - Set a different port: `PORT=4001 npm start`, then visit `http://localhost:4001/index.html`. If opening `index.html` directly from file, it will still call `http://localhost:3001` by default, so prefer opening via the server when using a custom port.
 
 ## Screenshots
 
