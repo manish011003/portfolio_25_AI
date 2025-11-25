@@ -8,34 +8,135 @@
 </head>
 <body>
     <header>
-        <h1>Manish Biswas</h1>
-        <p>AI Version of Manish Biswas</p>
+        <nav id="top-nav">
+            <div class="nav-left">
+                <div class="brand">Manish Biswas</div>
+                <div class="tagline">AI Engineer & Product Management Aspirant</div>
+            </div>
+            <div class="nav-center">
+                <a href="#chat" class="nav-link">AI Chat</a>
+                <a href="#work" class="nav-link">Case Studies</a>
+                <a href="#contact" class="nav-link">Contact</a>
+        </nav>
     </header>
 
     <main>
-        <div id="game-container">
-            <div id="character-container">
-                <div id="ai-bubble-container">
-                    <div id="ai-message" class="message ai-message"></div>
+        <section id="chat">
+            <div id="game-container">
+                <div id="character-container">
+                    <div id="ai-bubble-container">
+                        <div id="ai-message" class="message ai-message"></div>
+                    </div>
+                    <div id="avatar-container">
+                        <img alt="8-bit avatar" id="avatar">
+                    </div>
                 </div>
-                <div id="avatar-container">
-                    <img alt="8-bit avatar" id="avatar">
+                <div id="chat-log-container">
+                    <div id="chat-log"></div>
+                    <div id="prompt-suggestions">
+                        <span class="prompt-chip" data-prompt="Tell me about yourself">Tell me about yourself</span>
+                        <span class="prompt-chip" data-prompt="What are your hobbies?">What are your hobbies?</span>
+                        <span class="prompt-chip" data-prompt="What are your main skills?">What are your main skills?</span>
+                        <span class="prompt-chip" data-prompt="Tell me about your projects">Tell me about your projects</span>
+                    </div>
+                    <div id="input-container">
+                        <input type="text" id="user-input" placeholder="Chat with my AI self...">
+                        <button id="send-btn">Send</button>
+                    </div>
                 </div>
             </div>
-            <div id="chat-log-container">
-                <div id="chat-log"></div>
-                <div id="input-container">
-                    <input type="text" id="user-input" placeholder="Chat with my AI self...">
-                    <button id="send-btn">Send</button>
+        </section>
+
+        <section id="work">
+            <h2>Case Studies & Projects</h2>
+            <p class="section-subtitle">A blend of product thinking and engineering execution.</p>
+            <h3 class="work-row-title">Product & Case Studies</h3>
+            <div class="work-row-scroll">
+                <div class="work-row" id="case-row">
+                    <article class="work-card" data-work-id="ai-task">
+                        <div class="work-thumb">AI</div>
+                        <h3>AI Task Management System</h3>
+                        <p>AI-powered productivity system with GPT-4o and cloud infra.</p>
+                        <button class="work-open-btn">View case study</button>
+                    </article>
+                    <article class="work-card" data-work-id="ewaste">
+                        <div class="work-thumb">E♻</div>
+                        <h3>E-Waste Commerce Platform</h3>
+                        <p>Smart India Hackathon finalist solution for e-waste recycling.</p>
+                        <button class="work-open-btn">View case study</button>
+                    </article>
+                    <article class="work-card" data-work-id="claro">
+                        <div class="work-thumb">B2B</div>
+                        <h3>Claro AI Analytics</h3>
+                        <p>LLM-powered analytics platform with real-time dashboards.</p>
+                        <button class="work-open-btn">View case study</button>
+                    </article>
+                    <!-- Placeholder for more product/PM case studies -->
+                    <article class="work-card">
+                        <div class="work-thumb">PM</div>
+                        <h3>More case studies coming soon</h3>
+                        <p>Exploring product strategy, discovery, and experimentation.</p>
+                    </article>
                 </div>
+            </div>
+
+            <h3 class="work-row-title">Engineering Projects</h3>
+            <div class="work-row-scroll">
+                <div class="work-row" id="project-row">
+                    <article class="work-card">
+                        <div class="work-thumb">DS</div>
+                        <h3>Distributed Systems Server</h3>
+                        <p>High-performance concurrent server in Java/C++ on Linux.</p>
+                    </article>
+                    <article class="work-card">
+                        <div class="work-thumb">CP</div>
+                        <h3>Competitive Programming</h3>
+                        <p>250+ DSA problems solved across LeetCode and CodeChef.</p>
+                    </article>
+                    <article class="work-card">
+                        <div class="work-thumb">GDSC</div>
+                        <h3>GDSC Workshops</h3>
+                        <p>Led 15+ sprints on DSA, system design, and scalable apps.</p>
+                    </article>
+                    <!-- Placeholder for more engineering projects -->
+                    <article class="work-card">
+                        <div class="work-thumb">++</div>
+                        <h3>More projects soon</h3>
+                        <p>New systems, infra, and AI tooling experiments.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Contact</h2>
+            <p class="section-subtitle">Open to product and engineering roles, internships, and collaborations.</p>
+            <div id="contact-grid">
+                <div class="contact-card">
+                    <h3>Say hi</h3>
+                    <p><a href="mailto:me@manishb.in">me@manishb.in</a></p>
+                    <p><a href="tel:+919820589676">+91-9820589676</a></p>
+                </div>
+                <div class="contact-card">
+                    <h3>Portfolio</h3>
+                    <p><a href="https://manishb.in" target="_blank" rel="noopener noreferrer">manishb.in</a></p>
+                    <p><a href="https://github.com/manish011003" target="_blank" rel="noopener noreferrer">GitHub: manish011003</a></p>
+                </div>
+                <div class="contact-card">
+                    <h3>Networking</h3>
+                    <p><a href="https://linkedin.com/in/manish-biswas" target="_blank" rel="noopener noreferrer">LinkedIn: manish-biswas</a></p>
+                </div>
+            </div>
+        </section>
+
+        <div id="work-panel" class="panel-closed">
+            <div id="work-panel-inner">
+                <button id="work-panel-close" aria-label="Close case study">&times;</button>
+                <h3 id="work-panel-title"></h3>
+                <div id="work-panel-body"></div>
             </div>
         </div>
     </main>
-
-    <footer>
-        <a href="https://github.com/" class="social-link">GitHub</a>
-        <a href="https://linkedin.com/in/" class="social-link">LinkedIn</a>
-    </footer>
 
     <script src="script.js"></script>
 </body>

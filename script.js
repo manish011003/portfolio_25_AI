@@ -24,6 +24,97 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Prompt suggestions (chips)
+    const promptContainer = document.getElementById('prompt-suggestions');
+    if (promptContainer) {
+        promptContainer.addEventListener('click', (e) => {
+            const target = e.target;
+            if (target.classList.contains('prompt-chip')) {
+                const promptText = target.getAttribute('data-prompt') || target.textContent;
+                userInput.value = promptText;
+                sendMessage();
+            }
+        });
+    }
+
+    // Work / case studies slide-in panel
+    const workDetails = {
+        'ai-task': {
+            title: 'AI-Powered Task Management System',
+            body: `
+I built an AI-powered task management system that combines GPT-4o with a scalable cloud backend.
+
+From a **product** perspective, the goal was to reduce cognitive load for users by letting them describe work in natural language and automatically structuring tasks, priorities, and deadlines.
+
+From an **engineering** perspective, I designed a distributed architecture with FastAPI, WebSockets, and cloud infrastructure that supports 100+ concurrent users with low latency. I also used ML-based context understanding to reduce API costs while keeping the experience smooth.
+            `
+        },
+        'ewaste': {
+            title: 'E-Waste Recycling E-Commerce Platform',
+            body: `
+This case study comes from my Smart India Hackathon project, where we built a commerce platform for e-waste recycling.
+
+As a **product** problem, the challenge was to connect consumers, collection centers, and recyclers in a way that feels like a familiar e-commerce experience, while surfacing the environmental impact.
+
+On the **system side**, we used Node.js, MongoDB, and microservices to support thousands of users and hundreds of facilities, with optimised supply-chain flows, payment integration, and analytics for predicting recyclable material value.
+            `
+        },
+        'claro': {
+            title: 'Claro AI Analytics Platform',
+            body: `
+At Claro AI, I worked on an AI-powered analytics platform that serves 1000+ users with real-time dashboards.
+
+From a **product management** angle, the focus was on making complex data accessible to business users by combining LLM-powered insights with familiar dashboard patterns.
+
+On the **engineering** side, I helped design and ship cloud-native microservices with Docker, fast APIs, and streaming data pipelines that process tens of gigabytes of data per day while maintaining high uptime.
+            `
+        }
+    };
+
+    const workPanel = document.getElementById('work-panel');
+    const workPanelTitle = document.getElementById('work-panel-title');
+    const workPanelBody = document.getElementById('work-panel-body');
+    const workPanelClose = document.getElementById('work-panel-close');
+
+    function openWorkPanel(id) {
+        const detail = workDetails[id];
+        if (!detail || !workPanel || !workPanelTitle || !workPanelBody) return;
+        workPanelTitle.textContent = detail.title;
+        workPanelBody.textContent = '';
+        const lines = detail.body.trim().split('\n');
+        lines.forEach(line => {
+            const p = document.createElement('p');
+            p.textContent = line.trim();
+            if (p.textContent.length > 0) {
+                workPanelBody.appendChild(p);
+            }
+        });
+        workPanel.classList.remove('panel-closed');
+        workPanel.classList.add('panel-open');
+    }
+
+    function closeWorkPanel() {
+        if (!workPanel) return;
+        workPanel.classList.remove('panel-open');
+        workPanel.classList.add('panel-closed');
+    }
+
+    const workCards = document.querySelectorAll('.work-card');
+    workCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            const id = card.getAttribute('data-work-id');
+            if (!id) return;
+            // Avoid double-firing when clicking the button by stopping propagation there
+            if (e.target.classList.contains('work-open-btn') || e.currentTarget === card) {
+                openWorkPanel(id);
+            }
+        });
+    });
+
+    if (workPanelClose) {
+        workPanelClose.addEventListener('click', closeWorkPanel);
+    }
+
     function getApiBaseUrl() {
         const isFile = location.protocol === 'file:';
         if (isFile) return 'http://localhost:3001';

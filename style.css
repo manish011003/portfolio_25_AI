@@ -12,10 +12,47 @@ body {
 }
 
 header {
-    text-align: center;
-    padding: 20px;
-    border-bottom: 4px solid #ccc;
     width: 100%;
+    border-bottom: 4px solid #ccc;
+    box-sizing: border-box;
+}
+
+#top-nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.nav-left .brand {
+    font-size: 1.1em;
+}
+
+.tagline {
+    font-size: 0.6em;
+    margin-top: 4px;
+}
+
+.nav-center {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.nav-link {
+    color: #333;
+    text-decoration: none;
+    border: 3px solid #ccc;
+    padding: 6px 8px;
+    box-shadow: 3px 3px 0px #999;
+}
+
+.nav-right {
+    display: flex;
+    gap: 10px;
 }
 
 main {
@@ -23,8 +60,24 @@ main {
     width: 100%;
     max-width: 1200px;
     display: flex;
+    flex-direction: column;
+    gap: 32px;
     padding: 20px;
     box-sizing: border-box;
+}
+
+section {
+    width: 100%;
+}
+
+h2 {
+    font-size: 1em;
+    margin-bottom: 10px;
+}
+
+.section-subtitle {
+    font-size: 0.6em;
+    margin-bottom: 16px;
 }
 
 #game-container {
@@ -64,6 +117,8 @@ main {
     position: relative;
     box-shadow: 4px 4px 0px #ccc;
     min-height: 50px;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 .ai-message::after {
@@ -90,6 +145,26 @@ main {
     margin-bottom: 20px;
     overflow-y: auto;
     background-color: #fff;
+}
+
+#prompt-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.prompt-chip {
+    background-color: #e6e6e6;
+    border: 3px solid #ccc;
+    padding: 8px 10px;
+    cursor: pointer;
+    font-size: 0.7em;
+    box-shadow: 3px 3px 0px #ccc;
+}
+
+.prompt-chip:hover {
+    background-color: #d0d0d0;
 }
 
 .message {
@@ -146,6 +221,125 @@ footer {
     padding: 10px;
 }
 
+/* Work / case studies */
+
+.work-row-title {
+    font-size: 0.8em;
+    margin: 16px 0 8px;
+}
+
+.work-row-scroll {
+    border: 4px solid #ccc;
+    padding: 8px;
+    margin-bottom: 8px;
+    background-color: #fff;
+    box-shadow: 4px 4px 0px #ccc;
+    overflow-x: auto;
+}
+
+.work-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
+}
+
+.work-card {
+    flex: 0 0 230px;
+    border: 4px solid #ccc;
+    padding: 12px;
+    box-shadow: 4px 4px 0px #ccc;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.work-thumb {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #333;
+    background-color: #e6e6e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    margin-bottom: 4px;
+}
+
+.work-open-btn {
+    margin-top: auto;
+    align-self: flex-start;
+    background-color: #333;
+    color: #fff;
+    border: 4px solid #333;
+    padding: 6px 10px;
+    font-family: 'Press Start 2P', cursive;
+    cursor: pointer;
+    box-shadow: 3px 3px 0px #999;
+    font-size: 0.6em;
+}
+
+/* Sliding work panel */
+
+#work-panel {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, 100%);
+    width: 100%;
+    max-width: 960px;
+    z-index: 1000;
+    transition: transform 0.3s ease-out;
+}
+
+#work-panel-inner {
+    background-color: #fff;
+    border: 4px solid #333;
+    box-shadow: 6px -6px 0px #999;
+    padding: 16px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+#work-panel.panel-open {
+    transform: translate(-50%, 0);
+}
+
+#work-panel-close {
+    background: #e6e6e6;
+    border: 3px solid #333;
+    font-family: 'Press Start 2P', cursive;
+    cursor: pointer;
+    padding: 4px 8px;
+    float: right;
+}
+
+#work-panel-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* Contact */
+
+#contact-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.contact-card {
+    flex: 1 1 220px;
+    border: 4px solid #ccc;
+    padding: 12px;
+    box-shadow: 4px 4px 0px #ccc;
+    background-color: #fff;
+    font-size: 0.7em;
+}
+
+.contact-card a {
+    color: #333;
+}
+
 /* Scrollbar Styles */
 ::-webkit-scrollbar {
     width: 10px;
@@ -176,5 +370,14 @@ footer {
     #avatar {
         width: 200px;
         height: 200px;
+    }
+
+    #top-nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #work-panel-inner {
+        max-height: 70vh;
     }
 }
