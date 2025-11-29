@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Manish Biswas</title>
+    <link rel="stylesheet" href="blog.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="blog-header">
+        <nav class="blog-nav">
+            <div class="nav-brand">
+                <a href="index.html">Manish Biswas</a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Portfolio</a>
+                <a href="pm-portfolio.html">PM Portfolio</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="blog-main">
+        <div class="blog-hero">
+            <h1 class="blog-title">Thoughts & Insights</h1>
+            <p class="blog-subtitle">Exploring AI, product management, and engineering</p>
+        </div>
+
+        <div class="blog-container">
+            <div class="blog-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="ai">AI/ML</button>
+                <button class="filter-btn" data-filter="pm">Product</button>
+                <button class="filter-btn" data-filter="engineering">Engineering</button>
+            </div>
+
+            <div class="blog-posts">
+                <article class="blog-post" data-category="ai">
+                    <div class="post-image">
+                        <div class="post-image-placeholder"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-category">AI/ML</span>
+                            <span class="post-date">Dec 2024</span>
+                        </div>
+                        <h2 class="post-title">Building AI Agents with WebSockets</h2>
+                        <p class="post-excerpt">Exploring how to create real-time AI agents using FastAPI WebSockets and GPT models for natural language task management...</p>
+                        <a href="#" class="read-more">Read more →</a>
+                    </div>
+                </article>
+
+                <article class="blog-post" data-category="pm">
+                    <div class="post-image">
+                        <div class="post-image-placeholder"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-category">Product</span>
+                            <span class="post-date">Nov 2024</span>
+                        </div>
+                        <h2 class="post-title">From Engineering to Product Thinking</h2>
+                        <p class="post-excerpt">My journey transitioning from building features to thinking about user problems, market fit, and product strategy...</p>
+                        <a href="#" class="read-more">Read more →</a>
+                    </div>
+                </article>
+
+                <article class="blog-post" data-category="engineering">
+                    <div class="post-image">
+                        <div class="post-image-placeholder"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-category">Engineering</span>
+                            <span class="post-date">Oct 2024</span>
+                        </div>
+                        <h2 class="post-title">Real-Time Pose Estimation with MediaPipe</h2>
+                        <p class="post-excerpt">Building a push-up counter using computer vision: lessons learned from angle calculations, form validation, and live feedback...</p>
+                        <a href="#" class="read-more">Read more →</a>
+                    </div>
+                </article>
+
+                <article class="blog-post" data-category="ai">
+                    <div class="post-image">
+                        <div class="post-image-placeholder"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-category">AI/ML</span>
+                            <span class="post-date">Sep 2024</span>
+                        </div>
+                        <h2 class="post-title">LLM Integration Patterns</h2>
+                        <p class="post-excerpt">Best practices for integrating large language models into production applications, from prompt engineering to cost optimization...</p>
+                        <a href="#" class="read-more">Read more →</a>
+                    </div>
+                </article>
+
+                <article class="blog-post" data-category="pm">
+                    <div class="post-image">
+                        <div class="post-image-placeholder"></div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-category">Product</span>
+                            <span class="post-date">Aug 2024</span>
+                        </div>
+                        <h2 class="post-title">Case Study: E-Waste Management Platform</h2>
+                        <p class="post-excerpt">How we built a full-stack solution for SIH 2023, balancing user needs, technical constraints, and environmental impact...</p>
+                        <a href="#" class="read-more">Read more →</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <footer class="blog-footer">
+        <p>&copy; 2024 Manish Biswas. All rights reserved.</p>
+    </footer>
+
+    <script src="blog.js"></script>
+</body>
+</html>
+
