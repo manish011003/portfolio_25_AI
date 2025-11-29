@@ -45,9 +45,6 @@ header {
 .nav-link {
     color: #333;
     text-decoration: none;
-    border: 3px solid #ccc;
-    padding: 6px 8px;
-    box-shadow: 3px 3px 0px #999;
 }
 
 .nav-right {
@@ -55,6 +52,29 @@ header {
     gap: 10px;
 }
 
+/* External link styling is now handled by box-button */
+
+/* External CTA section */
+#external-cta {
+    border: 4px solid #ccc;
+    padding: 16px;
+    background-color: #fff;
+    box-shadow: 4px 4px 0px #ccc;
+    text-align: center;
+}
+
+.cta-buttons {
+    margin: 16px 0;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-note {
+    font-size: 0.6em;
+    color: #555;
+}
 main {
     flex: 1;
     width: 100%;
@@ -196,14 +216,59 @@ h2 {
     font-size: 1em;
 }
 
-#send-btn {
-    background-color: #333;
-    color: #fff;
-    border: 4px solid #333;
-    padding: 10px 20px;
-    font-family: 'Press Start 2P', cursive;
+/* Box Button Style - Applied to all buttons */
+.box-button {
     cursor: pointer;
-    box-shadow: 4px 4px 0px #999;
+    border: 4px solid black;
+    background-color: gray;
+    padding-bottom: 10px;
+    transition: 0.1s ease-in-out;
+    user-select: none;
+    display: inline-block;
+}
+
+.box-button .button {
+    background-color: #dddddd;
+    border: 4px solid #fff;
+    padding: 3px 8px;
+    font-family: 'Press Start 2P', cursive;
+    border: none;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    color: #333;
+    margin: 0;
+    display: block;
+    text-decoration: none;
+}
+
+.box-button .button span {
+    font-size: 1.2em;
+    letter-spacing: 1px;
+    display: block;
+}
+
+/* Smaller font for nav links */
+.nav-center .box-button .button span,
+.nav-right .box-button .button span {
+    font-size: 0.7em;
+}
+
+/* Adjust font size for footer CTA buttons */
+.cta-buttons .box-button .button span {
+    font-size: 0.8em;
+}
+
+.box-button:active {
+    padding: 0;
+    margin-bottom: 10px;
+    transform: translateY(10px);
+}
+
+#send-btn {
+    font-family: 'Press Start 2P', cursive;
+    color: #333;
 }
 
 footer {
@@ -244,7 +309,7 @@ footer {
 }
 
 .work-card {
-    flex: 0 0 230px;
+    flex: 0 0 280px;
     border: 4px solid #ccc;
     padding: 12px;
     box-shadow: 4px 4px 0px #ccc;
@@ -266,17 +331,133 @@ footer {
     margin-bottom: 4px;
 }
 
-.work-open-btn {
+.work-card-buttons {
+    display: flex;
+    gap: 8px;
     margin-top: auto;
-    align-self: flex-start;
-    background-color: #333;
-    color: #fff;
-    border: 4px solid #333;
-    padding: 6px 10px;
+    flex-wrap: wrap;
+}
+
+.work-card-buttons .box-button {
+    flex: 1;
+    min-width: 100px;
+}
+
+.work-open-btn {
     font-family: 'Press Start 2P', cursive;
-    cursor: pointer;
-    box-shadow: 3px 3px 0px #999;
+    color: #333;
+}
+
+.work-open-btn span {
     font-size: 0.6em;
+}
+
+.github-btn {
+    font-family: 'Press Start 2P', cursive;
+    color: #333;
+}
+
+.github-btn span {
+    font-size: 0.6em;
+}
+
+/* Tech Tags */
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 8px 0;
+}
+
+.tech-tag {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.5em;
+    padding: 4px 8px;
+    border: 2px solid #333;
+    display: inline-block;
+    color: #fff;
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+}
+
+.tech-tag.python {
+    background-color: #3776ab;
+    border-color: #2d5a87;
+}
+
+.tech-tag.fastapi {
+    background-color: #009688;
+    border-color: #00796b;
+}
+
+.tech-tag.websocket {
+    background-color: #ff6b35;
+    border-color: #e55a2b;
+}
+
+.tech-tag.openai {
+    background-color: #10a37f;
+    border-color: #0d8a6b;
+}
+
+.tech-tag.docker {
+    background-color: #2496ed;
+    border-color: #1e7fc4;
+}
+
+.tech-tag.opencv {
+    background-color: #5c3ee8;
+    border-color: #4a2fb8;
+}
+
+.tech-tag.mediapipe {
+    background-color: #4285f4;
+    border-color: #3367d6;
+}
+
+.tech-tag.numpy {
+    background-color: #4dabcf;
+    border-color: #3d8ba8;
+}
+
+.tech-tag.javascript {
+    background-color: #f7df1e;
+    border-color: #d4c019;
+    color: #333;
+    text-shadow: none;
+}
+
+.tech-tag.nodejs {
+    background-color: #339933;
+    border-color: #2a7a2a;
+}
+
+.tech-tag.express {
+    background-color: #000000;
+    border-color: #333;
+}
+
+.tech-tag.mongodb {
+    background-color: #47a248;
+    border-color: #3a823b;
+}
+
+.tech-tag.html {
+    background-color: #e34c26;
+    border-color: #b83a1e;
+}
+
+.tech-tag.react {
+    background-color: #61dafb;
+    border-color: #4fb3d1;
+    color: #333;
+    text-shadow: none;
+}
+
+.tech-tag.firebase {
+    background-color: #ffca28;
+    border-color: #d4a321;
+    color: #333;
+    text-shadow: none;
 }
 
 /* Sliding work panel */
@@ -306,12 +487,13 @@ footer {
 }
 
 #work-panel-close {
-    background: #e6e6e6;
-    border: 3px solid #333;
     font-family: 'Press Start 2P', cursive;
-    cursor: pointer;
-    padding: 4px 8px;
+    color: #333;
     float: right;
+}
+
+#work-panel-close span {
+    font-size: 1em;
 }
 
 #work-panel-title {
@@ -357,6 +539,344 @@ footer {
     background: #555;
 }
 
+/* Loading Ghost Animation */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(247, 247, 247, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+}
+
+.loading-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#ghost {
+    position: relative;
+    scale: 0.8;
+}
+
+#red {
+    animation: upNDown infinite 0.5s;
+    position: relative;
+    width: 140px;
+    height: 140px;
+    display: grid;
+    grid-template-columns: repeat(14, 1fr);
+    grid-template-rows: repeat(14, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    grid-template-areas:
+        "a1  a2  a3  a4  a5  top0  top0  top0  top0  a10 a11 a12 a13 a14"
+        "b1  b2  b3  top1 top1 top1 top1 top1 top1 top1 top1 b12 b13 b14"
+        "c1 c2 top2 top2 top2 top2 top2 top2 top2 top2 top2 top2 c13 c14"
+        "d1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 d14"
+        "e1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 e14"
+        "f1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 f14"
+        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+        "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+        "st0 st0 an4 st1 an7 st2 an10 an10 st3 an13 st4 an16 st5 st5"
+        "an1 an2 an3 an5 an6 an8 an9 an9 an11 an12 an14 an15 an17 an18";
+}
+
+@keyframes upNDown {
+    0%,
+    49% {
+        transform: translateY(0px);
+    }
+    50%,
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+#top0,
+#top1,
+#top2,
+#top3,
+#top4,
+#st0,
+#st1,
+#st2,
+#st3,
+#st4,
+#st5 {
+    background-color: red;
+}
+
+#top0 {
+    grid-area: top0;
+}
+
+#top1 {
+    grid-area: top1;
+}
+
+#top2 {
+    grid-area: top2;
+}
+
+#top3 {
+    grid-area: top3;
+}
+
+#top4 {
+    grid-area: top4;
+}
+
+#st0 {
+    grid-area: st0;
+}
+
+#st1 {
+    grid-area: st1;
+}
+
+#st2 {
+    grid-area: st2;
+}
+
+#st3 {
+    grid-area: st3;
+}
+
+#st4 {
+    grid-area: st4;
+}
+
+#st5 {
+    grid-area: st5;
+}
+
+#an1 {
+    grid-area: an1;
+    animation: flicker0 infinite 0.5s;
+}
+
+#an18 {
+    grid-area: an18;
+    animation: flicker0 infinite 0.5s;
+}
+
+#an2 {
+    grid-area: an2;
+    animation: flicker1 infinite 0.5s;
+}
+
+#an17 {
+    grid-area: an17;
+    animation: flicker1 infinite 0.5s;
+}
+
+#an3 {
+    grid-area: an3;
+    animation: flicker1 infinite 0.5s;
+}
+
+#an16 {
+    grid-area: an16;
+    animation: flicker1 infinite 0.5s;
+}
+
+#an4 {
+    grid-area: an4;
+    animation: flicker1 infinite 0.5s;
+}
+
+#an15 {
+    grid-area: an15;
+    animation: flicker1 infinite 0.5s;
+}
+
+#an6 {
+    grid-area: an6;
+    animation: flicker0 infinite 0.5s;
+}
+
+#an12 {
+    grid-area: an12;
+    animation: flicker0 infinite 0.5s;
+}
+
+#an7 {
+    grid-area: an7;
+    animation: flicker0 infinite 0.5s;
+}
+
+#an13 {
+    grid-area: an13;
+    animation: flicker0 infinite 0.5s;
+}
+
+#an9 {
+    grid-area: an9;
+    animation: flicker1 infinite 0.5s;
+}
+
+#an10 {
+    grid-area: an10;
+    animation: flicker1 infinite 0.5s;
+}
+
+#an8 {
+    grid-area: an8;
+    animation: flicker0 infinite 0.5s;
+}
+
+#an11 {
+    grid-area: an11;
+    animation: flicker0 infinite 0.5s;
+}
+
+@keyframes flicker0 {
+    0%,
+    49% {
+        background-color: red;
+    }
+    50%,
+    100% {
+        background-color: transparent;
+    }
+}
+
+@keyframes flicker1 {
+    0%,
+    49% {
+        background-color: transparent;
+    }
+    50%,
+    100% {
+        background-color: red;
+    }
+}
+
+#eye {
+    width: 40px;
+    height: 50px;
+    position: absolute;
+    top: 30px;
+    left: 10px;
+}
+
+#eye::before {
+    content: "";
+    background-color: white;
+    width: 20px;
+    height: 50px;
+    transform: translateX(10px);
+    display: block;
+    position: absolute;
+}
+
+#eye::after {
+    content: "";
+    background-color: white;
+    width: 40px;
+    height: 30px;
+    transform: translateY(10px);
+    display: block;
+    position: absolute;
+}
+
+#eye1 {
+    width: 40px;
+    height: 50px;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+
+#eye1::before {
+    content: "";
+    background-color: white;
+    width: 20px;
+    height: 50px;
+    transform: translateX(10px);
+    display: block;
+    position: absolute;
+}
+
+#eye1::after {
+    content: "";
+    background-color: white;
+    width: 40px;
+    height: 30px;
+    transform: translateY(10px);
+    display: block;
+    position: absolute;
+}
+
+#pupil {
+    width: 20px;
+    height: 20px;
+    background-color: blue;
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    z-index: 1;
+    animation: eyesMovement infinite 3s;
+}
+
+#pupil1 {
+    width: 20px;
+    height: 20px;
+    background-color: blue;
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    z-index: 1;
+    animation: eyesMovement infinite 3s;
+}
+
+@keyframes eyesMovement {
+    0%,
+    49% {
+        transform: translateX(0px);
+    }
+    50%,
+    99% {
+        transform: translateX(10px);
+    }
+    100% {
+        transform: translateX(0px);
+    }
+}
+
+#shadow {
+    background-color: black;
+    width: 140px;
+    height: 140px;
+    position: absolute;
+    border-radius: 50%;
+    transform: rotateX(80deg);
+    filter: blur(20px);
+    top: 80%;
+    animation: shadowMovement infinite 0.5s;
+}
+
+@keyframes shadowMovement {
+    0%,
+    49% {
+        opacity: 0.5;
+    }
+    50%,
+    100% {
+        opacity: 0.2;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     #game-container {
@@ -379,5 +899,26 @@ footer {
 
     #work-panel-inner {
         max-height: 70vh;
+    }
+
+    .work-card {
+        flex: 0 0 250px;
+    }
+
+    .tech-tags {
+        gap: 4px;
+    }
+
+    .tech-tag {
+        font-size: 0.45em;
+        padding: 3px 6px;
+    }
+
+    .work-card-buttons {
+        flex-direction: column;
+    }
+
+    .work-card-buttons .box-button {
+        width: 100%;
     }
 }

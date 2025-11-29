@@ -14,11 +14,68 @@
                 <div class="tagline">AI Engineer & Product Management Aspirant</div>
             </div>
             <div class="nav-center">
-                <a href="#chat" class="nav-link">AI Chat</a>
-                <a href="#work" class="nav-link">Case Studies</a>
-                <a href="#contact" class="nav-link">Contact</a>
+                <div class="box-button">
+                    <a href="#chat" class="nav-link button"><span>AI Chat</span></a>
+                </div>
+                <div class="box-button">
+                    <a href="#work" class="nav-link button"><span>Case Studies</span></a>
+                </div>
+                <div class="box-button">
+                    <a href="#contact" class="nav-link button"><span>Contact</span></a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="box-button">
+                    <a href="#" class="nav-link external-link button" data-link-type="blog"><span>Blog</span></a>
+                </div>
+                <div class="box-button">
+                    <a href="#" class="nav-link external-link button" data-link-type="pm"><span>PM Portfolio</span></a>
+                </div>
+            </div>
         </nav>
     </header>
+
+    <!-- Loading Ghost Animation -->
+    <div id="loading-ghost" class="loading-overlay">
+        <div id="ghost">
+            <div id="red">
+                <div id="pupil"></div>
+                <div id="pupil1"></div>
+                <div id="eye"></div>
+                <div id="eye1"></div>
+                <div id="top0"></div>
+                <div id="top1"></div>
+                <div id="top2"></div>
+                <div id="top3"></div>
+                <div id="top4"></div>
+                <div id="st0"></div>
+                <div id="st1"></div>
+                <div id="st2"></div>
+                <div id="st3"></div>
+                <div id="st4"></div>
+                <div id="st5"></div>
+                <div id="an1"></div>
+                <div id="an2"></div>
+                <div id="an3"></div>
+                <div id="an4"></div>
+                <div id="an5"></div>
+                <div id="an6"></div>
+                <div id="an7"></div>
+                <div id="an8"></div>
+                <div id="an9"></div>
+                <div id="an10"></div>
+                <div id="an11"></div>
+                <div id="an12"></div>
+                <div id="an13"></div>
+                <div id="an14"></div>
+                <div id="an15"></div>
+                <div id="an16"></div>
+                <div id="an17"></div>
+                <div id="an18"></div>
+            </div>
+            <div id="shadow"></div>
+        </div>
+    </div>
 
     <main>
         <section id="chat">
@@ -41,7 +98,9 @@
                     </div>
                     <div id="input-container">
                         <input type="text" id="user-input" placeholder="Chat with my AI self...">
-                        <button id="send-btn">Send</button>
+                        <div class="box-button">
+                            <button id="send-btn" class="button"><span>Send</span></button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -50,59 +109,87 @@
         <section id="work">
             <h2>Case Studies & Projects</h2>
             <p class="section-subtitle">A blend of product thinking and engineering execution.</p>
-            <h3 class="work-row-title">Product & Case Studies</h3>
+            <h3 class="work-row-title">Featured Projects</h3>
             <div class="work-row-scroll">
                 <div class="work-row" id="case-row">
-                    <article class="work-card" data-work-id="ai-task">
-                        <div class="work-thumb">AI</div>
-                        <h3>AI Task Management System</h3>
-                        <p>AI-powered productivity system with GPT-4o and cloud infra.</p>
-                        <button class="work-open-btn">View case study</button>
+                    <article class="work-card" data-work-id="task-manager">
+                        <div class="work-thumb">🤖</div>
+                        <h3>Task Manager Agent</h3>
+                        <p>AI-powered WebSocket agent for natural-language task management with Notion sync.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag python">Python</span>
+                            <span class="tech-tag fastapi">FastAPI</span>
+                            <span class="tech-tag websocket">WebSocket</span>
+                            <span class="tech-tag openai">OpenAI</span>
+                            <span class="tech-tag docker">Docker</span>
+                        </div>
+                        <div class="work-card-buttons">
+                            <div class="box-button">
+                                <button class="work-open-btn button"><span>View details</span></button>
+                            </div>
+                            <div class="box-button">
+                                <a href="https://github.com/manish011003/task-manager-agent" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="work-card" data-work-id="pushup-counter">
+                        <div class="work-thumb">💪</div>
+                        <h3>Push-Up Counter</h3>
+                        <p>Real-time fitness tracking using MediaPipe Pose and OpenCV for form analysis.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag python">Python</span>
+                            <span class="tech-tag opencv">OpenCV</span>
+                            <span class="tech-tag mediapipe">MediaPipe</span>
+                            <span class="tech-tag numpy">NumPy</span>
+                        </div>
+                        <div class="work-card-buttons">
+                            <div class="box-button">
+                                <button class="work-open-btn button"><span>View details</span></button>
+                            </div>
+                            <div class="box-button">
+                                <a href="https://github.com/manish011003/pushup-counter" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
+                            </div>
+                        </div>
                     </article>
                     <article class="work-card" data-work-id="ewaste">
-                        <div class="work-thumb">E♻</div>
-                        <h3>E-Waste Commerce Platform</h3>
-                        <p>Smart India Hackathon finalist solution for e-waste recycling.</p>
-                        <button class="work-open-btn">View case study</button>
+                        <div class="work-thumb">♻️</div>
+                        <h3>Hungry for E-Waste</h3>
+                        <p>Full-stack platform for e-waste management - SIH 2023 finalist solution.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag javascript">JavaScript</span>
+                            <span class="tech-tag nodejs">Node.js</span>
+                            <span class="tech-tag express">Express</span>
+                            <span class="tech-tag mongodb">MongoDB</span>
+                            <span class="tech-tag html">HTML/CSS</span>
+                        </div>
+                        <div class="work-card-buttons">
+                            <div class="box-button">
+                                <button class="work-open-btn button"><span>View details</span></button>
+                            </div>
+                            <div class="box-button">
+                                <a href="https://github.com/manish011003/hungry-for-ewaste" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
+                            </div>
+                        </div>
                     </article>
-                    <article class="work-card" data-work-id="claro">
-                        <div class="work-thumb">B2B</div>
-                        <h3>Claro AI Analytics</h3>
-                        <p>LLM-powered analytics platform with real-time dashboards.</p>
-                        <button class="work-open-btn">View case study</button>
-                    </article>
-                    <!-- Placeholder for more product/PM case studies -->
-                    <article class="work-card">
-                        <div class="work-thumb">PM</div>
-                        <h3>More case studies coming soon</h3>
-                        <p>Exploring product strategy, discovery, and experimentation.</p>
-                    </article>
-                </div>
-            </div>
-
-            <h3 class="work-row-title">Engineering Projects</h3>
-            <div class="work-row-scroll">
-                <div class="work-row" id="project-row">
-                    <article class="work-card">
-                        <div class="work-thumb">DS</div>
-                        <h3>Distributed Systems Server</h3>
-                        <p>High-performance concurrent server in Java/C++ on Linux.</p>
-                    </article>
-                    <article class="work-card">
-                        <div class="work-thumb">CP</div>
-                        <h3>Competitive Programming</h3>
-                        <p>250+ DSA problems solved across LeetCode and CodeChef.</p>
-                    </article>
-                    <article class="work-card">
-                        <div class="work-thumb">GDSC</div>
-                        <h3>GDSC Workshops</h3>
-                        <p>Led 15+ sprints on DSA, system design, and scalable apps.</p>
-                    </article>
-                    <!-- Placeholder for more engineering projects -->
-                    <article class="work-card">
-                        <div class="work-thumb">++</div>
-                        <h3>More projects soon</h3>
-                        <p>New systems, infra, and AI tooling experiments.</p>
+                    <article class="work-card" data-work-id="gym-buddy">
+                        <div class="work-thumb">🏋️</div>
+                        <h3>Gym Buddy (MVP)</h3>
+                        <p>AI-powered fitness & nutrition companion with personalized workout planning.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag python">Python</span>
+                            <span class="tech-tag fastapi">FastAPI</span>
+                            <span class="tech-tag openai">OpenAI</span>
+                            <span class="tech-tag react">React</span>
+                            <span class="tech-tag firebase">Firebase</span>
+                        </div>
+                        <div class="work-card-buttons">
+                            <div class="box-button">
+                                <button class="work-open-btn button"><span>View details</span></button>
+                            </div>
+                            <div class="box-button">
+                                <a href="https://github.com/manish011003/gym-buddy" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
+                            </div>
+                        </div>
                     </article>
                 </div>
             </div>
@@ -118,11 +205,6 @@
                     <p><a href="tel:+919820589676">+91-9820589676</a></p>
                 </div>
                 <div class="contact-card">
-                    <h3>Portfolio</h3>
-                    <p><a href="https://manishb.in" target="_blank" rel="noopener noreferrer">manishb.in</a></p>
-                    <p><a href="https://github.com/manish011003" target="_blank" rel="noopener noreferrer">GitHub: manish011003</a></p>
-                </div>
-                <div class="contact-card">
                     <h3>Networking</h3>
                     <p><a href="https://linkedin.com/in/manish-biswas" target="_blank" rel="noopener noreferrer">LinkedIn: manish-biswas</a></p>
                 </div>
@@ -131,11 +213,27 @@
 
         <div id="work-panel" class="panel-closed">
             <div id="work-panel-inner">
-                <button id="work-panel-close" aria-label="Close case study">&times;</button>
+                <div class="box-button">
+                    <button id="work-panel-close" class="button" aria-label="Close case study"><span>&times;</span></button>
+                </div>
                 <h3 id="work-panel-title"></h3>
                 <div id="work-panel-body"></div>
             </div>
         </div>
+
+        <section id="external-cta">
+            <h2>Explore More</h2>
+            <p class="section-subtitle">Deep dives live on my blog and product management hub.</p>
+            <div class="cta-buttons">
+                <div class="box-button">
+                    <a href="#" class="nav-link external-link button" data-link-type="blog-footer"><span>Visit my blog</span></a>
+                </div>
+                <div class="box-button">
+                    <a href="#" class="nav-link external-link button" data-link-type="pm-footer"><span>View PM portfolio</span></a>
+                </div>
+            </div>
+            <p class="cta-note">Links coming soon — placeholders for now.</p>
+        </section>
     </main>
 
     <script src="script.js"></script>
