@@ -14,27 +14,72 @@ document.addEventListener('DOMContentLoaded', () => {
         'char8bit/6-removebg-preview (1).png'
     ];
 
-    // Hide loading ghost after page loads
+    // Hide loading overlay
     window.addEventListener('load', () => {
-        setTimeout(() => {
-            if (loadingGhost) {
-                loadingGhost.classList.add('hidden');
-            }
-        }, 500);
+        setTimeout(() => loadingGhost && loadingGhost.classList.add('hidden'), 500);
     });
 
-    // Set a default avatar
-    avatar.src = avatarImages[0];
-    aiMessage.innerText = 'Hello! Ask me anything.';
+    if (avatar) avatar.src = avatarImages[0];
+    if (aiMessage) aiMessage.innerText = 'Hello! Ask me anything.';
 
-    sendBtn.addEventListener('click', sendMessage);
-    userInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
-    });
+    /* ---------- Mobile nav toggle ---------- */
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+            const open = navMenu.classList.toggle('is-open');
+            navToggle.classList.toggle('is-open', open);
+            navToggle.setAttribute('aria-expanded', String(open));
+        });
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('is-open');
+                navToggle.classList.remove('is-open');
+                navToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    }
 
-    // Prompt suggestions (chips)
+    /* ---------- Scroll reveal ---------- */
+    const reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && reveals.length) {
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+        reveals.forEach(el => io.observe(el));
+    } else {
+        reveals.forEach(el => el.classList.add('is-visible'));
+    }
+
+    /* ---------- Back to top ---------- */
+    const backToTop = document.getElementById('back-to-top');
+    if (backToTop) {
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('show', window.scrollY > 400);
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    /* ---------- Year ---------- */
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    /* ---------- Chat send ---------- */
+    if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+    if (userInput) {
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    }
+
+    /* ---------- Prompt chips ---------- */
     const promptContainer = document.getElementById('prompt-suggestions');
     if (promptContainer) {
         promptContainer.addEventListener('click', (e) => {
@@ -47,10 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Work / case studies slide-in panel
+    /* ---------- Work / case studies ---------- */
     const workDetails = {
         'task-manager': {
-            title: 'Task Manager Agent - AI-Powered WebSocket Agent',
+            title: 'Task Manager Agent — AI-Powered WebSocket Agent',
             github: 'https://github.com/manish011003/task-manager-agent',
             body: `
 A WebSocket-driven AI agent designed to help users create, organize, update, and track tasks through natural-language interaction. Built using FastAPI, Python, and OpenAI's GPT models, the system demonstrates how LLMs can be operationalized for real-world agentic workflows.
@@ -95,7 +140,7 @@ A real-time fitness tracking application that counts push-ups and evaluates post
             `
         },
         'ewaste': {
-            title: 'Hungry for E-Waste - Web Platform for E-Waste Management',
+            title: 'Hungry for E-Waste — Web Platform for E-Waste Management',
             github: 'https://github.com/manish011003/hungry-for-ewaste',
             body: `
 Hungry for E-Waste is a full-stack web platform built for the SIH 2023 hackathon final round. It aims to streamline the formalized e-waste management ecosystem in India, supporting proper collection, safe transportation, segregation, and eco-friendly disposal of electronic waste.
@@ -111,7 +156,7 @@ Hungry for E-Waste is a full-stack web platform built for the SIH 2023 hackathon
             `
         },
         'gym-buddy': {
-            title: 'Gym Buddy (MVP) - AI-Powered Fitness & Nutrition Companion',
+            title: 'Gym Buddy (MVP) — AI-Powered Fitness & Nutrition Companion',
             github: 'https://github.com/manish011003/gym-buddy',
             body: `
 Gym Buddy is an AI-driven personal fitness assistant designed to help users track their nutrition, calories, workouts, and long-term progress. It combines LLM-based coaching, scientific training principles, and data-driven personalization to act as a 24/7 gym partner.
@@ -153,13 +198,12 @@ Gym Buddy is an AI-driven personal fitness assistant designed to help users trac
         if (!detail || !workPanel || !workPanelTitle || !workPanelBody) return;
         workPanelTitle.textContent = detail.title;
         workPanelBody.textContent = '';
-        
-        // Add GitHub button if available
+
         if (detail.github) {
             const githubBtnContainer = document.createElement('div');
             githubBtnContainer.style.marginBottom = '16px';
             githubBtnContainer.innerHTML = `
-                <div class="box-button" style="display: inline-block;">
+                <div class="box-button alt" style="display: inline-block;">
                     <a href="${detail.github}" target="_blank" class="github-btn button" rel="noopener noreferrer">
                         <span>View on GitHub</span>
                     </a>
@@ -167,25 +211,26 @@ Gym Buddy is an AI-driven personal fitness assistant designed to help users trac
             `;
             workPanelBody.appendChild(githubBtnContainer);
         }
-        
+
         const lines = detail.body.trim().split('\n');
         lines.forEach(line => {
             const trimmed = line.trim();
             if (trimmed.length > 0) {
                 const p = document.createElement('p');
-                // Handle markdown-style bold
                 p.innerHTML = trimmed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 workPanelBody.appendChild(p);
             }
         });
         workPanel.classList.remove('panel-closed');
         workPanel.classList.add('panel-open');
+        document.body.style.overflow = 'hidden';
     }
 
     function closeWorkPanel() {
         if (!workPanel) return;
         workPanel.classList.remove('panel-open');
         workPanel.classList.add('panel-closed');
+        document.body.style.overflow = '';
     }
 
     const workCards = document.querySelectorAll('.work-card');
@@ -193,23 +238,21 @@ Gym Buddy is an AI-driven personal fitness assistant designed to help users trac
         card.addEventListener('click', (e) => {
             const id = card.getAttribute('data-work-id');
             if (!id) return;
-            // Handle clicks on button, box-button wrapper, or span
-            const clickedButton = e.target.closest('.work-open-btn') || 
-                                 e.target.closest('.box-button')?.querySelector('.work-open-btn');
-            if (clickedButton || e.currentTarget === card) {
-                openWorkPanel(id);
-            }
+            // Don't open panel when clicking the GitHub link
+            if (e.target.closest('.github-btn')) return;
+            openWorkPanel(id);
         });
     });
 
-    if (workPanelClose) {
-        workPanelClose.addEventListener('click', closeWorkPanel);
-    }
+    if (workPanelClose) workPanelClose.addEventListener('click', closeWorkPanel);
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeWorkPanel();
+    });
 
+    /* ---------- API ---------- */
     function getApiBaseUrl() {
         const isFile = location.protocol === 'file:';
         if (isFile) return 'http://localhost:3001';
-        // If served from a different port than backend, prefer backend 3001
         if (location.port && location.port !== '3001') return 'http://localhost:3001';
         return '';
     }
@@ -220,7 +263,7 @@ Gym Buddy is an AI-driven personal fitness assistant designed to help users trac
 
         appendMessage(messageText, 'user');
         userInput.value = '';
-        aiMessage.innerText = '...';
+        showTyping(true);
         sendBtn.disabled = true;
 
         try {
@@ -234,29 +277,57 @@ Gym Buddy is an AI-driven personal fitness assistant designed to help users trac
                 const errText = await response.text().catch(() => '');
                 throw new Error(`HTTP ${response.status} ${errText}`);
             }
-
             const data = await response.json();
             appendMessage(data.reply || 'No reply', 'ai');
         } catch (error) {
             console.error('Error:', error);
-            appendMessage('Sorry, something went wrong.', 'ai');
+            appendMessage('Sorry, my brain glitched. Try again in a moment.', 'ai');
         } finally {
+            showTyping(false);
             sendBtn.disabled = false;
+        }
+    }
+
+    let typingTimer = null;
+    function showTyping(isOn) {
+        if (!aiMessage) return;
+        if (typingTimer) { clearInterval(typingTimer); typingTimer = null; }
+        if (isOn) {
+            const dots = ['.', '..', '...'];
+            let i = 0;
+            aiMessage.innerText = 'thinking.';
+            typingTimer = setInterval(() => {
+                aiMessage.innerText = 'thinking' + dots[i++ % dots.length];
+            }, 400);
         }
     }
 
     function appendMessage(text, sender) {
         if (sender === 'ai') {
-            aiMessage.innerText = text;
+            typewriter(aiMessage, text);
             const randomAvatar = avatarImages[Math.floor(Math.random() * avatarImages.length)];
             avatar.src = randomAvatar;
         } else {
-            chatLog.innerHTML = ''; // Clear previous user messages
+            chatLog.innerHTML = '';
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', 'user-message');
             messageElement.innerText = text;
             chatLog.appendChild(messageElement);
             chatLog.scrollTop = chatLog.scrollHeight;
         }
+    }
+
+    /* Simple typewriter for AI replies (skips on long text) */
+    function typewriter(el, text) {
+        if (!el) return;
+        if (text.length > 240) { el.innerText = text; return; }
+        el.innerText = '';
+        let i = 0;
+        const speed = 18;
+        const tick = () => {
+            el.innerText = text.slice(0, i++);
+            if (i <= text.length) setTimeout(tick, speed);
+        };
+        tick();
     }
 });

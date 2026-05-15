@@ -3,48 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Manish Biswas</title>
+    <meta name="theme-color" content="#1e40af">
+    <meta name="description" content="Blog by Manish Biswas — exploring AI, product management, and engineering.">
+    <title>Blog — Manish Biswas</title>
     <link rel="stylesheet" href="blog.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="blog-header">
-        <nav class="blog-nav">
+        <nav class="blog-nav" aria-label="Primary">
             <div class="nav-brand">
                 <a href="index.html">Manish Biswas</a>
             </div>
-            <div class="nav-links">
+            <button class="blog-nav-toggle" id="blog-nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="blog-nav-links">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav-links" id="blog-nav-links">
                 <a href="index.html">Portfolio</a>
                 <a href="pm-portfolio.html">PM Portfolio</a>
+                <a href="#posts">Posts</a>
             </div>
         </nav>
     </header>
 
-    <main class="blog-main">
+    <main class="blog-main" id="main">
         <div class="blog-hero">
-            <h1 class="blog-title">Thoughts & Insights</h1>
-            <p class="blog-subtitle">Exploring AI, product management, and engineering</p>
+            <div class="blog-hero-inner">
+                <p class="blog-eyebrow">THE NOTEBOOK</p>
+                <h1 class="blog-title">Thoughts &amp; Insights</h1>
+                <p class="blog-subtitle">Exploring AI, product management, and engineering — one essay at a time.</p>
+            </div>
+            <div class="blog-hero-deco" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </div>
         </div>
 
-        <div class="blog-container">
-            <div class="blog-filters">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="ai">AI/ML</button>
-                <button class="filter-btn" data-filter="pm">Product</button>
-                <button class="filter-btn" data-filter="engineering">Engineering</button>
+        <div class="blog-container" id="posts">
+            <div class="blog-toolbar">
+                <div class="blog-search">
+                    <span class="search-icon" aria-hidden="true">🔍</span>
+                    <input type="search" id="blog-search" placeholder="Search posts..." aria-label="Search posts">
+                </div>
+                <div class="blog-filters" role="tablist" aria-label="Filter posts">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="ai">AI/ML</button>
+                    <button class="filter-btn" data-filter="pm">Product</button>
+                    <button class="filter-btn" data-filter="engineering">Engineering</button>
+                </div>
             </div>
 
             <div class="blog-posts">
                 <article class="blog-post" data-category="ai">
                     <div class="post-image">
-                        <div class="post-image-placeholder"></div>
+                        <div class="post-image-placeholder">🤖</div>
                     </div>
                     <div class="post-content">
                         <div class="post-meta">
                             <span class="post-category">AI/ML</span>
                             <span class="post-date">Dec 2024</span>
+                            <span class="post-read">5 min read</span>
                         </div>
                         <h2 class="post-title">Building AI Agents with WebSockets</h2>
                         <p class="post-excerpt">Exploring how to create real-time AI agents using FastAPI WebSockets and GPT models for natural language task management...</p>
@@ -54,12 +74,13 @@
 
                 <article class="blog-post" data-category="pm">
                     <div class="post-image">
-                        <div class="post-image-placeholder"></div>
+                        <div class="post-image-placeholder">🎯</div>
                     </div>
                     <div class="post-content">
                         <div class="post-meta">
                             <span class="post-category">Product</span>
                             <span class="post-date">Nov 2024</span>
+                            <span class="post-read">7 min read</span>
                         </div>
                         <h2 class="post-title">From Engineering to Product Thinking</h2>
                         <p class="post-excerpt">My journey transitioning from building features to thinking about user problems, market fit, and product strategy...</p>
@@ -69,12 +90,13 @@
 
                 <article class="blog-post" data-category="engineering">
                     <div class="post-image">
-                        <div class="post-image-placeholder"></div>
+                        <div class="post-image-placeholder">💪</div>
                     </div>
                     <div class="post-content">
                         <div class="post-meta">
                             <span class="post-category">Engineering</span>
                             <span class="post-date">Oct 2024</span>
+                            <span class="post-read">6 min read</span>
                         </div>
                         <h2 class="post-title">Real-Time Pose Estimation with MediaPipe</h2>
                         <p class="post-excerpt">Building a push-up counter using computer vision: lessons learned from angle calculations, form validation, and live feedback...</p>
@@ -84,12 +106,13 @@
 
                 <article class="blog-post" data-category="ai">
                     <div class="post-image">
-                        <div class="post-image-placeholder"></div>
+                        <div class="post-image-placeholder">🧠</div>
                     </div>
                     <div class="post-content">
                         <div class="post-meta">
                             <span class="post-category">AI/ML</span>
                             <span class="post-date">Sep 2024</span>
+                            <span class="post-read">8 min read</span>
                         </div>
                         <h2 class="post-title">LLM Integration Patterns</h2>
                         <p class="post-excerpt">Best practices for integrating large language models into production applications, from prompt engineering to cost optimization...</p>
@@ -99,12 +122,13 @@
 
                 <article class="blog-post" data-category="pm">
                     <div class="post-image">
-                        <div class="post-image-placeholder"></div>
+                        <div class="post-image-placeholder">♻️</div>
                     </div>
                     <div class="post-content">
                         <div class="post-meta">
                             <span class="post-category">Product</span>
                             <span class="post-date">Aug 2024</span>
+                            <span class="post-read">9 min read</span>
                         </div>
                         <h2 class="post-title">Case Study: E-Waste Management Platform</h2>
                         <p class="post-excerpt">How we built a full-stack solution for SIH 2023, balancing user needs, technical constraints, and environmental impact...</p>
@@ -112,14 +136,33 @@
                     </div>
                 </article>
             </div>
+
+            <p class="blog-empty" id="blog-empty" hidden>No posts match your search yet — try a different keyword.</p>
         </div>
+
+        <section class="blog-newsletter">
+            <div class="blog-container">
+                <div class="newsletter-card">
+                    <h2>Subscribe to the notebook</h2>
+                    <p>Occasional essays on AI, products, and the messy middle of building things.</p>
+                    <form class="newsletter-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed ✓';">
+                        <input type="email" placeholder="you@example.com" aria-label="Your email" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="blog-footer">
-        <p>&copy; 2024 Manish Biswas. All rights reserved.</p>
+        <p>&copy; <span id="blog-year"></span> Manish Biswas. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="index.html">AI Portfolio</a>
+            <a href="pm-portfolio.html">PM Portfolio</a>
+            <a href="https://github.com/manish011003" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
     </footer>
 
     <script src="blog.js"></script>
 </body>
 </html>
-

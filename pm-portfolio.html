@@ -3,33 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PM Portfolio - Manish Biswas</title>
+    <meta name="theme-color" content="#1e1b4b">
+    <meta name="description" content="Manish Biswas — Product Management portfolio. Case studies, metrics, and core competencies.">
+    <title>PM Portfolio — Manish Biswas</title>
     <link rel="stylesheet" href="pm-portfolio.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="pm-header">
-        <nav class="pm-nav">
+        <nav class="pm-nav" aria-label="Primary">
             <div class="pm-brand">
-                <a href="index.html">MB</a>
+                <a href="index.html">MB<span>.</span></a>
             </div>
-            <div class="pm-nav-links">
+            <button class="pm-nav-toggle" id="pm-nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="pm-nav-links">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="pm-nav-links" id="pm-nav-links">
                 <a href="index.html">Portfolio</a>
                 <a href="blog.html">Blog</a>
+                <a href="#case-studies">Case Studies</a>
+                <a href="#skills">Skills</a>
+                <a href="mailto:me@manishb.in" class="pm-cta">Contact</a>
             </div>
         </nav>
     </header>
 
-    <main class="pm-main">
+    <main class="pm-main" id="main">
         <section class="pm-hero">
             <div class="pm-hero-content">
+                <p class="pm-hero-eyebrow">PRODUCT MANAGEMENT PORTFOLIO</p>
                 <h1 class="pm-hero-title">
                     <span class="title-line">Product</span>
                     <span class="title-line">Management</span>
                 </h1>
-                <p class="pm-hero-subtitle">Building products that solve real problems</p>
+                <p class="pm-hero-subtitle">Building products that solve real problems — at the intersection of users, business and tech.</p>
                 <div class="pm-hero-stats">
                     <div class="stat-item">
                         <div class="stat-number" data-target="3">0</div>
@@ -44,17 +54,30 @@
                         <div class="stat-label">% Faster Deployment</div>
                     </div>
                 </div>
+                <div class="pm-hero-cta">
+                    <a href="#case-studies" class="btn btn-primary">Explore case studies</a>
+                    <a href="index.html#chat" class="btn btn-ghost">Chat with my AI twin</a>
+                </div>
+            </div>
+            <div class="pm-hero-orbit" aria-hidden="true">
+                <div class="orbit-ring"></div>
+                <div class="orbit-ring r2"></div>
+                <div class="orbit-dot d1"></div>
+                <div class="orbit-dot d2"></div>
+                <div class="orbit-dot d3"></div>
+                <div class="orbit-dot d4"></div>
             </div>
         </section>
 
-        <section class="pm-case-studies">
+        <section class="pm-case-studies" id="case-studies">
             <div class="pm-container">
                 <h2 class="pm-section-title">Case Studies</h2>
-                
+                <p class="pm-section-sub">Three deep dives across B2B SaaS, social impact, and AI products.</p>
+
                 <article class="pm-case-study" data-study="1">
                     <div class="case-study-visual">
                         <div class="case-study-image">
-                            <div class="visual-placeholder"></div>
+                            <div class="visual-placeholder">📊</div>
                         </div>
                     </div>
                     <div class="case-study-content">
@@ -64,22 +87,13 @@
                         </div>
                         <h3 class="case-study-title">Claro AI Analytics Platform</h3>
                         <p class="case-study-description">
-                            Led product development for an AI-powered analytics platform serving 1000+ users. 
+                            Led product development for an AI-powered analytics platform serving 1000+ users.
                             Focused on making complex data accessible through LLM-powered insights and intuitive dashboards.
                         </p>
                         <div class="case-study-metrics">
-                            <div class="metric">
-                                <div class="metric-value">1000+</div>
-                                <div class="metric-label">Active Users</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">99.9%</div>
-                                <div class="metric-label">Uptime</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">&lt;100ms</div>
-                                <div class="metric-label">API Response</div>
-                            </div>
+                            <div class="metric"><div class="metric-value">1000+</div><div class="metric-label">Active Users</div></div>
+                            <div class="metric"><div class="metric-value">99.9%</div><div class="metric-label">Uptime</div></div>
+                            <div class="metric"><div class="metric-value">&lt;100ms</div><div class="metric-label">API Response</div></div>
                         </div>
                         <div class="case-study-skills">
                             <span class="skill-tag">Product Strategy</span>
@@ -92,33 +106,24 @@
 
                 <article class="pm-case-study" data-study="2">
                     <div class="case-study-visual">
-                        <div class="case-study-image">
-                            <div class="visual-placeholder"></div>
+                        <div class="case-study-image alt">
+                            <div class="visual-placeholder">♻️</div>
                         </div>
                     </div>
                     <div class="case-study-content">
                         <div class="case-study-header">
-                            <span class="case-study-tag">E-Commerce</span>
+                            <span class="case-study-tag">Social Impact</span>
                             <span class="case-study-year">2023</span>
                         </div>
                         <h3 class="case-study-title">E-Waste Management Platform</h3>
                         <p class="case-study-description">
-                            Designed and launched a full-stack platform for e-waste management, connecting consumers, 
+                            Designed and launched a full-stack platform for e-waste management, connecting consumers,
                             collection centers, and recyclers. Finalist at Smart India Hackathon 2023.
                         </p>
                         <div class="case-study-metrics">
-                            <div class="metric">
-                                <div class="metric-value">10K+</div>
-                                <div class="metric-label">Users</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">500+</div>
-                                <div class="metric-label">Facilities</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">40%</div>
-                                <div class="metric-label">Efficiency Gain</div>
-                            </div>
+                            <div class="metric"><div class="metric-value">10K+</div><div class="metric-label">Users</div></div>
+                            <div class="metric"><div class="metric-value">500+</div><div class="metric-label">Facilities</div></div>
+                            <div class="metric"><div class="metric-value">40%</div><div class="metric-label">Efficiency Gain</div></div>
                         </div>
                         <div class="case-study-skills">
                             <span class="skill-tag">Product Design</span>
@@ -131,8 +136,8 @@
 
                 <article class="pm-case-study" data-study="3">
                     <div class="case-study-visual">
-                        <div class="case-study-image">
-                            <div class="visual-placeholder"></div>
+                        <div class="case-study-image alt2">
+                            <div class="visual-placeholder">🤖</div>
                         </div>
                     </div>
                     <div class="case-study-content">
@@ -142,22 +147,13 @@
                         </div>
                         <h3 class="case-study-title">AI Task Management Agent</h3>
                         <p class="case-study-description">
-                            Built an AI-powered task management system that reduces cognitive load by enabling 
+                            Built an AI-powered task management system that reduces cognitive load by enabling
                             natural language task creation and organization. Focused on user experience and API cost optimization.
                         </p>
                         <div class="case-study-metrics">
-                            <div class="metric">
-                                <div class="metric-value">100+</div>
-                                <div class="metric-label">Concurrent Users</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">95%</div>
-                                <div class="metric-label">Accuracy</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">30%</div>
-                                <div class="metric-label">Cost Reduction</div>
-                            </div>
+                            <div class="metric"><div class="metric-value">100+</div><div class="metric-label">Concurrent Users</div></div>
+                            <div class="metric"><div class="metric-value">95%</div><div class="metric-label">Accuracy</div></div>
+                            <div class="metric"><div class="metric-value">30%</div><div class="metric-label">Cost Reduction</div></div>
                         </div>
                         <div class="case-study-skills">
                             <span class="skill-tag">AI/ML Products</span>
@@ -170,9 +166,10 @@
             </div>
         </section>
 
-        <section class="pm-skills">
+        <section class="pm-skills" id="skills">
             <div class="pm-container">
                 <h2 class="pm-section-title">Core Competencies</h2>
+                <p class="pm-section-sub">A toolkit honed across engineering, design, and business.</p>
                 <div class="skills-grid">
                     <div class="skill-card">
                         <div class="skill-icon">📊</div>
@@ -207,15 +204,32 @@
                 </div>
             </div>
         </section>
+
+        <section class="pm-cta-band">
+            <div class="pm-container pm-cta-inner">
+                <div>
+                    <h2>Let's build something users love.</h2>
+                    <p>Open to PM and AI-product roles. Let's chat.</p>
+                </div>
+                <div class="pm-cta-buttons">
+                    <a href="mailto:me@manishb.in" class="btn btn-primary">Email me</a>
+                    <a href="https://linkedin.com/in/manish-biswas" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">LinkedIn</a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="pm-footer">
-        <div class="pm-container">
-            <p>&copy; 2024 Manish Biswas. Product Management Portfolio.</p>
+        <div class="pm-container pm-footer-inner">
+            <p>&copy; <span id="pm-year"></span> Manish Biswas. Product Management Portfolio.</p>
+            <div class="pm-footer-links">
+                <a href="index.html">AI Portfolio</a>
+                <a href="blog.html">Blog</a>
+                <a href="https://github.com/manish011003" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
         </div>
     </footer>
 
     <script src="pm-portfolio.js"></script>
 </body>
 </html>
-

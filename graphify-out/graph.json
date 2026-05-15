@@ -1,0 +1,337 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "blog.js",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\blog.js",
+      "source_location": "L1",
+      "id": "c_users_manisbis_portfolio_25_ai_blog_js",
+      "community": 3,
+      "norm_label": "blog.js"
+    },
+    {
+      "label": "pm-portfolio.js",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\pm-portfolio.js",
+      "source_location": "L1",
+      "id": "c_users_manisbis_portfolio_25_ai_pm_portfolio_js",
+      "community": 2,
+      "norm_label": "pm-portfolio.js"
+    },
+    {
+      "label": "animateCounter()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\pm-portfolio.js",
+      "source_location": "L2",
+      "id": "pm_portfolio_animatecounter",
+      "community": 2,
+      "norm_label": "animatecounter()"
+    },
+    {
+      "label": "script.js",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\script.js",
+      "source_location": "L1",
+      "id": "c_users_manisbis_portfolio_25_ai_script_js",
+      "community": 0,
+      "norm_label": "script.js"
+    },
+    {
+      "label": "openWorkPanel()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\script.js",
+      "source_location": "L151",
+      "id": "script_openworkpanel",
+      "community": 0,
+      "norm_label": "openworkpanel()"
+    },
+    {
+      "label": "closeWorkPanel()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\script.js",
+      "source_location": "L185",
+      "id": "script_closeworkpanel",
+      "community": 0,
+      "norm_label": "closeworkpanel()"
+    },
+    {
+      "label": "getApiBaseUrl()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\script.js",
+      "source_location": "L209",
+      "id": "script_getapibaseurl",
+      "community": 0,
+      "norm_label": "getapibaseurl()"
+    },
+    {
+      "label": "sendMessage()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\script.js",
+      "source_location": "L217",
+      "id": "script_sendmessage",
+      "community": 0,
+      "norm_label": "sendmessage()"
+    },
+    {
+      "label": "appendMessage()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\script.js",
+      "source_location": "L248",
+      "id": "script_appendmessage",
+      "community": 0,
+      "norm_label": "appendmessage()"
+    },
+    {
+      "label": "server.js",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L1",
+      "id": "c_users_manisbis_portfolio_25_ai_server_js",
+      "community": 1,
+      "norm_label": "server.js"
+    },
+    {
+      "label": "listModels()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L174",
+      "id": "server_listmodels",
+      "community": 1,
+      "norm_label": "listmodels()"
+    },
+    {
+      "label": "ensureDiscoveredModels()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L191",
+      "id": "server_ensurediscoveredmodels",
+      "community": 1,
+      "norm_label": "ensurediscoveredmodels()"
+    },
+    {
+      "label": "getModel()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L208",
+      "id": "server_getmodel",
+      "community": 1,
+      "norm_label": "getmodel()"
+    },
+    {
+      "label": "tryGenerate()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L224",
+      "id": "server_trygenerate",
+      "community": 1,
+      "norm_label": "trygenerate()"
+    },
+    {
+      "label": "generateReply()",
+      "file_type": "code",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L255",
+      "id": "server_generatereply",
+      "community": 1,
+      "norm_label": "generatereply()"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\pm-portfolio.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_src": "c_users_manisbis_portfolio_25_ai_pm_portfolio_js",
+      "_tgt": "pm_portfolio_animatecounter",
+      "source": "c_users_manisbis_portfolio_25_ai_pm_portfolio_js",
+      "target": "pm_portfolio_animatecounter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\script.js",
+      "source_location": "L151",
+      "weight": 1.0,
+      "_src": "c_users_manisbis_portfolio_25_ai_script_js",
+      "_tgt": "script_openworkpanel",
+      "source": "c_users_manisbis_portfolio_25_ai_script_js",
+      "target": "script_openworkpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\script.js",
+      "source_location": "L185",
+      "weight": 1.0,
+      "_src": "c_users_manisbis_portfolio_25_ai_script_js",
+      "_tgt": "script_closeworkpanel",
+      "source": "c_users_manisbis_portfolio_25_ai_script_js",
+      "target": "script_closeworkpanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\script.js",
+      "source_location": "L209",
+      "weight": 1.0,
+      "_src": "c_users_manisbis_portfolio_25_ai_script_js",
+      "_tgt": "script_getapibaseurl",
+      "source": "c_users_manisbis_portfolio_25_ai_script_js",
+      "target": "script_getapibaseurl",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\script.js",
+      "source_location": "L217",
+      "weight": 1.0,
+      "_src": "c_users_manisbis_portfolio_25_ai_script_js",
+      "_tgt": "script_sendmessage",
+      "source": "c_users_manisbis_portfolio_25_ai_script_js",
+      "target": "script_sendmessage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\script.js",
+      "source_location": "L248",
+      "weight": 1.0,
+      "_src": "c_users_manisbis_portfolio_25_ai_script_js",
+      "_tgt": "script_appendmessage",
+      "source": "c_users_manisbis_portfolio_25_ai_script_js",
+      "target": "script_appendmessage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\script.js",
+      "source_location": "L227",
+      "weight": 1.0,
+      "_src": "script_sendmessage",
+      "_tgt": "script_getapibaseurl",
+      "source": "script_getapibaseurl",
+      "target": "script_sendmessage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\script.js",
+      "source_location": "L221",
+      "weight": 1.0,
+      "_src": "script_sendmessage",
+      "_tgt": "script_appendmessage",
+      "source": "script_sendmessage",
+      "target": "script_appendmessage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L174",
+      "weight": 1.0,
+      "_src": "c_users_manisbis_portfolio_25_ai_server_js",
+      "_tgt": "server_listmodels",
+      "source": "c_users_manisbis_portfolio_25_ai_server_js",
+      "target": "server_listmodels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L191",
+      "weight": 1.0,
+      "_src": "c_users_manisbis_portfolio_25_ai_server_js",
+      "_tgt": "server_ensurediscoveredmodels",
+      "source": "c_users_manisbis_portfolio_25_ai_server_js",
+      "target": "server_ensurediscoveredmodels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L208",
+      "weight": 1.0,
+      "_src": "c_users_manisbis_portfolio_25_ai_server_js",
+      "_tgt": "server_getmodel",
+      "source": "c_users_manisbis_portfolio_25_ai_server_js",
+      "target": "server_getmodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L224",
+      "weight": 1.0,
+      "_src": "c_users_manisbis_portfolio_25_ai_server_js",
+      "_tgt": "server_trygenerate",
+      "source": "c_users_manisbis_portfolio_25_ai_server_js",
+      "target": "server_trygenerate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L255",
+      "weight": 1.0,
+      "_src": "c_users_manisbis_portfolio_25_ai_server_js",
+      "_tgt": "server_generatereply",
+      "source": "c_users_manisbis_portfolio_25_ai_server_js",
+      "target": "server_generatereply",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L193",
+      "weight": 1.0,
+      "_src": "server_ensurediscoveredmodels",
+      "_tgt": "server_listmodels",
+      "source": "server_listmodels",
+      "target": "server_ensurediscoveredmodels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L225",
+      "weight": 1.0,
+      "_src": "server_trygenerate",
+      "_tgt": "server_getmodel",
+      "source": "server_getmodel",
+      "target": "server_trygenerate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "C:\\Users\\manisbis\\portfolio_25_AI\\server.js",
+      "source_location": "L270",
+      "weight": 1.0,
+      "_src": "server_generatereply",
+      "_tgt": "server_trygenerate",
+      "source": "server_trygenerate",
+      "target": "server_generatereply",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": []
+}

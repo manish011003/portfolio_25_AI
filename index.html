@@ -3,40 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manish Biswas - AI Portfolio</title>
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="description" content="Manish Biswas — AI Engineer & Product Management aspirant. Chat with my pixel-art AI twin and explore my projects.">
+    <title>Manish Biswas — AI Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <nav id="top-nav">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+        <nav id="top-nav" aria-label="Primary">
             <div class="nav-left">
-                <div class="brand">Manish Biswas</div>
-                <div class="tagline">AI Engineer & Product Management Aspirant</div>
+                <a href="#hero" class="brand-link">
+                    <span class="brand">Manish<span class="brand-dot">.</span>Biswas</span>
+                </a>
+                <span class="tagline">AI Engineer × Product Aspirant</span>
             </div>
-            <div class="nav-center">
-                <div class="box-button">
-                    <a href="#chat" class="nav-link button"><span>AI Chat</span></a>
+
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
+            <div class="nav-menu" id="nav-menu">
+                <div class="nav-center">
+                    <div class="box-button"><a href="#about" class="nav-link button"><span>About</span></a></div>
+                    <div class="box-button"><a href="#chat" class="nav-link button"><span>AI Chat</span></a></div>
+                    <div class="box-button"><a href="#work" class="nav-link button"><span>Projects</span></a></div>
+                    <div class="box-button"><a href="#contact" class="nav-link button"><span>Contact</span></a></div>
                 </div>
-                <div class="box-button">
-                    <a href="#work" class="nav-link button"><span>Case Studies</span></a>
-                </div>
-                <div class="box-button">
-                    <a href="#contact" class="nav-link button"><span>Contact</span></a>
-                </div>
-            </div>
-            <div class="nav-right">
-                <div class="box-button">
-                    <a href="blog.html" class="nav-link external-link button"><span>Blog</span></a>
-                </div>
-                <div class="box-button">
-                    <a href="pm-portfolio.html" class="nav-link external-link button"><span>PM Portfolio</span></a>
+                <div class="nav-right">
+                    <div class="box-button"><a href="blog.html" class="nav-link external-link button"><span>Blog</span></a></div>
+                    <div class="box-button"><a href="pm-portfolio.html" class="nav-link external-link button"><span>PM</span></a></div>
                 </div>
             </div>
         </nav>
     </header>
 
     <!-- Loading Ghost Animation -->
-    <div id="loading-ghost" class="loading-overlay">
+    <div id="loading-ghost" class="loading-overlay" aria-hidden="true">
         <div id="ghost">
             <div id="red">
                 <div id="pupil"></div>
@@ -74,42 +83,164 @@
                 <div id="an18"></div>
             </div>
             <div id="shadow"></div>
+            <p class="loading-text">Loading pixels...</p>
         </div>
     </div>
 
-    <main>
-        <section id="chat">
-            <div id="game-container">
-                <div id="character-container">
-                    <div id="ai-bubble-container">
-                        <div id="ai-message" class="message ai-message"></div>
+    <main id="main-content">
+        <!-- HERO -->
+        <section id="hero" class="hero reveal">
+            <div class="hero-grid">
+                <div class="hero-copy">
+                    <p class="hero-eyebrow">&gt; PRESS START</p>
+                    <h1 class="hero-title">
+                        Hi, I'm <span class="accent">Manish</span>.
+                        <br>I build <span class="accent-2">AI</span> &amp; ship <span class="accent-2">products</span>.
+                    </h1>
+                    <p class="hero-sub">
+                        AI Engineer with a product mindset. I prototype LLM agents, computer-vision tools,
+                        and full-stack apps — then turn them into things people actually use.
+                    </p>
+                    <div class="hero-cta">
+                        <div class="box-button">
+                            <a href="#chat" class="button"><span>Chat with my AI</span></a>
+                        </div>
+                        <div class="box-button alt">
+                            <a href="#work" class="button"><span>See projects</span></a>
+                        </div>
                     </div>
-                    <div id="avatar-container">
-                        <img alt="8-bit avatar" id="avatar">
+                    <div class="hero-stats">
+                        <div class="stat-pill"><strong>10+</strong><span>Projects shipped</span></div>
+                        <div class="stat-pill"><strong>SIH '23</strong><span>Finalist</span></div>
+                        <div class="stat-pill"><strong>1k+</strong><span>Users impacted</span></div>
                     </div>
                 </div>
-                <div id="chat-log-container">
-                    <div id="chat-log"></div>
-                    <div id="prompt-suggestions">
-                        <span class="prompt-chip" data-prompt="Tell me about yourself">Tell me about yourself</span>
-                        <span class="prompt-chip" data-prompt="What are your hobbies?">What are your hobbies?</span>
-                        <span class="prompt-chip" data-prompt="What are your main skills?">What are your main skills?</span>
-                        <span class="prompt-chip" data-prompt="Tell me about your projects">Tell me about your projects</span>
-                    </div>
-                    <div id="input-container">
-                        <input type="text" id="user-input" placeholder="Chat with my AI self...">
-                        <div class="box-button">
-                            <button id="send-btn" class="button"><span>Send</span></button>
+                <div class="hero-art">
+                    <div class="hero-screen">
+                        <div class="hero-screen-bar">
+                            <span></span><span></span><span></span>
+                            <em>manish.exe</em>
+                        </div>
+                        <div class="hero-screen-body">
+                            <p><span class="prompt">$</span> whoami</p>
+                            <p class="muted">manish_biswas</p>
+                            <p><span class="prompt">$</span> cat skills.txt</p>
+                            <p class="muted">python · fastapi · react · llms · cv · product</p>
+                            <p><span class="prompt">$</span> status</p>
+                            <p class="muted">building &amp; shipping<span class="caret">_</span></p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="work">
-            <h2>Case Studies & Projects</h2>
+        <!-- ABOUT -->
+        <section id="about" class="about reveal">
+            <h2 class="section-title">About <span class="accent">Me</span></h2>
+            <p class="section-subtitle">A short story before the long game.</p>
+            <div class="about-grid">
+                <article class="about-card">
+                    <div class="about-card-icon" aria-hidden="true">🧠</div>
+                    <h3>Engineer's brain</h3>
+                    <p>I love building agents and pipelines that actually solve a problem — from
+                    real-time pose estimation to natural-language task agents.</p>
+                </article>
+                <article class="about-card">
+                    <div class="about-card-icon" aria-hidden="true">🎯</div>
+                    <h3>Product's heart</h3>
+                    <p>I obsess over user pain, metrics that matter, and shipping the smallest thing
+                    that proves the idea before scaling it.</p>
+                </article>
+                <article class="about-card">
+                    <div class="about-card-icon" aria-hidden="true">🚀</div>
+                    <h3>Always shipping</h3>
+                    <p>SIH 2023 finalist, multiple side projects in production, and constantly
+                    experimenting with new AI primitives.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- SKILLS -->
+        <section id="skills" class="skills reveal">
+            <h2 class="section-title">Skill <span class="accent">Tree</span></h2>
+            <p class="section-subtitle">Leveled up over years of building.</p>
+            <div class="skills-grid">
+                <div class="skill-block">
+                    <h3>AI &amp; ML</h3>
+                    <ul>
+                        <li>LLMs &amp; Agents</li>
+                        <li>OpenAI / Gemini APIs</li>
+                        <li>Prompt engineering</li>
+                        <li>MediaPipe · OpenCV</li>
+                    </ul>
+                </div>
+                <div class="skill-block">
+                    <h3>Backend</h3>
+                    <ul>
+                        <li>Python · FastAPI</li>
+                        <li>Node.js · Express</li>
+                        <li>WebSockets</li>
+                        <li>MongoDB · Firebase</li>
+                    </ul>
+                </div>
+                <div class="skill-block">
+                    <h3>Frontend</h3>
+                    <ul>
+                        <li>HTML · CSS · JS</li>
+                        <li>React · React Native</li>
+                        <li>Responsive design</li>
+                        <li>Animations &amp; UX</li>
+                    </ul>
+                </div>
+                <div class="skill-block">
+                    <h3>Product</h3>
+                    <ul>
+                        <li>User research</li>
+                        <li>MVP scoping</li>
+                        <li>Metrics &amp; A/B</li>
+                        <li>Roadmapping</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHAT -->
+        <section id="chat" class="reveal">
+            <h2 class="section-title">Chat with my <span class="accent">AI twin</span></h2>
+            <p class="section-subtitle">Ask anything — projects, skills, philosophy, snacks.</p>
+            <div id="game-container">
+                <div id="character-container">
+                    <div id="ai-bubble-container">
+                        <div id="ai-message" class="message ai-message" role="status" aria-live="polite"></div>
+                    </div>
+                    <div id="avatar-container">
+                        <img alt="8-bit avatar of Manish" id="avatar">
+                    </div>
+                </div>
+                <div id="chat-log-container">
+                    <div id="chat-log" aria-label="Chat log"></div>
+                    <div id="prompt-suggestions" aria-label="Suggested prompts">
+                        <span class="prompt-chip" data-prompt="Tell me about yourself">Tell me about yourself</span>
+                        <span class="prompt-chip" data-prompt="What are your hobbies?">Hobbies?</span>
+                        <span class="prompt-chip" data-prompt="What are your main skills?">Main skills?</span>
+                        <span class="prompt-chip" data-prompt="Tell me about your projects">Your projects</span>
+                        <span class="prompt-chip" data-prompt="Why product management?">Why PM?</span>
+                    </div>
+                    <div id="input-container">
+                        <input type="text" id="user-input" placeholder="Chat with my AI self..." aria-label="Type your message">
+                        <div class="box-button">
+                            <button id="send-btn" class="button" aria-label="Send message"><span>Send</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WORK -->
+        <section id="work" class="reveal">
+            <h2 class="section-title">Case Studies &amp; <span class="accent">Projects</span></h2>
             <p class="section-subtitle">A blend of product thinking and engineering execution.</p>
-            <h3 class="work-row-title">Featured Projects</h3>
+            <h3 class="work-row-title">Featured</h3>
             <div class="work-row-scroll">
                 <div class="work-row" id="case-row">
                     <article class="work-card" data-work-id="task-manager">
@@ -125,9 +256,9 @@
                         </div>
                         <div class="work-card-buttons">
                             <div class="box-button">
-                                <button class="work-open-btn button"><span>View details</span></button>
+                                <button class="work-open-btn button"><span>Details</span></button>
                             </div>
-                            <div class="box-button">
+                            <div class="box-button alt">
                                 <a href="https://github.com/manish011003/task-manager-agent" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
                             </div>
                         </div>
@@ -144,9 +275,9 @@
                         </div>
                         <div class="work-card-buttons">
                             <div class="box-button">
-                                <button class="work-open-btn button"><span>View details</span></button>
+                                <button class="work-open-btn button"><span>Details</span></button>
                             </div>
-                            <div class="box-button">
+                            <div class="box-button alt">
                                 <a href="https://github.com/manish011003/pushup-counter" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
                             </div>
                         </div>
@@ -154,7 +285,7 @@
                     <article class="work-card" data-work-id="ewaste">
                         <div class="work-thumb">♻️</div>
                         <h3>Hungry for E-Waste</h3>
-                        <p>Full-stack platform for e-waste management - SIH 2023 finalist solution.</p>
+                        <p>Full-stack platform for e-waste management — SIH 2023 finalist solution.</p>
                         <div class="tech-tags">
                             <span class="tech-tag javascript">JavaScript</span>
                             <span class="tech-tag nodejs">Node.js</span>
@@ -164,9 +295,9 @@
                         </div>
                         <div class="work-card-buttons">
                             <div class="box-button">
-                                <button class="work-open-btn button"><span>View details</span></button>
+                                <button class="work-open-btn button"><span>Details</span></button>
                             </div>
-                            <div class="box-button">
+                            <div class="box-button alt">
                                 <a href="https://github.com/manish011003/hungry-for-ewaste" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
                             </div>
                         </div>
@@ -174,7 +305,7 @@
                     <article class="work-card" data-work-id="gym-buddy">
                         <div class="work-thumb">🏋️</div>
                         <h3>Gym Buddy (MVP)</h3>
-                        <p>AI-powered fitness & nutrition companion with personalized workout planning.</p>
+                        <p>AI-powered fitness &amp; nutrition companion with personalized workout planning.</p>
                         <div class="tech-tags">
                             <span class="tech-tag python">Python</span>
                             <span class="tech-tag fastapi">FastAPI</span>
@@ -184,9 +315,9 @@
                         </div>
                         <div class="work-card-buttons">
                             <div class="box-button">
-                                <button class="work-open-btn button"><span>View details</span></button>
+                                <button class="work-open-btn button"><span>Details</span></button>
                             </div>
-                            <div class="box-button">
+                            <div class="box-button alt">
                                 <a href="https://github.com/manish011003/gym-buddy" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
                             </div>
                         </div>
@@ -195,8 +326,23 @@
             </div>
         </section>
 
-        <section id="contact">
-            <h2>Contact</h2>
+        <!-- EXTERNAL CTA -->
+        <section id="external-cta" class="reveal">
+            <h2 class="section-title">Explore <span class="accent">More</span></h2>
+            <p class="section-subtitle">Deep dives live on my blog and product management hub.</p>
+            <div class="cta-buttons">
+                <div class="box-button">
+                    <a href="blog.html" class="nav-link external-link button"><span>Visit my blog</span></a>
+                </div>
+                <div class="box-button alt">
+                    <a href="pm-portfolio.html" class="nav-link external-link button"><span>View PM portfolio</span></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="reveal">
+            <h2 class="section-title">Let's <span class="accent">connect</span></h2>
             <p class="section-subtitle">Open to product and engineering roles and collaborations.</p>
             <div id="contact-grid">
                 <div class="contact-card">
@@ -204,13 +350,18 @@
                     <p><a href="mailto:me@manishb.in">me@manishb.in</a></p>
                 </div>
                 <div class="contact-card">
-                    <h3>Networking</h3>
-                    <p><a href="https://linkedin.com/in/manish-biswas" target="_blank" rel="noopener noreferrer">LinkedIn: manish-biswas</a></p>
+                    <h3>Network</h3>
+                    <p><a href="https://linkedin.com/in/manish-biswas" target="_blank" rel="noopener noreferrer">LinkedIn → manish-biswas</a></p>
+                </div>
+                <div class="contact-card">
+                    <h3>Code</h3>
+                    <p><a href="https://github.com/manish011003" target="_blank" rel="noopener noreferrer">GitHub → manish011003</a></p>
                 </div>
             </div>
         </section>
 
-        <div id="work-panel" class="panel-closed">
+        <!-- WORK PANEL -->
+        <div id="work-panel" class="panel-closed" role="dialog" aria-modal="true" aria-labelledby="work-panel-title">
             <div id="work-panel-inner">
                 <div class="box-button">
                     <button id="work-panel-close" class="button" aria-label="Close case study"><span>&times;</span></button>
@@ -219,20 +370,26 @@
                 <div id="work-panel-body"></div>
             </div>
         </div>
-
-        <section id="external-cta">
-            <h2>Explore More</h2>
-            <p class="section-subtitle">Deep dives live on my blog and product management hub.</p>
-            <div class="cta-buttons">
-                <div class="box-button">
-                    <a href="blog.html" class="nav-link external-link button"><span>Visit my blog</span></a>
-                </div>
-                <div class="box-button">
-                    <a href="pm-portfolio.html" class="nav-link external-link button"><span>View PM portfolio</span></a>
-                </div>
-            </div>
-        </section>
     </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <span class="brand">Manish<span class="brand-dot">.</span>Biswas</span>
+                <p>Made with pixels, coffee &amp; curiosity.</p>
+            </div>
+            <div class="footer-links" aria-label="Footer">
+                <a href="#about">About</a>
+                <a href="#work">Projects</a>
+                <a href="blog.html">Blog</a>
+                <a href="pm-portfolio.html">PM</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <p class="footer-copy">© <span id="year"></span> Manish Biswas. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top">▲</button>
 
     <script src="script.js"></script>
 </body>
