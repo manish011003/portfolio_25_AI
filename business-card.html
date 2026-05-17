@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manish Biswas — Business Card</title>
+    <meta name="description" content="Pixel-style business card for Manish Biswas — AI Engineer × Product Aspirant.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           Palette — synced with style.css
+           ============================================================ */
+        :root {
+            --bg: #0f1020;
+            --bg-2: #16172e;
+            --panel: #1c1d3a;
+            --panel-2: #20224a;
+            --ink: #eef1ff;
+            --ink-dim: #b6bce0;
+            --line: #2d2f5e;
+            --accent: #ffd166;
+            --accent-2: #06d6a0;
+            --accent-3: #ef476f;
+            --accent-4: #5cc8ff;
+            --shadow: 8px 8px 0 #000;
+            --font-pixel: 'Press Start 2P', 'Courier New', monospace;
+            --font-mono: 'VT323', 'Courier New', monospace;
+
+            /* Real-world card size: 3.5in × 2in (US standard) */
+            --card-w: 540px;
+            --card-h: 309px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: var(--font-mono);
+            color: var(--ink);
+            background:
+                repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 4px),
+                radial-gradient(1200px 600px at 50% 0%, rgba(255, 209, 102, 0.06), transparent 60%),
+                linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+            background-attachment: fixed;
+        }
+
+        /* ============================================================
+           Layout — stage + controls
+           ============================================================ */
+        .stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px 60px;
+            gap: 28px;
+        }
+
+        .stage-title {
+            font-family: var(--font-pixel);
+            font-size: 14px;
+            letter-spacing: 1px;
+            color: var(--ink);
+            text-align: center;
+            margin: 0;
+        }
+        .stage-title .accent { color: var(--accent); }
+
+        .stage-hint {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            color: var(--ink-dim);
+            margin: -10px 0 0;
+        }
+        .stage-hint kbd {
+            display: inline-block;
+            font-family: var(--font-pixel);
+            font-size: 10px;
+            padding: 3px 6px;
+            background: var(--panel);
+            border: 2px solid var(--ink);
+            color: var(--accent);
+            box-shadow: 2px 2px 0 #000;
+        }
+
+        /* ============================================================
+           Card flip container
+           ============================================================ */
+        .card-scene {
+            width: var(--card-w);
+            height: var(--card-h);
+            perspective: 1600px;
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.7s cubic-bezier(.6,.05,.28,.99);
+            cursor: pointer;
+        }
+        .card.is-flipped { transform: rotateY(180deg); }
+
+        .face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            background: var(--panel);
+            border: 4px solid var(--ink);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            image-rendering: pixelated;
+        }
+        .face::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 4px);
+        }
+
+        .face-back { transform: rotateY(180deg); }
+
+        /* ============================================================
+           FRONT
+           ============================================================ */
+        .face-front {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-rows: auto 1fr auto;
+            padding: 22px 24px;
+            gap: 8px;
+        }
+
+        .front-top {
+            grid-column: 1 / span 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .front-eyebrow {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            color: var(--accent-2);
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        .front-eyebrow .caret {
+            display: inline-block;
+            width: 8px;
+            background: var(--accent-2);
+            animation: blink 1s steps(2, end) infinite;
+            margin-left: 2px;
+            color: transparent;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+        .front-version {
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            color: var(--ink-dim);
+            letter-spacing: 1px;
+        }
+
+        .front-main {
+            grid-column: 1 / span 2;
+            align-self: center;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .name {
+            font-family: var(--font-pixel);
+            font-size: 22px;
+            letter-spacing: 1px;
+            line-height: 1.2;
+            margin: 0;
+            color: var(--ink);
+            text-shadow: 3px 3px 0 #000;
+        }
+        .name .dot { color: var(--accent); }
+        .role {
+            font-family: var(--font-mono);
+            font-size: 22px;
+            color: var(--ink-dim);
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        .role .accent { color: var(--accent); }
+        .role .accent-2 { color: var(--accent-2); }
+
+        .front-bottom {
+            grid-column: 1 / span 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 10px;
+        }
+        .badge {
+            display: inline-block;
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            letter-spacing: 1.5px;
+            padding: 6px 8px;
+            background: var(--accent);
+            color: #000;
+            border: 2px solid #000;
+            box-shadow: 3px 3px 0 #000;
+        }
+        .badge.alt { background: var(--accent-2); }
+
+        /* Decorative pixel ghost in the corner */
+        .pixel-art {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.95;
+        }
+        .pixel-art .row {
+            display: flex;
+        }
+        .pixel-art .px {
+            width: 8px;
+            height: 8px;
+        }
+        .px-y { background: var(--accent); }
+        .px-r { background: var(--accent-3); }
+        .px-b { background: var(--accent-4); }
+        .px-w { background: var(--ink); }
+        .px-d { background: #000; }
+        .px-0 { background: transparent; }
+
+        /* ============================================================
+           BACK
+           ============================================================ */
+        .face-back {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-rows: auto 1fr auto;
+            padding: 20px 22px;
+            gap: 10px;
+        }
+        .back-header {
+            grid-column: 1 / span 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--line);
+            padding-bottom: 8px;
+        }
+        .back-brand {
+            font-family: var(--font-pixel);
+            font-size: 12px;
+            color: var(--ink);
+            letter-spacing: 1px;
+        }
+        .back-brand .dot { color: var(--accent); }
+        .back-header-tag {
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            color: var(--accent-2);
+            letter-spacing: 1px;
+        }
+
+        .back-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            justify-content: center;
+        }
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-mono);
+            font-size: 18px;
+            color: var(--ink);
+        }
+        .info-row .key {
+            font-family: var(--font-pixel);
+            font-size: 8px;
+            color: var(--accent);
+            letter-spacing: 1px;
+            min-width: 56px;
+        }
+        .info-row a {
+            color: var(--ink);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--accent);
+        }
+
+        .qr {
+            align-self: center;
+            justify-self: end;
+            width: 96px;
+            height: 96px;
+            background: var(--ink);
+            border: 3px solid var(--ink);
+            box-shadow: 4px 4px 0 #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            image-rendering: pixelated;
+        }
+
+        .back-footer {
+            grid-column: 1 / span 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2px solid var(--line);
+            padding-top: 8px;
+            gap: 10px;
+        }
+        .social-mini {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .social-mini a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--ink);
+            background: var(--panel-2);
+            color: var(--ink);
+            box-shadow: 2px 2px 0 #000;
+            text-decoration: none;
+        }
+        .social-mini svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+            display: block;
+        }
+        .social-mini a:hover {
+            background: var(--accent);
+            color: #000;
+        }
+        .footer-tagline {
+            font-family: var(--font-mono);
+            font-size: 16px;
+            color: var(--ink-dim);
+        }
+        .footer-tagline .accent { color: var(--accent-2); }
+
+        /* ============================================================
+           Controls
+           ============================================================ */
+        .controls {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            font-family: var(--font-pixel);
+            font-size: 10px;
+            letter-spacing: 1px;
+            padding: 12px 16px;
+            background: var(--accent);
+            color: #000;
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0 #000;
+            cursor: pointer;
+            transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.2s ease;
+        }
+        .btn:hover { background: var(--accent-2); }
+        .btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0 0 0 #000;
+        }
+        .btn.ghost {
+            background: var(--panel);
+            color: var(--ink);
+        }
+        .btn.ghost:hover { background: var(--panel-2); }
+
+        .back-link {
+            margin-top: 16px;
+            font-family: var(--font-mono);
+            font-size: 18px;
+            color: var(--ink-dim);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--accent);
+        }
+        .back-link:hover { color: var(--accent); }
+
+        /* ============================================================
+           Responsive — scale the card on small screens
+           ============================================================ */
+        @media (max-width: 600px) {
+            :root {
+                --card-w: 92vw;
+                --card-h: calc(92vw * 0.572);
+            }
+            .name { font-size: 16px; }
+            .role { font-size: 18px; }
+            .info-row { font-size: 16px; }
+            .info-row .key { font-size: 7px; min-width: 48px; }
+            .qr { width: 78px; height: 78px; }
+            .pixel-art { transform: translateY(-50%) scale(0.7); right: 8px; }
+        }
+
+        /* ============================================================
+           Print — show both sides stacked, real card size
+           ============================================================ */
+        @media print {
+            html, body {
+                background: #fff !important;
+            }
+            .stage-title, .stage-hint, .controls, .back-link { display: none !important; }
+            .stage {
+                min-height: auto;
+                padding: 0;
+                gap: 12mm;
+            }
+            .card-scene {
+                width: 88.9mm;
+                height: 50.8mm;
+                perspective: none;
+            }
+            .card {
+                transform: none !important;
+                transition: none !important;
+                transform-style: flat;
+            }
+            .face {
+                position: relative;
+                inset: auto;
+                width: 88.9mm;
+                height: 50.8mm;
+                margin: 0 auto 6mm;
+                backface-visibility: visible;
+                box-shadow: none;
+                border-width: 1mm;
+            }
+            .face-back { transform: none; }
+            .face::before { display: none; }
+            .qr { box-shadow: none; }
+            .btn, .social-mini a { box-shadow: 0.5mm 0.5mm 0 #000; }
+            .badge { box-shadow: 0.5mm 0.5mm 0 #000; }
+            @page { size: A4; margin: 12mm; }
+        }
+    </style>
+</head>
+<body>
+    <main class="stage">
+        <h1 class="stage-title">Manish<span class="accent">.</span>Biswas — Business Card</h1>
+        <p class="stage-hint">Click the card to flip · Press <kbd>F</kbd> to flip · Press <kbd>P</kbd> to print</p>
+
+        <div class="card-scene">
+            <div class="card" id="card" role="button" tabindex="0" aria-label="Business card. Click to flip.">
+
+                <!-- ============ FRONT ============ -->
+                <div class="face face-front">
+                    <div class="front-top">
+                        <p class="front-eyebrow">&gt; PRESS START<span class="caret">_</span></p>
+                        <span class="front-version">v.2026</span>
+                    </div>
+
+                    <div class="front-main">
+                        <h2 class="name">Manish<span class="dot">.</span>Biswas</h2>
+                        <p class="role">
+                            <span class="accent">AI</span> Engineer
+                            <span class="accent-2">×</span>
+                            <span class="accent">Product</span> Aspirant
+                        </p>
+                    </div>
+
+                    <div class="front-bottom">
+                        <span class="badge">SHIPS · BUILDS · LEARNS</span>
+                        <span class="badge alt">PLAYER 1</span>
+                    </div>
+
+                    <!-- Decorative pixel pacman -->
+                    <div class="pixel-art" aria-hidden="true">
+                        <div class="row"><div class="px px-0"></div><div class="px px-0"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-0"></div><div class="px px-0"></div></div>
+                        <div class="row"><div class="px px-0"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-0"></div></div>
+                        <div class="row"><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-d"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-0"></div><div class="px px-0"></div></div>
+                        <div class="row"><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-0"></div><div class="px px-0"></div><div class="px px-0"></div><div class="px px-0"></div></div>
+                        <div class="row"><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-d"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-0"></div><div class="px px-0"></div></div>
+                        <div class="row"><div class="px px-0"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-0"></div></div>
+                        <div class="row"><div class="px px-0"></div><div class="px px-0"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-y"></div><div class="px px-0"></div><div class="px px-0"></div></div>
+                    </div>
+                </div>
+
+                <!-- ============ BACK ============ -->
+                <div class="face face-back">
+                    <div class="back-header">
+                        <span class="back-brand">Manish<span class="dot">.</span>Biswas</span>
+                        <span class="back-header-tag">// CONTACT</span>
+                    </div>
+
+                    <div class="back-info">
+                        <div class="info-row">
+                            <span class="key">MAIL</span>
+                            <a href="mailto:me@manishb.in">me@manishb.in</a>
+                        </div>
+                        <div class="info-row">
+                            <span class="key">WEB</span>
+                            <a href="https://manishb.in" target="_blank" rel="noopener noreferrer">manishb.in</a>
+                        </div>
+                        <div class="info-row">
+                            <span class="key">LINKS</span>
+                            <a href="https://linktr.ee/manishbiswas" target="_blank" rel="noopener noreferrer">linktr.ee/manishbiswas</a>
+                        </div>
+                    </div>
+
+                    <div class="qr" aria-label="QR code linking to manishb.in">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fmanishb.in&margin=2&qzone=2&format=png" alt="QR code to manishb.in" loading="lazy">
+                    </div>
+
+                    <div class="back-footer">
+                        <ul class="social-mini" aria-label="Socials">
+                            <li>
+                                <a href="https://github.com/manish011003" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.9.58.1.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.73-1.52-2.55-.29-5.24-1.27-5.24-5.66 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.17a10.95 10.95 0 0 1 5.74 0c2.19-1.48 3.15-1.17 3.15-1.17.63 1.58.23 2.75.12 3.04.74.8 1.18 1.82 1.18 3.07 0 4.4-2.7 5.37-5.27 5.65.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.linkedin.com/in/manish-biswas-a6644922b/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.37V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://x.com/realmanishb" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25h6.829l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/dietcoakenjoyer/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.22.06 1.26.07 1.65.07 4.86 0 3.2-.01 3.58-.07 4.85-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.26.06-1.65.07-4.85.07-3.2 0-3.58-.01-4.85-.07-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12c0-3.2.01-3.58.07-4.85.05-1.17.25-1.8.41-2.22.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.91.33 4.15.63a5.88 5.88 0 0 0-2.13 1.39A5.88 5.88 0 0 0 .63 4.15C.33 4.91.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.14.56 2.9.31.79.73 1.46 1.39 2.13.67.67 1.34 1.08 2.13 1.39.76.3 1.63.5 2.9.56 1.28.06 1.69.07 4.95.07 3.26 0 3.67-.01 4.95-.07 1.27-.06 2.14-.26 2.9-.56a5.88 5.88 0 0 0 2.13-1.39 5.88 5.88 0 0 0 1.39-2.13c.3-.76.5-1.63.56-2.9.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.14-.56-2.9a5.88 5.88 0 0 0-1.39-2.13A5.88 5.88 0 0 0 19.85.63C19.09.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zm0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4zm6.4-11.85a1.44 1.44 0 1 0 1.44 1.44 1.44 1.44 0 0 0-1.44-1.44z"/></svg>
+                                </a>
+                            </li>
+                        </ul>
+                        <span class="footer-tagline">Made with <span class="accent">pixels</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="flip-btn" type="button">FLIP CARD</button>
+            <button class="btn ghost" id="print-btn" type="button">PRINT / SAVE PDF</button>
+        </div>
+
+        <a class="back-link" href="index.html">&larr; back to portfolio</a>
+    </main>
+
+    <script>
+        const card = document.getElementById('card');
+        const flipBtn = document.getElementById('flip-btn');
+        const printBtn = document.getElementById('print-btn');
+
+        function flip() { card.classList.toggle('is-flipped'); }
+
+        card.addEventListener('click', flip);
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
+        });
+        flipBtn.addEventListener('click', (e) => { e.stopPropagation(); flip(); });
+        printBtn.addEventListener('click', (e) => { e.stopPropagation(); window.print(); });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.target === document.body || e.target === card) {
+                if (e.key === 'f' || e.key === 'F') flip();
+                if (e.key === 'p' || e.key === 'P') { e.preventDefault(); window.print(); }
+            }
+        });
+    </script>
+</body>
+</html>

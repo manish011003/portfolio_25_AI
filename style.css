@@ -888,6 +888,40 @@ section { width: 100%; scroll-margin-top: calc(var(--header-h) + 12px); }
     box-shadow: 0 0 0 #000;
 }
 
+.card-cta {
+    margin-top: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 18px;
+    color: var(--ink-dim);
+    text-decoration: none;
+    padding: 6px 4px;
+    border-bottom: 2px dashed transparent;
+    transition: color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+.card-cta-icon {
+    color: var(--accent);
+    font-family: var(--font-pixel);
+    font-size: 10px;
+    line-height: 1;
+}
+.card-cta-arrow {
+    display: inline-block;
+    transition: transform 0.15s ease;
+}
+.card-cta:hover,
+.card-cta:focus-visible {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+    outline: none;
+}
+.card-cta:hover .card-cta-arrow,
+.card-cta:focus-visible .card-cta-arrow {
+    transform: translateX(4px);
+}
+
 /* ============================================================
    Footer
    ============================================================ */
