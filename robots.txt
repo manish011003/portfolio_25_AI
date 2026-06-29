@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aimanishbportfolio.onrender.com/sitemap.xml
+Sitemap: https://manishbiswashere.vercel.app/sitemap.xml

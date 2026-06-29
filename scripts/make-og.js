@@ -49,7 +49,7 @@ const bg = `
     <text x="568" y="509">LLMs</text>
   </g>
 
-  <text x="80" y="585" font-family="Verdana, sans-serif" font-size="24" fill="#7e84bb">aimanishbportfolio.onrender.com</text>
+  <text x="80" y="585" font-family="Verdana, sans-serif" font-size="24" fill="#7e84bb">manishbiswashere.vercel.app</text>
 </svg>`;
 
 (async () => {
