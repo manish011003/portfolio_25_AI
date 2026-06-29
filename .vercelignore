@@ -1,0 +1,7 @@
+.git
+node_modules
+scripts
+graphify-out
+.DS_Store
+**/.DS_Store
+terminals
