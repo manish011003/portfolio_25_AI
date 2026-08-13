@@ -94,6 +94,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* ---------- Work / case studies ---------- */
     const workDetails = {
+        'ironclad': {
+            title: 'Ironclad — Cross-Platform Fitness App',
+            github: 'https://github.com/manish011003/ironclad',
+            body: `
+Ironclad is a production-ready fitness app for iOS, Android, and Web — one Expo + TypeScript codebase with Firebase Auth, Firestore, and Storage. Live web: https://ironclad-bice.vercel.app
+
+**What It Does:**
+- Auth (email / Google / Apple) and onboarding with BMI, TDEE, and calorie budget
+- Home dashboard, nutrition camera log (Groq → Gemini fallback), and meal sharing
+- Gym bro invites (link + code) and a meal swipe feed
+- Form checker (web MediaPipe + exercise rules), workouts, XP / ranks, and consistency analytics
+- Custom training plans (v2): wizard → Groq / Gemini week plans (gym / calisthenics / cardio)
+- Soundtrack (v2): pin a Spotify track, album, or playlist for the week on Home + Profile
+- Achievements: scan marathon / HYROX / Ironman / competition medals for the profile
+- Profile photo upload and avatar management
+
+**Product & Architecture:**
+- Single Expo Router app — no separate Flutter / KMP / native forks
+- Firebase project for auth, realtime data, and media
+- Vision + planning via Groq with optional Gemini fallback
+- Optional Spotify PKCE connect for search; oEmbed works without a client secret
+- Web SPA routing via vercel.json; Android / iOS via EAS env + builds
+
+**Tech Stack:** Expo, TypeScript, expo-router, React Native, Firebase, Groq, Gemini, MediaPipe (web), Spotify AuthSession / oEmbed, Vercel, EAS
+            `
+        },
+        'geostocks-ai': {
+            title: 'GeoStocks AI — Geopolitical Stock Intelligence',
+            github: 'https://github.com/manish011003/geostocks-ai',
+            body: `
+GeoStock AI links world events to market moves in a single Next.js dashboard: a live 3-D globe, multi-exchange watchlist, AI-tagged news, and a streaming analyst chatbot.
+
+**What It Does:**
+- Tracks 8 exchanges (NYSE, NASDAQ, BSE, NSE, LSE, EURONEXT, TSE, SSE) with live open/close status and currency-correct quotes
+- Day/night-blended Three.js Earth with pulsing severity markers and camera fly-to for events and exchanges
+- Gemini tags headlines by severity / region / sector; click an event for impact analysis and affected tickers
+- Multi-list watchlist, stock detail drawer with candlesticks, RSI, and a 5-signal AI prediction engine
+- Streaming Gemini analyst chatbot with live watchlist + event context (Ctrl/Cmd + K)
+
+**Architecture Highlights:**
+- Next.js App Router + React 19 + TypeScript + Tailwind
+- Exchange registry + session status engine; Yahoo Finance for quotes / OHLCV / search
+- Parallel regional news fan-out (GNews / NewsAPI) with heuristic fallbacks so the UI never blanks
+- Zustand-persisted settings and watchlists with theme, globe, and exchange preferences
+
+**Tech Stack:** Next.js, React, TypeScript, Three.js, GSAP, Gemini, lightweight-charts, Zustand, Yahoo Finance, GNews
+            `
+        },
+        'ai-cicd': {
+            title: 'AI CI/CD Log Analyzer — RAG Failure Diagnosis',
+            github: 'https://github.com/manish011003/ai-cicd-log-analyzer',
+            body: `
+An end-to-end pipeline that turns failed Jenkins builds into LLM-generated root-cause analyses, surfaces them in a Next.js dashboard, and learns from operator feedback via a vector knowledge base.
+
+**What It Does:**
+- Polls Jenkins for failed builds, extracts failed-stage logs, and compresses them with structural filters
+- LangGraph worker calls Groq (llama-3.3-70b) for diagnosis and stores accepted fixes in Elasticsearch kNN
+- Next.js dashboard for sessions, analyses, feedback, and settings
+- Human-approved institutional knowledge reduces mean time to resolution on similar failures
+
+**Architecture:**
+- Jenkins → jenkins_failure_listener → failure_analyzer_worker → Elasticsearch (kNN)
+- Worker also writes sessions to Postgres via a FastAPI web backend for the UI
+- Docker Compose packaging for listener, worker, web API, frontend, Postgres, and Elasticsearch
+
+**Tech Stack:** Python, FastAPI, LangGraph, Groq, Sentence-Transformers, Elasticsearch, Postgres, Next.js, Docker Compose, Jenkins
+            `
+        },
         'task-manager': {
             title: 'Task Manager Agent — AI-Powered WebSocket Agent',
             github: 'https://github.com/manish011003/task-manager-agent',

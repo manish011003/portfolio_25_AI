@@ -757,6 +757,12 @@ section { width: 100%; scroll-margin-top: calc(var(--header-h) + 12px); }
 .tech-tag.html      { background:#e34c26; }
 .tech-tag.react     { background:#61dafb; color:#003042; text-shadow:none; }
 .tech-tag.firebase  { background:#ffca28; color:#222; text-shadow:none; }
+.tech-tag.expo      { background:#000; }
+.tech-tag.typescript{ background:#3178c6; }
+.tech-tag.nextjs    { background:#111; }
+.tech-tag.threejs   { background:#049ef4; color:#003042; text-shadow:none; }
+.tech-tag.gemini    { background:#4285f4; }
+.tech-tag.elasticsearch { background:#fecc63; color:#222; text-shadow:none; }
 
 /* ============================================================
    Sliding Work Panel
