@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /graphify-out/
 
 Sitemap: https://manishbiswashere.vercel.app/sitemap.xml

@@ -1,0 +1,19 @@
+{
+  "name": "Manish Biswas — Portfolio",
+  "short_name": "Manish Biswas",
+  "description": "AI Engineer & Product Manager portfolio — Ironclad, GeoStocks AI, CI/CD log analyzer, and more.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0f1020",
+  "theme_color": "#1a1a2e",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "char8bit/9-removebg-preview.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
