@@ -1,25 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://manishbiswashere.vercel.app/</loc>
     <lastmod>2026-08-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <image:image>
-      <image:loc>https://manishbiswashere.vercel.app/og-image.png</image:loc>
-      <image:title>Manish Biswas — AI Engineer &amp; Product Manager</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://manishbiswashere.vercel.app/pm-portfolio.html</loc>
     <lastmod>2026-08-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
-    <image:image>
-      <image:loc>https://manishbiswashere.vercel.app/assets/ironclad-case-study.jpg</image:loc>
-      <image:title>Ironclad case study thumbnail</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://manishbiswashere.vercel.app/blog.html</loc>
