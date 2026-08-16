@@ -92,177 +92,396 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* ---------- Work / case studies ---------- */
-    const workDetails = {
-        'ironclad': {
-            title: 'Ironclad — Cross-Platform Fitness App',
+    /* ---------- Work / case studies (dynamic) ---------- */
+    // Curated from github.com/manish011003 - skips portfolio clones, toys, forks/duplicates.
+    const projects = [
+        {
+            id: 'ironclad',
+            thumb: '⚔️',
+            name: 'Ironclad',
+            blurb: 'Cross-platform fitness app — AI meal logging, form checker, plans, XP & Spotify soundtrack.',
+            tags: [
+                { label: 'Expo', className: 'expo' },
+                { label: 'TypeScript', className: 'typescript' },
+                { label: 'Firebase', className: 'firebase' },
+                { label: 'React Native', className: 'react' },
+                { label: 'MediaPipe', className: 'mediapipe' }
+            ],
+            categories: ['ai', 'fitness', 'fullstack'],
             github: 'https://github.com/manish011003/ironclad',
+            title: 'Ironclad — Cross-Platform Fitness App',
             body: `
-Ironclad is a production-ready fitness app for iOS, Android, and Web — one Expo + TypeScript codebase with Firebase Auth, Firestore, and Storage. Live web: https://ironclad-bice.vercel.app
+Ironclad is a production-ready fitness app for iOS, Android, and Web — one Expo + TypeScript codebase with Firebase. Live: https://ironclad-bice.vercel.app
 
 **What It Does:**
-- Auth (email / Google / Apple) and onboarding with BMI, TDEE, and calorie budget
-- Home dashboard, nutrition camera log (Groq → Gemini fallback), and meal sharing
-- Gym bro invites (link + code) and a meal swipe feed
-- Form checker (web MediaPipe + exercise rules), workouts, XP / ranks, and consistency analytics
-- Custom training plans (v2): wizard → Groq / Gemini week plans (gym / calisthenics / cardio)
-- Soundtrack (v2): pin a Spotify track, album, or playlist for the week on Home + Profile
-- Achievements: scan marathon / HYROX / Ironman / competition medals for the profile
-- Profile photo upload and avatar management
+- Auth (email / Google / Apple) + BMI / TDEE / calorie onboarding
+- Nutrition camera log (Groq → Gemini), meal sharing, gym-bro invites
+- Form checker (web MediaPipe), workouts, XP / ranks, consistency analytics
+- Custom training plans + Spotify soundtrack pins + medal achievements
 
-**Product & Architecture:**
-- Single Expo Router app — no separate Flutter / KMP / native forks
-- Firebase project for auth, realtime data, and media
-- Vision + planning via Groq with optional Gemini fallback
-- Optional Spotify PKCE connect for search; oEmbed works without a client secret
-- Web SPA routing via vercel.json; Android / iOS via EAS env + builds
-
-**Tech Stack:** Expo, TypeScript, expo-router, React Native, Firebase, Groq, Gemini, MediaPipe (web), Spotify AuthSession / oEmbed, Vercel, EAS
+**Tech Stack:** Expo, TypeScript, expo-router, React Native, Firebase, Groq, Gemini, MediaPipe, Vercel, EAS
             `
         },
-        'geostocks-ai': {
-            title: 'GeoStocks AI — Geopolitical Stock Intelligence',
+        {
+            id: 'geostocks-ai',
+            thumb: '🌐',
+            name: 'GeoStocks AI',
+            blurb: 'Geopolitical stock intelligence — 3D globe, 8 exchanges, AI news tagging & streaming analyst.',
+            tags: [
+                { label: 'Next.js', className: 'nextjs' },
+                { label: 'TypeScript', className: 'typescript' },
+                { label: 'Three.js', className: 'threejs' },
+                { label: 'Gemini', className: 'gemini' },
+                { label: 'React', className: 'react' }
+            ],
+            categories: ['ai', 'fullstack'],
             github: 'https://github.com/manish011003/geostocks-ai',
+            title: 'GeoStocks AI — Geopolitical Stock Intelligence',
             body: `
-GeoStock AI links world events to market moves in a single Next.js dashboard: a live 3-D globe, multi-exchange watchlist, AI-tagged news, and a streaming analyst chatbot.
+Links world events to market moves: live 3-D globe, multi-exchange watchlist, AI-tagged news, and a streaming Gemini analyst. Live: https://geostocks-ai.vercel.app
 
-**What It Does:**
-- Tracks 8 exchanges (NYSE, NASDAQ, BSE, NSE, LSE, EURONEXT, TSE, SSE) with live open/close status and currency-correct quotes
-- Day/night-blended Three.js Earth with pulsing severity markers and camera fly-to for events and exchanges
-- Gemini tags headlines by severity / region / sector; click an event for impact analysis and affected tickers
-- Multi-list watchlist, stock detail drawer with candlesticks, RSI, and a 5-signal AI prediction engine
-- Streaming Gemini analyst chatbot with live watchlist + event context (Ctrl/Cmd + K)
+**Highlights:**
+- 8 exchanges with live open/close status and currency-correct quotes
+- Gemini severity / region / sector tagging + 5-signal AI prediction engine
+- Three.js Earth with fly-to events and exchange focus
 
-**Architecture Highlights:**
-- Next.js App Router + React 19 + TypeScript + Tailwind
-- Exchange registry + session status engine; Yahoo Finance for quotes / OHLCV / search
-- Parallel regional news fan-out (GNews / NewsAPI) with heuristic fallbacks so the UI never blanks
-- Zustand-persisted settings and watchlists with theme, globe, and exchange preferences
-
-**Tech Stack:** Next.js, React, TypeScript, Three.js, GSAP, Gemini, lightweight-charts, Zustand, Yahoo Finance, GNews
+**Tech Stack:** Next.js, React, TypeScript, Three.js, Gemini, Yahoo Finance, Zustand
             `
         },
-        'ai-cicd': {
-            title: 'AI CI/CD Log Analyzer — RAG Failure Diagnosis',
+        {
+            id: 'ai-cicd',
+            thumb: '🔧',
+            name: 'AI CI/CD Log Analyzer',
+            blurb: 'RAG pipeline that turns Jenkins failures into root-cause analyses with a learning knowledge base.',
+            tags: [
+                { label: 'Python', className: 'python' },
+                { label: 'FastAPI', className: 'fastapi' },
+                { label: 'Next.js', className: 'nextjs' },
+                { label: 'Docker', className: 'docker' },
+                { label: 'Elasticsearch', className: 'elasticsearch' }
+            ],
+            categories: ['ai', 'devops', 'fullstack'],
             github: 'https://github.com/manish011003/ai-cicd-log-analyzer',
+            title: 'AI CI/CD Log Analyzer — RAG Failure Diagnosis',
             body: `
-An end-to-end pipeline that turns failed Jenkins builds into LLM-generated root-cause analyses, surfaces them in a Next.js dashboard, and learns from operator feedback via a vector knowledge base.
+End-to-end pipeline: Jenkins failures → LangGraph + Groq diagnosis → Next.js dashboard, with accepted fixes stored in Elasticsearch kNN for future similarity search.
 
-**What It Does:**
-- Polls Jenkins for failed builds, extracts failed-stage logs, and compresses them with structural filters
-- LangGraph worker calls Groq (llama-3.3-70b) for diagnosis and stores accepted fixes in Elasticsearch kNN
-- Next.js dashboard for sessions, analyses, feedback, and settings
-- Human-approved institutional knowledge reduces mean time to resolution on similar failures
+**Architecture:** Jenkins listener → failure analyzer worker → Elasticsearch + Postgres → Next.js UI (Docker Compose).
 
-**Architecture:**
-- Jenkins → jenkins_failure_listener → failure_analyzer_worker → Elasticsearch (kNN)
-- Worker also writes sessions to Postgres via a FastAPI web backend for the UI
-- Docker Compose packaging for listener, worker, web API, frontend, Postgres, and Elasticsearch
-
-**Tech Stack:** Python, FastAPI, LangGraph, Groq, Sentence-Transformers, Elasticsearch, Postgres, Next.js, Docker Compose, Jenkins
+**Tech Stack:** Python, FastAPI, LangGraph, Groq, Sentence-Transformers, Elasticsearch, Postgres, Next.js, Docker
             `
         },
-        'task-manager': {
+        {
+            id: 'benevolve-ai',
+            thumb: '🏢',
+            name: 'Benevolve AI',
+            blurb: 'Agency site for custom in-house tools, business websites, and LLM-wrapper products.',
+            tags: [
+                { label: 'Next.js', className: 'nextjs' },
+                { label: 'TypeScript', className: 'typescript' },
+                { label: 'React', className: 'react' },
+                { label: 'Supabase', className: 'supabase' }
+            ],
+            categories: ['ai', 'fullstack'],
+            github: 'https://github.com/manish011003/benevolve-AI',
+            title: 'Benevolve AI — In-house Software Agency Site',
+            body: `
+Marketing + lead-gen site for Benevolve AI: custom business websites, internal SaaS tools, and LLM-wrapper products. Live: https://benevolve-ai.vercel.app
+
+**Highlights:**
+- Positioning for fixed-scope builds (website / internal tool / AI product)
+- Selected-work case cards and clear discovery → ship process
+- Stack callouts for React, Next.js, Supabase, OpenAI / Claude, Stripe
+
+**Tech Stack:** Next.js, TypeScript, React, Tailwind
+            `
+        },
+        {
+            id: 'spidey-tracker',
+            thumb: '🕷️',
+            name: 'Spidey Tracker',
+            blurb: 'Private couples / friends pixel HUD — live map presence, missions, quizzes, spider-code invites.',
+            tags: [
+                { label: 'React', className: 'react' },
+                { label: 'TypeScript', className: 'typescript' },
+                { label: 'Firebase', className: 'firebase' },
+                { label: 'Vite', className: 'vite' },
+                { label: 'Leaflet', className: 'leaflet' }
+            ],
+            categories: ['fullstack'],
+            github: 'https://github.com/manish011003/spidey_tracker',
+            title: 'Spidey Tracker — Private Presence & Adventure HUD',
+            body: `
+Privacy-first couples / friends web app with a homemade pixel Spider HUD: dark map, live presence, missions, quizzes, and spider-code invites. Live: https://spidey-tracker-pi.vercel.app
+
+**What It Does:**
+- Google sign-in + onboarding (role / spider / suit)
+- Partner link (1:1) and friends with request flows
+- Leaflet map with opt-in location, nearby landmark quests (Overpass)
+- Adventure loop: XP, levels, suits, quizzes, missions, achievements
+
+**Tech Stack:** React 19, TypeScript, Vite, Tailwind, Firebase Auth / Firestore / Realtime DB, Leaflet, Vercel
+            `
+        },
+        {
+            id: 'task-manager',
+            thumb: '🤖',
+            name: 'Task Manager Agent',
+            blurb: 'AI-powered WebSocket agent for natural-language task management with Notion sync.',
+            tags: [
+                { label: 'Python', className: 'python' },
+                { label: 'FastAPI', className: 'fastapi' },
+                { label: 'WebSocket', className: 'websocket' },
+                { label: 'OpenAI', className: 'openai' },
+                { label: 'Docker', className: 'docker' }
+            ],
+            categories: ['ai', 'fullstack'],
+            github: 'https://github.com/manish011003/AI-task-manager-agent-main',
             title: 'Task Manager Agent — AI-Powered WebSocket Agent',
-            github: 'https://github.com/manish011003/task-manager-agent',
             body: `
-A WebSocket-driven AI agent designed to help users create, organize, update, and track tasks through natural-language interaction. Built using FastAPI, Python, and OpenAI's GPT models, the system demonstrates how LLMs can be operationalized for real-world agentic workflows.
+WebSocket-driven AI agent for creating, organizing, and tracking tasks via natural language — FastAPI + OpenAI GPT with optional Notion sync.
 
-**What It Does:**
-- Natural-language task creation, deletion, listing, and status updates
-- Stable conversation sessions using UUID-based memory
-- Notion sync to manage tasks across platforms (if configured)
-- Robust error-handling, API security, and clean WebSocket-based communication
-- Optional web UI for demo and testing
+**Highlights:**
+- NL task CRUD + UUID conversation memory
+- Tool-calling agent over WebSockets
+- Streamlit demo UI + Docker packaging
 
-**Architecture Highlights:**
-- WebSocket Agent (FastAPI): Core agent for message handling and tool execution
-- Task Management Tools: Create, update, delete, count tasks
-- Conversation Memory: Maintains chat context per session
-- Streamlit Frontend: Simple UI for interacting with the agent
-- REST endpoints for health checks and conversation resets
-
-**Tech Stack:** FastAPI, Python, OpenAI GPT Models, Notion API, Streamlit, Docker, WebSockets, UUID session management
+**Tech Stack:** FastAPI, Python, OpenAI, Notion API, Streamlit, Docker, WebSockets
             `
         },
-        'pushup-counter': {
+        {
+            id: 'pushup-counter',
+            thumb: '💪',
+            name: 'Push-Up Counter',
+            blurb: 'Real-time fitness tracking using MediaPipe Pose and OpenCV for form analysis.',
+            tags: [
+                { label: 'Python', className: 'python' },
+                { label: 'OpenCV', className: 'opencv' },
+                { label: 'MediaPipe', className: 'mediapipe' },
+                { label: 'NumPy', className: 'numpy' }
+            ],
+            categories: ['ai', 'fitness'],
+            github: 'https://github.com/manish011003/push-up-counter',
             title: 'Push-Up Counter using MediaPipe & OpenCV',
-            github: 'https://github.com/manish011003/pushup-counter',
             body: `
-A real-time fitness tracking application that counts push-ups and evaluates posture using MediaPipe Pose and OpenCV. The project analyzes joint angles (shoulder, elbow, wrist) to detect movement stages and provide live feedback on form.
+Counts push-ups and evaluates posture in real time from webcam pose landmarks.
 
-**What It Does:**
-- Detects push-up reps using elbow angle thresholds
-- Classifies stages (up/down) and increments counts automatically
-- Provides real-time form feedback like "Good Form" or "Keep Body Straight"
-- Displays bounding boxes and pose landmarks on video feed
-- Simple start/stop interaction
+**Highlights:**
+- Elbow-angle rep detection (up / down stages)
+- Shoulder–hip–ankle form feedback overlay
+- Live count, stage, and angle HUD
 
-**How It Works:**
-- Angle Estimation: Calculates elbow angle to determine rep accuracy
-- Stage Transition: Detects transitions from down → up to count one push-up
-- Form Validation: Ensures correct shoulder-hip-ankle alignment
-- Live Overlay: Shows rep count, stage, and posture feedback on the screen
-
-**Tech Stack:** OpenCV, MediaPipe Pose, Python, NumPy (for angle calculations)
+**Tech Stack:** OpenCV, MediaPipe Pose, Python, NumPy
             `
         },
-        'ewaste': {
-            title: 'Hungry for E-Waste — Web Platform for E-Waste Management',
-            github: 'https://github.com/manish011003/hungry-for-ewaste',
+        {
+            id: 'panipurirush',
+            thumb: '🍽️',
+            name: 'Pani Puri Rush',
+            blurb: 'Pac-Man style browser game — eat pani puris, grab chillies, dodge water glasses.',
+            tags: [
+                { label: 'JavaScript', className: 'javascript' },
+                { label: 'HTML/CSS', className: 'html' }
+            ],
+            categories: ['games', 'fullstack'],
+            github: 'https://github.com/manish011003/panipurirush',
+            title: 'Pani Puri Rush — Browser Arcade Game',
             body: `
-Hungry for E-Waste is a full-stack web platform built for the SIH 2023 hackathon final round. It aims to streamline the formalized e-waste management ecosystem in India, supporting proper collection, safe transportation, segregation, and eco-friendly disposal of electronic waste.
+Pac-Man style browser game built with HTML, CSS, and vanilla JavaScript. Live: https://panipurirush.vercel.app
 
-**What It Does:**
-- Organized E-Waste Collection: Track and manage e-waste pickups from individuals, institutions, and sources
-- Safe Transportation: Assigns transport routes for moving e-waste to verified disposal or recycling facilities
-- Smart Segregation: Automatically categorizes waste into appropriate recycling/disposal classes
-- Eco-Friendly Disposal: Promotes certified disposal methods to ensure environmental safety
-- User Dashboard: Users can track pickup requests, view status updates, and raise queries
+**How to Play:**
+- Easy / Medium / Hard difficulties
+- Arrow keys, WASD, swipe, or on-screen pad
+- Eat every pani puri; chillies frighten water-glass enemies
+- 3 lives
 
-**Tech Stack:** HTML, CSS, JavaScript, Node.js, Express, MongoDB, Git, GitHub
+**Tech Stack:** HTML, CSS, JavaScript
             `
         },
-        'gym-buddy': {
-            title: 'Gym Buddy (MVP) — AI-Powered Fitness & Nutrition Companion',
-            github: 'https://github.com/manish011003/gym-buddy',
+        {
+            id: 'superstorewise',
+            thumb: '🛒',
+            name: 'Superstorewise',
+            blurb: 'Expo / React Native storefront app with file-based routing and Axios API calls.',
+            tags: [
+                { label: 'Expo', className: 'expo' },
+                { label: 'TypeScript', className: 'typescript' },
+                { label: 'React Native', className: 'react' }
+            ],
+            categories: ['fullstack'],
+            github: 'https://github.com/manish011003/Superstorewise',
+            title: 'Superstorewise — Expo Storefront App',
             body: `
-Gym Buddy is an AI-driven personal fitness assistant designed to help users track their nutrition, calories, workouts, and long-term progress. It combines LLM-based coaching, scientific training principles, and data-driven personalization to act as a 24/7 gym partner.
+Cross-platform storefront built with Expo Router — React Native UI talking to APIs via Axios.
 
-**Core Features (Planned):**
+**Highlights:**
+- File-based routing with expo-router
+- Universal app targets (iOS / Android / web via Expo)
+- Modular React Native screens for product browsing flows
 
-1. **AI Workout Planner:**
-   - Personalized routine generation using LLMs + evidence-based training research
-   - Adjusts workouts based on user performance, soreness, PRs, and fatigue trends
-   - Supports hypertrophy, fat loss, strength cycles, and mobility goals
+**Tech Stack:** Expo, React Native, TypeScript, Axios, expo-router
+            `
+        },
+        {
+            id: 'decoy',
+            thumb: '🎯',
+            name: 'DECOY Website',
+            blurb: 'Official marketing site for DECOY — shipped as a polished static web presence.',
+            tags: [
+                { label: 'HTML/CSS', className: 'html' },
+                { label: 'JavaScript', className: 'javascript' }
+            ],
+            categories: ['fullstack'],
+            github: 'https://github.com/manish011003/DECOYwebsrc',
+            title: 'DECOY — Official Organization Website',
+            body: `
+The official website of DECOY — a static marketing site with custom layout, assets, and responsive pages. Live: https://decoywebsrc.vercel.app
 
-2. **Nutrition & Calories Tracker:**
-   - Food logging with macro/micro breakdown
-   - Automatic calorie goals based on TDEE, body fat %, and progress
-   - Smart recommendations: meals, supplements, hydration planning
+**Tech Stack:** HTML, CSS, JavaScript, Vercel
+            `
+        },
+        {
+            id: 'aasaan',
+            thumb: '📦',
+            name: 'Aasaan',
+            blurb: 'Lightweight landing + order funnel — “get things aasaani se” with Google Forms checkout.',
+            tags: [
+                { label: 'HTML/CSS', className: 'html' },
+                { label: 'JavaScript', className: 'javascript' }
+            ],
+            categories: ['fullstack'],
+            github: 'https://github.com/manish011003/aasaan',
+            title: 'Aasaan — Landing & Order Funnel',
+            body: `
+Minimal product landing page with clear CTA into a Google Forms order flow. Live: https://aasaan.vercel.app
 
-3. **Progress Monitoring Dashboard:**
-   - Body metrics: weight, body fat %, circumference changes
-   - Workout analytics: volume, intensity, PR tracking, progressive overload detection
-   - Weekly AI summary: what improved, what regressed, and why
+**Tech Stack:** HTML, CSS, JavaScript, Vercel
+            `
+        },
+        {
+            id: 'ewaste',
+            thumb: '♻️',
+            name: 'Hungry for E-Waste (SIH)',
+            blurb: 'Full-stack e-waste management platform — Smart India Hackathon 2023 finalist solution.',
+            tags: [
+                { label: 'JavaScript', className: 'javascript' },
+                { label: 'Node.js', className: 'nodejs' },
+                { label: 'Express', className: 'express' },
+                { label: 'MongoDB', className: 'mongodb' },
+                { label: 'HTML/CSS', className: 'html' }
+            ],
+            categories: ['fullstack'],
+            github: 'https://github.com/manish011003/sih2023final',
+            title: 'Hungry for E-Waste — SIH 2023 Finalist',
+            body: `
+Full-stack platform built for Smart India Hackathon 2023 to formalize e-waste collection, transport, segregation, and disposal.
 
-4. **Supplemented Agent System:**
-   - AI coach that answers questions ("Why am I not losing fat?", "Fix my form")
-   - Cites scientific studies, training principles, and evidence-based nutrition
-   - Context-aware responses based on user logs and past training
+**What It Does:**
+- Pickup tracking for individuals and institutions
+- Transport routing to verified facilities
+- Segregation classes and eco-friendly disposal flows
+- User dashboard for request status
 
-**MVP Tech Stack (Planned):** FastAPI or Node.js, OpenAI GPT, React Native / React, Firebase / PostgreSQL, MediaPipe + OpenCV (for form-check)
+**Tech Stack:** HTML, CSS, JavaScript, Node.js, Express, MongoDB
             `
         }
-    };
+    ];
 
     const workPanel = document.getElementById('work-panel');
     const workPanelTitle = document.getElementById('work-panel-title');
     const workPanelBody = document.getElementById('work-panel-body');
     const workPanelClose = document.getElementById('work-panel-close');
+    const caseRow = document.getElementById('case-row');
+    const workFilters = document.getElementById('work-filters');
+    let activeFilter = 'all';
+    let renderToken = 0;
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function getFilteredProjects(filter) {
+        if (filter === 'all') return projects;
+        return projects.filter((p) => p.categories.includes(filter));
+    }
+
+    function createWorkCard(project, index) {
+        const article = document.createElement('article');
+        article.className = 'work-card';
+        article.dataset.workId = project.id;
+        article.style.setProperty('--card-i', String(index));
+
+        const tagsHtml = project.tags
+            .map((t) => `<span class="tech-tag ${escapeHtml(t.className)}">${escapeHtml(t.label)}</span>`)
+            .join('');
+
+        article.innerHTML = `
+            <div class="work-thumb">${escapeHtml(project.thumb)}</div>
+            <h3>${escapeHtml(project.name)}</h3>
+            <p>${escapeHtml(project.blurb)}</p>
+            <div class="tech-tags">${tagsHtml}</div>
+            <div class="work-card-buttons">
+                <div class="box-button">
+                    <button type="button" class="work-open-btn button"><span>Details</span></button>
+                </div>
+                <div class="box-button alt">
+                    <a href="${escapeHtml(project.github)}" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
+                </div>
+            </div>
+        `;
+        return article;
+    }
+
+    function renderProjects(filter, { animate = true } = {}) {
+        if (!caseRow) return;
+        const token = ++renderToken;
+        const list = getFilteredProjects(filter);
+
+        const paint = () => {
+            if (token !== renderToken) return;
+            caseRow.innerHTML = '';
+
+            if (!list.length) {
+                const empty = document.createElement('p');
+                empty.className = 'work-empty';
+                empty.textContent = 'No projects in this category yet.';
+                caseRow.appendChild(empty);
+                return;
+            }
+
+            list.forEach((project, i) => {
+                const card = createWorkCard(project, i);
+                if (animate) card.classList.add('is-entering');
+                caseRow.appendChild(card);
+            });
+
+            if (animate) {
+                requestAnimationFrame(() => {
+                    caseRow.querySelectorAll('.work-card.is-entering').forEach((card) => {
+                        card.classList.add('is-visible');
+                    });
+                });
+            }
+        };
+
+        if (animate && caseRow.children.length) {
+            caseRow.classList.add('is-swapping');
+            window.setTimeout(() => {
+                if (token !== renderToken) return;
+                caseRow.classList.remove('is-swapping');
+                paint();
+            }, 160);
+        } else {
+            paint();
+        }
+    }
 
     function openWorkPanel(id) {
-        const detail = workDetails[id];
+        const detail = projects.find((p) => p.id === id);
         if (!detail || !workPanel || !workPanelTitle || !workPanelBody) return;
         workPanelTitle.textContent = detail.title;
         workPanelBody.textContent = '';
@@ -272,7 +491,7 @@ Gym Buddy is an AI-driven personal fitness assistant designed to help users trac
             githubBtnContainer.style.marginBottom = '16px';
             githubBtnContainer.innerHTML = `
                 <div class="box-button alt" style="display: inline-block;">
-                    <a href="${detail.github}" target="_blank" class="github-btn button" rel="noopener noreferrer">
+                    <a href="${escapeHtml(detail.github)}" target="_blank" class="github-btn button" rel="noopener noreferrer">
                         <span>View on GitHub</span>
                     </a>
                 </div>
@@ -281,11 +500,11 @@ Gym Buddy is an AI-driven personal fitness assistant designed to help users trac
         }
 
         const lines = detail.body.trim().split('\n');
-        lines.forEach(line => {
+        lines.forEach((line) => {
             const trimmed = line.trim();
             if (trimmed.length > 0) {
                 const p = document.createElement('p');
-                p.innerHTML = trimmed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                p.innerHTML = escapeHtml(trimmed).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 workPanelBody.appendChild(p);
             }
         });
@@ -301,21 +520,38 @@ Gym Buddy is an AI-driven personal fitness assistant designed to help users trac
         document.body.style.overflow = '';
     }
 
-    const workCards = document.querySelectorAll('.work-card');
-    workCards.forEach(card => {
-        card.addEventListener('click', (e) => {
-            const id = card.getAttribute('data-work-id');
-            if (!id) return;
-            // Don't open panel when clicking the GitHub link
+    if (caseRow) {
+        caseRow.addEventListener('click', (e) => {
+            const card = e.target.closest('.work-card');
+            if (!card) return;
             if (e.target.closest('.github-btn')) return;
-            openWorkPanel(id);
+            const id = card.getAttribute('data-work-id');
+            if (id) openWorkPanel(id);
         });
-    });
+    }
+
+    if (workFilters) {
+        workFilters.addEventListener('click', (e) => {
+            const btn = e.target.closest('.work-filter');
+            if (!btn) return;
+            const next = btn.getAttribute('data-filter') || 'all';
+            if (next === activeFilter) return;
+            activeFilter = next;
+            workFilters.querySelectorAll('.work-filter').forEach((el) => {
+                const on = el === btn;
+                el.classList.toggle('is-active', on);
+                el.setAttribute('aria-selected', String(on));
+            });
+            renderProjects(activeFilter);
+        });
+    }
 
     if (workPanelClose) workPanelClose.addEventListener('click', closeWorkPanel);
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeWorkPanel();
     });
+
+    renderProjects(activeFilter, { animate: true });
 
     /* ---------- API ---------- */
     function getApiBaseUrl() {

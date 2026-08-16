@@ -642,6 +642,37 @@ section { width: 100%; scroll-margin-top: calc(var(--header-h) + 12px); }
     letter-spacing: 1px;
 }
 
+.work-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 14px;
+}
+
+.work-filter {
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 8px 12px;
+    border: 3px solid var(--line);
+    background: var(--panel);
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45);
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.work-filter:hover {
+    transform: translate(-1px, -1px);
+    border-color: var(--accent);
+}
+
+.work-filter.is-active {
+    background: var(--accent);
+    color: #111;
+    border-color: #000;
+}
+
 .work-row-scroll {
     border: 3px solid var(--line);
     padding: 14px;
@@ -656,6 +687,19 @@ section { width: 100%; scroll-margin-top: calc(var(--header-h) + 12px); }
     display: flex;
     flex-wrap: nowrap;
     gap: 16px;
+    min-height: 220px;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.work-row.is-swapping {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+.work-empty {
+    font-family: var(--font-mono);
+    color: var(--ink-dim);
+    margin: 24px 8px;
 }
 
 .work-card {
@@ -667,9 +711,21 @@ section { width: 100%; scroll-margin-top: calc(var(--header-h) + 12px); }
     display: flex;
     flex-direction: column;
     gap: 8px;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.35s ease;
     cursor: pointer;
 }
+
+.work-card.is-entering {
+    opacity: 0;
+    transform: translateY(14px);
+}
+
+.work-card.is-entering.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: calc(var(--card-i, 0) * 45ms);
+}
+
 .work-card:hover {
     transform: translateY(-4px);
     border-color: var(--accent);
@@ -763,6 +819,9 @@ section { width: 100%; scroll-margin-top: calc(var(--header-h) + 12px); }
 .tech-tag.threejs   { background:#049ef4; color:#003042; text-shadow:none; }
 .tech-tag.gemini    { background:#4285f4; }
 .tech-tag.elasticsearch { background:#fecc63; color:#222; text-shadow:none; }
+.tech-tag.supabase  { background:#3ecf8e; color:#003042; text-shadow:none; }
+.tech-tag.vite      { background:#646cff; }
+.tech-tag.leaflet   { background:#199900; }
 
 /* ============================================================
    Sliding Work Panel

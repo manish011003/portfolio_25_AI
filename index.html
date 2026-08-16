@@ -204,7 +204,7 @@
                         </div>
                     </div>
                     <div class="hero-stats">
-                        <div class="stat-pill"><strong>13+</strong><span>Projects shipped</span></div>
+                        <div class="stat-pill"><strong>12</strong><span>Projects shipped</span></div>
                         <div class="stat-pill"><strong>SIH '23</strong><span>Finalist</span></div>
                         <div class="stat-pill"><strong>1k+</strong><span>Users impacted</span></div>
                     </div>
@@ -335,148 +335,16 @@
             <h2 class="section-title">Case Studies &amp; <span class="accent">Projects</span></h2>
             <p class="section-subtitle">A blend of product thinking and engineering execution.</p>
             <h3 class="work-row-title">Featured</h3>
+            <div class="work-filters" id="work-filters" role="tablist" aria-label="Filter projects">
+                <button type="button" class="work-filter is-active" data-filter="all" role="tab" aria-selected="true">All</button>
+                <button type="button" class="work-filter" data-filter="ai" role="tab" aria-selected="false">AI</button>
+                <button type="button" class="work-filter" data-filter="fitness" role="tab" aria-selected="false">Fitness</button>
+                <button type="button" class="work-filter" data-filter="fullstack" role="tab" aria-selected="false">Full-stack</button>
+                <button type="button" class="work-filter" data-filter="devops" role="tab" aria-selected="false">DevOps</button>
+                <button type="button" class="work-filter" data-filter="games" role="tab" aria-selected="false">Games</button>
+            </div>
             <div class="work-row-scroll">
-                <div class="work-row" id="case-row">
-                    <article class="work-card" data-work-id="ironclad">
-                        <div class="work-thumb">⚔️</div>
-                        <h3>Ironclad</h3>
-                        <p>Cross-platform fitness app — AI meal logging, form checker, plans, XP &amp; Spotify soundtrack.</p>
-                        <div class="tech-tags">
-                            <span class="tech-tag expo">Expo</span>
-                            <span class="tech-tag typescript">TypeScript</span>
-                            <span class="tech-tag firebase">Firebase</span>
-                            <span class="tech-tag react">React Native</span>
-                            <span class="tech-tag mediapipe">MediaPipe</span>
-                        </div>
-                        <div class="work-card-buttons">
-                            <div class="box-button">
-                                <button class="work-open-btn button"><span>Details</span></button>
-                            </div>
-                            <div class="box-button alt">
-                                <a href="https://github.com/manish011003/ironclad" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card" data-work-id="geostocks-ai">
-                        <div class="work-thumb">🌐</div>
-                        <h3>GeoStocks AI</h3>
-                        <p>Geopolitical stock intelligence — 3D globe, 8 exchanges, AI news tagging &amp; streaming analyst.</p>
-                        <div class="tech-tags">
-                            <span class="tech-tag nextjs">Next.js</span>
-                            <span class="tech-tag typescript">TypeScript</span>
-                            <span class="tech-tag threejs">Three.js</span>
-                            <span class="tech-tag gemini">Gemini</span>
-                            <span class="tech-tag react">React</span>
-                        </div>
-                        <div class="work-card-buttons">
-                            <div class="box-button">
-                                <button class="work-open-btn button"><span>Details</span></button>
-                            </div>
-                            <div class="box-button alt">
-                                <a href="https://github.com/manish011003/geostocks-ai" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card" data-work-id="ai-cicd">
-                        <div class="work-thumb">🔧</div>
-                        <h3>AI CI/CD Log Analyzer</h3>
-                        <p>RAG pipeline that turns Jenkins failures into root-cause analyses with a learning knowledge base.</p>
-                        <div class="tech-tags">
-                            <span class="tech-tag python">Python</span>
-                            <span class="tech-tag fastapi">FastAPI</span>
-                            <span class="tech-tag nextjs">Next.js</span>
-                            <span class="tech-tag docker">Docker</span>
-                            <span class="tech-tag elasticsearch">Elasticsearch</span>
-                        </div>
-                        <div class="work-card-buttons">
-                            <div class="box-button">
-                                <button class="work-open-btn button"><span>Details</span></button>
-                            </div>
-                            <div class="box-button alt">
-                                <a href="https://github.com/manish011003/ai-cicd-log-analyzer" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card" data-work-id="task-manager">
-                        <div class="work-thumb">🤖</div>
-                        <h3>Task Manager Agent</h3>
-                        <p>AI-powered WebSocket agent for natural-language task management with Notion sync.</p>
-                        <div class="tech-tags">
-                            <span class="tech-tag python">Python</span>
-                            <span class="tech-tag fastapi">FastAPI</span>
-                            <span class="tech-tag websocket">WebSocket</span>
-                            <span class="tech-tag openai">OpenAI</span>
-                            <span class="tech-tag docker">Docker</span>
-                        </div>
-                        <div class="work-card-buttons">
-                            <div class="box-button">
-                                <button class="work-open-btn button"><span>Details</span></button>
-                            </div>
-                            <div class="box-button alt">
-                                <a href="https://github.com/manish011003/task-manager-agent" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card" data-work-id="pushup-counter">
-                        <div class="work-thumb">💪</div>
-                        <h3>Push-Up Counter</h3>
-                        <p>Real-time fitness tracking using MediaPipe Pose and OpenCV for form analysis.</p>
-                        <div class="tech-tags">
-                            <span class="tech-tag python">Python</span>
-                            <span class="tech-tag opencv">OpenCV</span>
-                            <span class="tech-tag mediapipe">MediaPipe</span>
-                            <span class="tech-tag numpy">NumPy</span>
-                        </div>
-                        <div class="work-card-buttons">
-                            <div class="box-button">
-                                <button class="work-open-btn button"><span>Details</span></button>
-                            </div>
-                            <div class="box-button alt">
-                                <a href="https://github.com/manish011003/pushup-counter" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card" data-work-id="ewaste">
-                        <div class="work-thumb">♻️</div>
-                        <h3>Hungry for E-Waste</h3>
-                        <p>Full-stack platform for e-waste management — SIH 2023 finalist solution.</p>
-                        <div class="tech-tags">
-                            <span class="tech-tag javascript">JavaScript</span>
-                            <span class="tech-tag nodejs">Node.js</span>
-                            <span class="tech-tag express">Express</span>
-                            <span class="tech-tag mongodb">MongoDB</span>
-                            <span class="tech-tag html">HTML/CSS</span>
-                        </div>
-                        <div class="work-card-buttons">
-                            <div class="box-button">
-                                <button class="work-open-btn button"><span>Details</span></button>
-                            </div>
-                            <div class="box-button alt">
-                                <a href="https://github.com/manish011003/hungry-for-ewaste" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card" data-work-id="gym-buddy">
-                        <div class="work-thumb">🏋️</div>
-                        <h3>Gym Buddy (MVP)</h3>
-                        <p>AI-powered fitness &amp; nutrition companion with personalized workout planning.</p>
-                        <div class="tech-tags">
-                            <span class="tech-tag python">Python</span>
-                            <span class="tech-tag fastapi">FastAPI</span>
-                            <span class="tech-tag openai">OpenAI</span>
-                            <span class="tech-tag react">React</span>
-                            <span class="tech-tag firebase">Firebase</span>
-                        </div>
-                        <div class="work-card-buttons">
-                            <div class="box-button">
-                                <button class="work-open-btn button"><span>Details</span></button>
-                            </div>
-                            <div class="box-button alt">
-                                <a href="https://github.com/manish011003/gym-buddy" target="_blank" class="github-btn button" rel="noopener noreferrer"><span>GitHub</span></a>
-                            </div>
-                        </div>
-                    </article>
-                </div>
+                <div class="work-row" id="case-row" aria-live="polite"></div>
             </div>
         </section>
 
