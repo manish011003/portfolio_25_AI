@@ -6,17 +6,35 @@ import { getAllCaseStudies, getAllSettings, getExperiences, getSkills } from "@/
 export const dynamic = "force-dynamic";
 
 export default async function AdminHomePage() {
-  const [studies, skills, settings, experiences] = await Promise.all([
-    getAllCaseStudies(),
-    getSkills(),
-    getAllSettings(),
-    getExperiences(),
-  ]);
+  let studies: Awaited<ReturnType<typeof getAllCaseStudies>> = [];
+  let skills: Awaited<ReturnType<typeof getSkills>> = [];
+  let settings: Awaited<ReturnType<typeof getAllSettings>> = {};
+  let experiences: Awaited<ReturnType<typeof getExperiences>> = [];
+  let dbError = false;
+
+  try {
+    [studies, skills, settings, experiences] = await Promise.all([
+      getAllCaseStudies(),
+      getSkills(),
+      getAllSettings(),
+      getExperiences(),
+    ]);
+  } catch (error) {
+    dbError = true;
+    console.error("Admin dashboard fetch failed", error);
+  }
   const published = studies.filter((s) => s.status === "published").length;
   const featured = studies.filter((s) => s.featured).length;
 
   return (
     <AdminShell title="Dashboard">
+      {dbError ? (
+        <p className="mb-4 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+          Could not reach the database. Check that Vercel{" "}
+          <code>DATABASE_URL</code> uses the Supabase pooler (port 6543), not
+          the direct IPv6 host.
+        </p>
+      ) : null}
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="rounded border border-zinc-200 bg-white p-4">
           <p className="text-sm text-zinc-500">Case studies</p>

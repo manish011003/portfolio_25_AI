@@ -6,7 +6,7 @@ export { ADMIN_COOKIE };
 export const ADMIN_SESSION_MAX_AGE = 60 * 60 * 24 * 30;
 
 function adminSecret() {
-  const secret = process.env.ADMIN_SECRET;
+  const secret = process.env.ADMIN_SECRET?.trim();
   if (!secret) {
     throw new Error("ADMIN_SECRET is not configured");
   }
@@ -42,9 +42,9 @@ export function verifyAdminSession(token: string | undefined) {
 }
 
 export function adminSecretsEqual(input: string) {
-  const secret = process.env.ADMIN_SECRET;
+  const secret = process.env.ADMIN_SECRET?.trim();
   if (!secret || !input) return false;
-  const a = Buffer.from(input);
+  const a = Buffer.from(input.trim());
   const b = Buffer.from(secret);
   if (a.length !== b.length) return false;
   return timingSafeEqual(a, b);

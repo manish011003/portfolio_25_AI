@@ -34,7 +34,7 @@ function timingEqual(a: string, b: string) {
 }
 
 export async function verifyAdminSessionEdge(token: string | undefined) {
-  const secret = process.env.ADMIN_SECRET;
+  const secret = process.env.ADMIN_SECRET?.trim();
   if (!token || !secret) return false;
   const dot = token.indexOf(".");
   if (dot <= 0) return false;
