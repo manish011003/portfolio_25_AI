@@ -5,18 +5,18 @@ import { ADMIN_COOKIE, verifyAdminSessionEdge } from "./lib/auth-edge";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname === "/") {
-    return NextResponse.rewrite(new URL("/index.html", request.url));
-  }
-
   if (pathname === "/admin/login") {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get(ADMIN_COOKIE)?.value;
-  const ok = await verifyAdminSessionEdge(token);
-  if (ok) {
-    return NextResponse.next();
+  try {
+    const token = request.cookies.get(ADMIN_COOKIE)?.value;
+    const ok = await verifyAdminSessionEdge(token);
+    if (ok) {
+      return NextResponse.next();
+    }
+  } catch {
+    // Fall through to login if the session check fails.
   }
 
   const login = request.nextUrl.clone();
@@ -26,5 +26,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/admin", "/admin/:path*"],
+  matcher: ["/admin", "/admin/:path*"],
+  runtime: "nodejs",
 };
