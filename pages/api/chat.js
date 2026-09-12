@@ -1,4 +1,4 @@
-const { generateReply, GEMINI_API_KEY } = require('../lib/gemini');
+const { generateReply, GEMINI_API_KEY } = require('../../lib/gemini');
 
 const isProd = process.env.NODE_ENV === 'production';
 

@@ -1,4 +1,4 @@
-const { ensureDiscoveredModels } = require('../lib/gemini');
+const { ensureDiscoveredModels } = require('../../lib/gemini');
 
 module.exports = async (_req, res) => {
   try {

@@ -44,10 +44,34 @@ This portfolio is designed to be an engaging way to learn more about Manish Bisw
     ```
     GEMINI_API_KEY=your_api_key
     ```
-5.  **Start the server:**
+5.  **Start the app:**
     ```bash
-    npm start
+    npm run dev
     ```
+    The original Express AI backend is still available as `npm run server` (port 3001).
+
+## PM portfolio CMS
+
+The product-management site now lives at `/pm` (old `/pm-portfolio.html` redirects there). Case studies and skills are stored in **Supabase Postgres** and edited at `/admin` with a single secret key — not a public accounts system.
+
+**Why ISR, not SSR:** public pages use Incremental Static Regeneration (`revalidate = 60`) plus `revalidatePath` after every admin write. Visitors usually get a cached page; your edits refresh the affected routes immediately. SSR would always be fresh but would hit the database on every request — unnecessary for a portfolio.
+
+### First-time setup
+
+1. Create a free [Supabase](https://supabase.com) project.
+2. Copy `.env.example` to `.env.local` and fill in:
+   - `ADMIN_SECRET` — a long passphrase only you know (never `NEXT_PUBLIC_`)
+   - `DATABASE_URL` — Supabase **direct** Postgres URI (port 5432)
+   - `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` — for cover uploads
+3. In the Supabase SQL editor, run `prisma/setup.sql` (creates tables + public `covers` bucket), **or** run `npx prisma db push`.
+4. Seed the four existing case studies and six competencies:
+   ```bash
+   npm run db:seed
+   ```
+5. Add the same env vars in the Vercel project, then deploy. Open `/admin/login` (not linked in the public nav).
+
+Hero stats: published case-study count and the sum of each study's `usersImpacted` field update automatically. The third hero stat is a site setting on the admin dashboard.
+
 6.  **Verify the server is healthy (optional):**
     ```bash
     curl http://localhost:3001/health

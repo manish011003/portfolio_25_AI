@@ -1,5 +1,9 @@
-config.js
 node_modules
 .env
+.env.*
+!.env.example
 .vercel
-.env*
+.next
+next-env.d.ts
+config.js
+*.tsbuildinfo

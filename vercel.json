@@ -1,27 +1,4 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "api/*.js", "use": "@vercel/node" },
-    { "src": "*.html", "use": "@vercel/static" },
-    { "src": "*.css", "use": "@vercel/static" },
-    { "src": "script.js", "use": "@vercel/static" },
-    { "src": "blog.js", "use": "@vercel/static" },
-    { "src": "pm-portfolio.js", "use": "@vercel/static" },
-    { "src": "og-image.png", "use": "@vercel/static" },
-    { "src": "robots.txt", "use": "@vercel/static" },
-    { "src": "sitemap.xml", "use": "@vercel/static" },
-    { "src": "google86dc4d992d4c2370.html", "use": "@vercel/static" },
-    { "src": "site.webmanifest", "use": "@vercel/static" },
-    { "src": "char8bit/**", "use": "@vercel/static" },
-    { "src": "assets/**", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/api/chat", "dest": "/api/chat.js" },
-    { "src": "/api/health", "dest": "/api/health.js" },
-    { "src": "/health", "dest": "/api/health.js" },
-    { "handle": "filesystem" },
-    { "src": "/", "dest": "/index.html" }
-  ],
   "headers": [
     {
       "source": "/(.*)",

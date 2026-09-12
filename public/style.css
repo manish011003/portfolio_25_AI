@@ -939,6 +939,138 @@ section { width: 100%; scroll-margin-top: calc(var(--header-h) + 12px); }
 .cta-buttons .box-button .button span { font-size: 10px; }
 
 /* ============================================================
+   X / Twitter feed
+   ============================================================ */
+#updates .section-subtitle a.inline-x-link {
+    color: var(--accent-2);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.x-feed-shell {
+    border: 3px solid var(--line);
+    background: var(--panel-2);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+}
+
+.x-feed-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 3px solid var(--line);
+    background: var(--panel);
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.x-feed-bar a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.x-feed-bar a:hover {
+    color: var(--accent-2);
+}
+
+.x-feed-frame {
+    min-height: 280px;
+    padding: 14px;
+    background: #0f1020;
+    display: grid;
+    gap: 12px;
+}
+
+.x-feed-status,
+.x-feed-fallback {
+    font-family: var(--font-mono);
+    color: var(--ink-dim);
+    padding: 18px 8px;
+    margin: 0;
+}
+
+.x-feed-fallback a,
+.x-post-link {
+    color: var(--accent-2);
+}
+
+.x-post {
+    border: 2px solid #2a2c55;
+    background: var(--panel);
+    padding: 14px 14px 12px;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.x-post:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.x-post-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.x-post-avatar {
+    width: 36px;
+    height: 36px;
+    border: 2px solid #000;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--accent);
+}
+
+.x-post-name {
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    color: var(--ink);
+    letter-spacing: 0.5px;
+}
+
+.x-post-handle {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--ink-dim);
+}
+
+.x-post-text {
+    font-family: var(--font-mono);
+    font-size: 17px;
+    line-height: 1.45;
+    color: var(--ink);
+    margin: 0 0 10px;
+    white-space: pre-wrap;
+}
+
+.x-post-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.x-post-actions a {
+    font-family: var(--font-pixel);
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.x-post-actions a:hover {
+    color: var(--accent-2);
+}
+
+.x-feed-fallback a {
+    color: var(--accent-2);
+}
+
+/* ============================================================
    Contact (compact — keeps AI chat as the hero of the page)
    ============================================================ */
 .contact-compact {

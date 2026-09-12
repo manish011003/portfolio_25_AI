@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: var(--font-bebas), "Arial Narrow", Impact, sans-serif;
+  --font-mono: var(--font-plex), ui-monospace, monospace;
+  --font-sans: var(--font-dm), "Helvetica Neue", sans-serif;
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-red: #e23b2c;
+  --color-yellow: #f5c518;
+  --color-pink: #f4b4c8;
+  --color-mint: #b8e986;
+  --color-blue: #7eb8e8;
+  --color-cream: var(--cream);
+  --color-chrome: var(--chrome);
+}
+
+:root {
+  --paper: #f6f1e8;
+  --ink: #111111;
+  --muted: #5c574e;
+  --line: #e4ddd0;
+  --cream: #fff8ee;
+  --chrome: #f3f1ec;
+  --rule: rgba(17, 17, 17, 0.045);
+}
+
+html.dark {
+  --paper: #161412;
+  --ink: #f4efe6;
+  --muted: #b8b0a3;
+  --line: #2c2823;
+  --cream: #1c1916;
+  --chrome: #241f1b;
+  --rule: rgba(244, 239, 230, 0.07);
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  overflow-x: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-dm), "Helvetica Neue", sans-serif;
+}
+
+.paper-lines {
+  background-color: var(--paper);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 31px,
+    var(--rule) 31px,
+    var(--rule) 32px
+  );
+}
+
+.paper-grid {
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.display {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 0.86;
+}
+
+.admin-body {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #f4f4f5;
+  color: #18181b;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -40px;
+  z-index: 50;
+  background: #111;
+  color: #fff;
+  padding: 8px 12px;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+.on-swatch {
+  color: #111111;
+}
+
+@keyframes float-note {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(var(--tilt));
+  }
+  50% {
+    transform: translate3d(0, -12px, 0) rotate(calc(var(--tilt) + 2deg));
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-6deg);
+  }
+  50% {
+    transform: translate3d(8px, -16px, 0) rotate(-2deg);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+}
+
+@keyframes quote-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--nudge-x, 0px)) rotate(var(--tilt)) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(var(--nudge-x, 0px)) rotate(var(--tilt)) translateY(0);
+  }
+}
+
+.float-note {
+  animation: float-note 7s ease-in-out infinite;
+}
+
+.float-note-slow {
+  animation: drift 9s ease-in-out infinite;
+}
+
+.float-wiggle {
+  animation: wiggle 5.5s ease-in-out infinite;
+}
+
+.quote-in {
+  animation: quote-in 0.55s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float-note,
+  .float-note-slow,
+  .float-wiggle,
+  .quote-in {
+    animation: none;
+  }
+}

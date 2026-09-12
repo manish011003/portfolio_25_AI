@@ -553,6 +553,69 @@ Full-stack platform built for Smart India Hackathon 2023 to formalize e-waste co
 
     renderProjects(activeFilter, { animate: true });
 
+    /* ---------- X / Twitter feed ---------- */
+    const xFeed = document.getElementById('x-feed');
+
+    function renderXPosts(payload) {
+        if (!xFeed) return;
+        const posts = Array.isArray(payload?.posts) ? payload.posts : [];
+        if (!posts.length) {
+            xFeed.innerHTML = `<p class="x-feed-fallback">No posts loaded. Visit <a href="https://x.com/realmanishb" target="_blank" rel="noopener noreferrer">@realmanishb</a>.</p>`;
+            return;
+        }
+
+        xFeed.innerHTML = posts.map((post) => {
+            const href = escapeHtml(post.href || 'https://x.com/realmanishb');
+            const text = escapeHtml(post.text || '');
+            const extra = post.url
+                ? `<a class="x-post-link" href="${escapeHtml(post.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(post.url.replace(/^https?:\/\//, ''))}</a>`
+                : '';
+            return `
+                <article class="x-post">
+                    <div class="x-post-meta">
+                        <img class="x-post-avatar" src="char8bit/9-removebg-preview.png" alt="" width="36" height="36" loading="lazy">
+                        <div>
+                            <div class="x-post-name">Manish Biswas</div>
+                            <div class="x-post-handle">@realmanishb</div>
+                        </div>
+                    </div>
+                    <p class="x-post-text">${text}</p>
+                    <div class="x-post-actions">
+                        ${extra}
+                        <a href="${href}" target="_blank" rel="noopener noreferrer">View on X →</a>
+                    </div>
+                </article>
+            `;
+        }).join('');
+    }
+
+    async function loadXFeed() {
+        if (!xFeed) return;
+        try {
+            const resp = await fetch(`${getApiBaseUrl()}/api/twitter`);
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const data = await resp.json();
+            renderXPosts(data);
+        } catch (err) {
+            console.error('X feed error', err);
+            renderXPosts({
+                posts: [
+                    {
+                        text: 'I think engineers have a weird habit of asking: “Can we build this?” before asking: “Should this exist?” I’ve definitely been guilty of it. Spidey Tracker is probably evidence.',
+                        url: 'https://spidey-tracker-pi.vercel.app/',
+                        href: 'https://x.com/realmanishb'
+                    },
+                    {
+                        text: 'One thing I learnt while building Spidey Tracker: realtime data ≠ normal database data. Firestore handles the persistent stuff. RTDB handles presence, location and nudges.',
+                        href: 'https://x.com/realmanishb'
+                    }
+                ]
+            });
+        }
+    }
+
+    loadXFeed();
+
     /* ---------- API ---------- */
     function getApiBaseUrl() {
         const isFile = location.protocol === 'file:';

@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const { generateReply, ensureDiscoveredModels, GEMINI_API_KEY } = require('./lib/gemini');
@@ -8,6 +9,7 @@ const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(__dirname));
 
 const isProd = process.env.NODE_ENV === 'production';
