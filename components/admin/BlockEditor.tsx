@@ -1,20 +1,36 @@
 "use client";
 
 import {
+  CHART_KINDS,
+  chartSeriesNames,
   createBlock,
+  isPolarChart,
   type ChartBlock,
+  type ChartDatum,
+  type ChartKind,
   type ContentBlock,
   type HeadingBlock,
   type ImageBlock,
   type ParagraphBlock,
   type QuoteBlock,
+  type UiBlock,
 } from "@/lib/blocks";
+import { CaseChart } from "@/components/pm/CaseChart";
 import { ImageField } from "./ImageField";
+
+const CHART_TYPE_LABELS: Record<ChartKind, string> = {
+  bar: "Bar",
+  line: "Line",
+  area: "Area",
+  pie: "Pie",
+  donut: "Donut",
+};
 
 const BLOCK_TYPES: { type: ContentBlock["type"]; label: string }[] = [
   { type: "heading", label: "Heading" },
   { type: "paragraph", label: "Paragraph" },
   { type: "image", label: "Image" },
+  { type: "ui", label: "UI" },
   { type: "chart", label: "Chart" },
   { type: "quote", label: "Quote" },
   { type: "divider", label: "Divider" },
@@ -59,7 +75,7 @@ export function BlockEditor({
       </div>
       {blocks.length === 0 ? (
         <p className="rounded border border-dashed border-zinc-300 px-3 py-6 text-sm text-zinc-500">
-          Add a heading, paragraph, image, chart, quote, or divider.
+          Add a heading, paragraph, image, UI screenshot, chart, quote, or divider.
         </p>
       ) : null}
       {blocks.map((block, index) => (
@@ -198,98 +214,37 @@ function BlockFields({
     );
   }
 
-  if (block.type === "chart") {
-    const chart = block as ChartBlock;
+  if (block.type === "ui") {
+    const shot = block as UiBlock;
     return (
       <div className="space-y-3">
-        <div className="grid gap-2 sm:grid-cols-2">
-          <label className="text-sm">
-            Chart type
-            <select
-              value={chart.chartType}
-              onChange={(e) =>
-                onChange({
-                  ...chart,
-                  chartType: e.target.value as ChartBlock["chartType"],
-                })
-              }
-              className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm"
-            >
-              <option value="bar">Bar</option>
-              <option value="line">Line</option>
-              <option value="pie">Pie</option>
-            </select>
-          </label>
-          <label className="text-sm">
-            Title
-            <input
-              value={chart.title ?? ""}
-              onChange={(e) => onChange({ ...chart, title: e.target.value })}
-              className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm"
-            />
-          </label>
-          <label className="text-sm">
-            X axis label
-            <input
-              value={chart.xLabel ?? ""}
-              onChange={(e) => onChange({ ...chart, xLabel: e.target.value })}
-              className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm"
-            />
-          </label>
-          <label className="text-sm">
-            Y axis label
-            <input
-              value={chart.yLabel ?? ""}
-              onChange={(e) => onChange({ ...chart, yLabel: e.target.value })}
-              className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm"
-            />
-          </label>
-        </div>
-        <div className="space-y-2">
-          <p className="text-sm font-medium">Data rows</p>
-          {chart.data.map((row, i) => (
-            <div key={`${chart.id}-row-${i}`} className="grid grid-cols-[1fr_100px_auto] gap-2">
-              <input
-                value={row.label}
-                placeholder="Label"
-                onChange={(e) => {
-                  const data = chart.data.map((item, index) =>
-                    index === i ? { ...item, label: e.target.value } : item,
-                  );
-                  onChange({ ...chart, data });
-                }}
-                className="rounded border border-zinc-300 px-3 py-2 text-sm"
-              />
-              <input
-                type="number"
-                value={Number.isFinite(row.value) ? row.value : 0}
-                onChange={(e) => {
-                  const data = chart.data.map((item, index) =>
-                    index === i ? { ...item, value: Number(e.target.value) } : item,
-                  );
-                  onChange({ ...chart, data });
-                }}
-                className="rounded border border-zinc-300 px-3 py-2 text-sm"
-              />
-              <button
-                type="button"
-                className="rounded border border-zinc-300 px-2 text-xs"
-                onClick={() => onChange({ ...chart, data: chart.data.filter((_, index) => index !== i) })}
-              >
-                Remove
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            className="rounded border border-zinc-300 px-3 py-1.5 text-xs"
-            onClick={() => onChange({ ...chart, data: [...chart.data, { label: "", value: 0 }] })}
-          >
-            + Row
-          </button>
-        </div>
+        <ImageField
+          label="UI screenshot"
+          url={shot.url}
+          onChange={(url) => onChange({ ...shot, url })}
+        />
+        <label className="block text-sm">
+          Alt text
+          <input
+            value={shot.alt}
+            onChange={(e) => onChange({ ...shot, alt: e.target.value })}
+            className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+          />
+        </label>
+        <label className="block text-sm">
+          Caption
+          <input
+            value={shot.caption ?? ""}
+            onChange={(e) => onChange({ ...shot, caption: e.target.value })}
+            className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+          />
+        </label>
       </div>
     );
+  }
+
+  if (block.type === "chart") {
+    return <ChartFields chart={block} onChange={onChange} />;
   }
 
   if (block.type === "quote") {
@@ -314,4 +269,246 @@ function BlockFields({
   }
 
   return <p className="text-sm text-zinc-500">Horizontal rule. No settings.</p>;
+}
+
+function rowValues(row: ChartDatum, count: number) {
+  const values = [row.value, ...(row.values ?? [])];
+  while (values.length < count) values.push(0);
+  return values.slice(0, count);
+}
+
+function rowDisplays(row: ChartDatum, count: number) {
+  const displays = [row.display ?? "", ...(row.displays ?? [])];
+  while (displays.length < count) displays.push("");
+  return displays.slice(0, count);
+}
+
+function packRow(label: string, values: number[], displays: string[]): ChartDatum {
+  const row: ChartDatum = { label, value: values[0] ?? 0 };
+  if (values.length > 1) row.values = values.slice(1);
+  if (displays[0]?.trim()) row.display = displays[0].trim();
+  const extra = displays.slice(1);
+  if (extra.some((item) => item.trim())) row.displays = extra;
+  return row;
+}
+
+function ChartFields({
+  chart,
+  onChange,
+}: {
+  chart: ChartBlock;
+  onChange: (block: ContentBlock) => void;
+}) {
+  const polar = isPolarChart(chart.chartType);
+  const names = polar ? ["Value"] : chartSeriesNames(chart);
+  const previewable = chart.data.some((row) => row.label.trim());
+
+  function setData(data: ChartDatum[]) {
+    onChange({ ...chart, data });
+  }
+
+  function setSeries(series: string[]) {
+    const next = series.map((name, index) => name.trim() || `Series ${index + 1}`);
+    const data = chart.data.map((row) => {
+      const values = rowValues(row, next.length);
+      const displays = rowDisplays(row, next.length);
+      return packRow(row.label, values, displays);
+    });
+    onChange({
+      ...chart,
+      series: next.length > 1 || next[0] !== "Value" ? next : undefined,
+      data,
+    });
+  }
+
+  function updateCell(index: number, seriesIndex: number, value: number, display: string) {
+    const data = chart.data.map((row, rowIndex) => {
+      if (rowIndex !== index) return row;
+      const values = rowValues(row, names.length);
+      const displays = rowDisplays(row, names.length);
+      values[seriesIndex] = value;
+      displays[seriesIndex] = display;
+      return packRow(row.label, values, displays);
+    });
+    setData(data);
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="grid gap-2 sm:grid-cols-2">
+        <label className="text-sm">
+          Chart type
+          <select
+            value={chart.chartType}
+            onChange={(e) => onChange({ ...chart, chartType: e.target.value as ChartKind })}
+            className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+          >
+            {CHART_KINDS.map((kind) => (
+              <option key={kind} value={kind}>
+                {CHART_TYPE_LABELS[kind]}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="text-sm">
+          Title
+          <input
+            value={chart.title ?? ""}
+            onChange={(e) => onChange({ ...chart, title: e.target.value })}
+            className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+          />
+        </label>
+        <label className="text-sm">
+          Unit
+          <input
+            value={chart.unit ?? ""}
+            onChange={(e) => onChange({ ...chart, unit: e.target.value })}
+            placeholder='e.g. min, %, $'
+            className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+          />
+        </label>
+        {polar ? null : (
+          <>
+            <label className="text-sm">
+              X axis label
+              <input
+                value={chart.xLabel ?? ""}
+                onChange={(e) => onChange({ ...chart, xLabel: e.target.value })}
+                className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+              />
+            </label>
+            <label className="text-sm">
+              Y axis label
+              <input
+                value={chart.yLabel ?? ""}
+                onChange={(e) => onChange({ ...chart, yLabel: e.target.value })}
+                className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+              />
+            </label>
+          </>
+        )}
+      </div>
+
+      {polar ? null : (
+        <div className="space-y-2">
+          <p className="text-sm font-medium">Series</p>
+          {names.map((name, index) => (
+            <div key={`${chart.id}-series-${index}`} className="flex gap-2">
+              <input
+                value={name}
+                onChange={(e) => {
+                  const next = [...names];
+                  next[index] = e.target.value;
+                  setSeries(next);
+                }}
+                className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+              />
+              {names.length > 1 ? (
+                <button
+                  type="button"
+                  className="rounded border border-zinc-300 px-2 text-xs"
+                  onClick={() => setSeries(names.filter((_, i) => i !== index))}
+                >
+                  Remove
+                </button>
+              ) : null}
+            </div>
+          ))}
+          <button
+            type="button"
+            className="rounded border border-zinc-300 px-3 py-1.5 text-xs"
+            onClick={() => setSeries([...names, `Series ${names.length + 1}`])}
+          >
+            + Series
+          </button>
+        </div>
+      )}
+
+      <div className="space-y-2">
+        <p className="text-sm font-medium">Data rows</p>
+        <div className="overflow-x-auto">
+          <div className="space-y-2 min-w-[32rem]">
+            {chart.data.map((row, i) => {
+              const values = rowValues(row, names.length);
+              const displays = rowDisplays(row, names.length);
+              return (
+                <div key={`${chart.id}-row-${i}`} className="flex flex-wrap items-end gap-2">
+                  <label className="min-w-[8rem] flex-1 text-xs text-zinc-500">
+                    Label
+                    <input
+                      value={row.label}
+                      placeholder="Label"
+                      onChange={(e) => {
+                        const data = chart.data.map((item, index) =>
+                          index === i ? { ...item, label: e.target.value } : item,
+                        );
+                        setData(data);
+                      }}
+                      className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
+                    />
+                  </label>
+                  {names.map((name, seriesIndex) => (
+                    <label key={`${chart.id}-row-${i}-s${seriesIndex}`} className="w-24 text-xs text-zinc-500">
+                      {polar ? "Value" : name}
+                      <input
+                        type="number"
+                        value={Number.isFinite(values[seriesIndex]) ? values[seriesIndex] : 0}
+                        onChange={(e) =>
+                          updateCell(i, seriesIndex, Number(e.target.value), displays[seriesIndex] ?? "")
+                        }
+                        className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
+                      />
+                    </label>
+                  ))}
+                  {names.map((name, seriesIndex) => (
+                    <label key={`${chart.id}-row-${i}-d${seriesIndex}`} className="min-w-[7rem] flex-1 text-xs text-zinc-500">
+                      {names.length > 1 ? `${name} label` : "Display label"}
+                      <input
+                        value={displays[seriesIndex] ?? ""}
+                        placeholder='e.g. ~1 sec'
+                        onChange={(e) =>
+                          updateCell(i, seriesIndex, values[seriesIndex] ?? 0, e.target.value)
+                        }
+                        className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
+                      />
+                    </label>
+                  ))}
+                  <button
+                    type="button"
+                    className="rounded border border-zinc-300 px-2 py-2 text-xs"
+                    onClick={() => setData(chart.data.filter((_, index) => index !== i))}
+                  >
+                    Remove
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <button
+          type="button"
+          className="rounded border border-zinc-300 px-3 py-1.5 text-xs"
+          onClick={() =>
+            setData([
+              ...chart.data,
+              packRow("", Array(names.length).fill(0), Array(names.length).fill("")),
+            ])
+          }
+        >
+          + Row
+        </button>
+      </div>
+
+      <div className="rounded border border-zinc-200 bg-zinc-50 p-3">
+        <p className="mb-2 text-xs font-medium uppercase tracking-wide text-zinc-500">Preview</p>
+        {previewable ? (
+          <div className="on-swatch rounded border border-zinc-200 bg-[#f6f1e8] px-3">
+            <CaseChart block={chart} compact />
+          </div>
+        ) : (
+          <p className="text-sm text-zinc-500">Add a labeled row to preview this chart.</p>
+        )}
+      </div>
+    </div>
+  );
 }

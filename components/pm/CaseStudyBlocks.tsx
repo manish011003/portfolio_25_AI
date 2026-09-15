@@ -1,9 +1,11 @@
 import {
   type ContentBlock,
   type ImageBlock,
+  type UiBlock,
 } from "@/lib/blocks";
 import { InlineText } from "@/lib/inline";
 import { CaseChart } from "./CaseChart";
+import { ImageLightbox } from "./ImageLightbox";
 import { Polaroid } from "./Polaroid";
 
 export function CaseStudyBlocks({
@@ -52,6 +54,10 @@ function BlockView({
     return <StoryImage block={block} index={index} />;
   }
 
+  if (block.type === "ui") {
+    return <UiShot block={block} />;
+  }
+
   if (block.type === "chart") {
     return <CaseChart block={block} />;
   }
@@ -87,5 +93,25 @@ function StoryImage({ block, index }: { block: ImageBlock; index: number }) {
         wide={block.size === "full"}
       />
     </div>
+  );
+}
+
+function UiShot({ block }: { block: UiBlock }) {
+  if (!block.url) return null;
+  const alt = block.alt || block.caption || "Product screenshot";
+  return (
+    <figure className="my-8 w-full">
+      <div className="flex w-full justify-center border border-line bg-chrome">
+        <ImageLightbox src={block.url} alt={alt} caption={block.caption} className="block w-max max-w-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={block.url} alt="" className="block h-auto max-w-full object-contain" />
+        </ImageLightbox>
+      </div>
+      {block.caption ? (
+        <figcaption className="mt-3 text-center font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+          {block.caption}
+        </figcaption>
+      ) : null}
+    </figure>
   );
 }

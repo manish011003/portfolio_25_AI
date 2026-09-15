@@ -1,3 +1,4 @@
+import { ImageLightbox } from "./ImageLightbox";
 import { Tape } from "./Doodles";
 
 export function Polaroid({
@@ -19,8 +20,10 @@ export function Polaroid({
       style={{ transform: `rotate(${rotate})` }}
     >
       <Tape />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} className="aspect-[16/10] w-full object-cover" />
+      <ImageLightbox src={src} alt={alt} caption={caption} className="block w-full">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt="" className="aspect-[16/10] w-full object-cover" />
+      </ImageLightbox>
       {caption ? (
         <figcaption className="absolute bottom-2.5 left-0 right-0 text-center font-mono text-[11px] uppercase tracking-[0.16em] text-ink">
           {caption}

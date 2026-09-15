@@ -9,11 +9,18 @@ export const CHART_COLORS = [
 
 export type CaseStudyTemplate = "standard" | "narrative" | "dataHeavy";
 
-export type ChartKind = "bar" | "line" | "pie";
+export const CHART_KINDS = ["bar", "line", "area", "pie", "donut"] as const;
+export type ChartKind = (typeof CHART_KINDS)[number];
 export type ImageSize = "full" | "inline";
 export type HeadingLevel = 2 | 3;
 
-export type ChartDatum = { label: string; value: number };
+export type ChartDatum = {
+  label: string;
+  value: number;
+  display?: string;
+  values?: number[];
+  displays?: string[];
+};
 
 export type HeadingBlock = {
   id: string;
@@ -37,6 +44,14 @@ export type ImageBlock = {
   size: ImageSize;
 };
 
+export type UiBlock = {
+  id: string;
+  type: "ui";
+  url: string;
+  alt: string;
+  caption?: string;
+};
+
 export type ChartBlock = {
   id: string;
   type: "chart";
@@ -44,6 +59,8 @@ export type ChartBlock = {
   title?: string;
   xLabel?: string;
   yLabel?: string;
+  unit?: string;
+  series?: string[];
   data: ChartDatum[];
 };
 
@@ -63,6 +80,7 @@ export type ContentBlock =
   | HeadingBlock
   | ParagraphBlock
   | ImageBlock
+  | UiBlock
   | ChartBlock
   | QuoteBlock
   | DividerBlock;
@@ -102,6 +120,8 @@ export function createBlock(type: ContentBlock["type"]): ContentBlock {
       return { id, type, text: "" };
     case "image":
       return { id, type, url: "", alt: "", caption: "", size: "full" };
+    case "ui":
+      return { id, type, url: "", alt: "", caption: "" };
     case "chart":
       return {
         id,
@@ -110,6 +130,7 @@ export function createBlock(type: ContentBlock["type"]): ContentBlock {
         title: "",
         xLabel: "",
         yLabel: "",
+        unit: "",
         data: [
           { label: "", value: 0 },
           { label: "", value: 0 },
@@ -134,15 +155,72 @@ export function descriptionToBody(description: string, prefix = "p"): ContentBlo
     }));
 }
 
+export function isPolarChart(type: ChartKind) {
+  return type === "pie" || type === "donut";
+}
+
+export function asChartKind(value: unknown): ChartKind {
+  return CHART_KINDS.includes(value as ChartKind) ? (value as ChartKind) : "bar";
+}
+
+export function chartSeriesNames(block: Pick<ChartBlock, "series">): string[] {
+  if (Array.isArray(block.series) && block.series.length > 0) {
+    return block.series.map((name, index) => name.trim() || `Series ${index + 1}`);
+  }
+  return ["Value"];
+}
+
+export function formatChartValue(value: number, unit?: string, display?: string) {
+  if (display?.trim()) return display.trim();
+  if (!Number.isFinite(value)) return "";
+  const n = Number.isInteger(value) ? String(value) : String(value);
+  const suffix = unit?.trim();
+  if (!suffix) return n;
+  if (suffix === "$") return `$${n}`;
+  if (suffix === "%") return `${n}%`;
+  return `${n} ${suffix}`;
+}
+
+function asOptionalText(value: unknown): string | undefined {
+  const text = String(value ?? "").trim();
+  return text || undefined;
+}
+
+function asNumberList(value: unknown): number[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const nums = value.map((item) => Number(item)).filter((item) => Number.isFinite(item));
+  return nums.length ? nums : undefined;
+}
+
+function asTextList(value: unknown): string[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const items = value.map((item) => String(item ?? "").trim());
+  return items.some(Boolean) ? items : undefined;
+}
+
+function asSeriesNames(value: unknown): string[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const names = value.map((item) => String(item ?? "").trim()).filter(Boolean);
+  return names.length > 1 ? names : names.length === 1 && names[0] !== "Value" ? names : undefined;
+}
+
 function asChartData(value: unknown): ChartDatum[] {
   if (!Array.isArray(value)) return [];
   return value
     .map((row) => {
       if (!row || typeof row !== "object") return null;
-      const label = String((row as ChartDatum).label ?? "").trim();
-      const raw = Number((row as ChartDatum).value);
+      const item = row as ChartDatum;
+      const label = String(item.label ?? "").trim();
+      const raw = Number(item.value);
       if (!label || !Number.isFinite(raw)) return null;
-      return { label, value: raw };
+      const datum: ChartDatum = { label, value: raw };
+      const display = asOptionalText(item.display);
+      const values = asNumberList(item.values);
+      const displays = asTextList(item.displays);
+      if (display) datum.display = display;
+      if (values) datum.values = values;
+      if (displays) datum.displays = displays;
+      return datum;
     })
     .filter((row): row is ChartDatum => Boolean(row));
 }
@@ -176,15 +254,25 @@ export function asBody(value: unknown, fallbackDescription = ""): ContentBlock[]
             size: raw.size === "inline" ? "inline" : "full",
           });
           break;
+        case "ui":
+          blocks.push({
+            id,
+            type: "ui",
+            url: String(raw.url ?? ""),
+            alt: String(raw.alt ?? ""),
+            caption: String(raw.caption ?? ""),
+          });
+          break;
         case "chart":
           blocks.push({
             id,
             type: "chart",
-            chartType:
-              raw.chartType === "line" || raw.chartType === "pie" ? raw.chartType : "bar",
+            chartType: asChartKind(raw.chartType),
             title: String(raw.title ?? ""),
             xLabel: String(raw.xLabel ?? ""),
             yLabel: String(raw.yLabel ?? ""),
+            unit: String(raw.unit ?? ""),
+            series: asSeriesNames(raw.series),
             data: asChartData(raw.data),
           });
           break;
@@ -225,9 +313,9 @@ export function bodyToPlainText(body: ContentBlock[]) {
 }
 
 export function imageUrlsFromBody(body: ContentBlock[]) {
-  return body
-    .filter((block): block is ImageBlock => block.type === "image" && Boolean(block.url))
-    .map((block) => block.url);
+  return body.flatMap((block) =>
+    (block.type === "image" || block.type === "ui") && block.url ? [block.url] : [],
+  );
 }
 
 export function asTemplate(value: unknown): CaseStudyTemplate {
