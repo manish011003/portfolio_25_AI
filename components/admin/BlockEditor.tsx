@@ -15,8 +15,13 @@ import {
   type QuoteBlock,
   type UiBlock,
 } from "@/lib/blocks";
-import { CaseChart } from "@/components/pm/CaseChart";
+import dynamic from "next/dynamic";
 import { ImageField } from "./ImageField";
+
+const CaseChart = dynamic(
+  () => import("@/components/pm/CaseChart").then((mod) => mod.CaseChart),
+  { ssr: false, loading: () => <p className="text-sm text-zinc-500">Loading preview…</p> },
+);
 
 const CHART_TYPE_LABELS: Record<ChartKind, string> = {
   bar: "Bar",
@@ -85,10 +90,20 @@ export function BlockEditor({
               {block.type}
             </p>
             <div className="flex flex-wrap gap-1">
-              <button type="button" className="rounded border border-zinc-300 px-2 py-1 text-xs" onClick={() => move(index, "up")}>
+              <button
+                type="button"
+                className="rounded border border-zinc-300 px-2 py-1 text-xs disabled:opacity-40"
+                disabled={index === 0}
+                onClick={() => move(index, "up")}
+              >
                 Up
               </button>
-              <button type="button" className="rounded border border-zinc-300 px-2 py-1 text-xs" onClick={() => move(index, "down")}>
+              <button
+                type="button"
+                className="rounded border border-zinc-300 px-2 py-1 text-xs disabled:opacity-40"
+                disabled={index === blocks.length - 1}
+                onClick={() => move(index, "down")}
+              >
                 Down
               </button>
               <button type="button" className="rounded border border-red-200 px-2 py-1 text-xs text-red-700" onClick={() => remove(index)}>

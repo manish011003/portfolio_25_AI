@@ -59,20 +59,25 @@ export function CaseStudyForm({ study }: { study: EditorStudy }) {
     setSaveLabel("Saving…");
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => {
-      void saveCaseStudyDraft(study.id, draftRef.current).then((result) => {
-        if (result && "error" in result && result.error) {
-          setError(result.error);
+      void saveCaseStudyDraft(study.id, draftRef.current)
+        .then((result) => {
+          if (result && "error" in result && result.error) {
+            setError(result.error);
+            setSaveLabel("Save failed");
+            return;
+          }
+          setError("");
+          setSaveLabel("Saved");
+          if (result && "slug" in result && result.slug) {
+            setDraft((current) =>
+              current.slug === result.slug ? current : { ...current, slug: result.slug },
+            );
+          }
+        })
+        .catch((err: unknown) => {
+          setError(err instanceof Error ? err.message : "Save failed");
           setSaveLabel("Save failed");
-          return;
-        }
-        setError("");
-        setSaveLabel("Saved");
-        if (result && "slug" in result && result.slug) {
-          setDraft((current) =>
-            current.slug === result.slug ? current : { ...current, slug: result.slug },
-          );
-        }
-      });
+        });
     }, 900);
     return () => {
       if (timer.current) clearTimeout(timer.current);
@@ -80,29 +85,40 @@ export function CaseStudyForm({ study }: { study: EditorStudy }) {
   }, [draft, study.id]);
 
   function patch(partial: Partial<CaseStudyDraft>) {
+    setSaveLabel("Unsaved");
     setDraft((current) => ({ ...current, ...partial }));
   }
 
   async function onPublish() {
     setSaveLabel("Publishing…");
-    const result = await publishCaseStudy(study.id, draftRef.current);
-    if (result.error) {
-      setError(result.error);
+    try {
+      const result = await publishCaseStudy(study.id, draftRef.current);
+      if ("error" in result && result.error) {
+        setError(result.error);
+        setSaveLabel("Publish failed");
+        return;
+      }
+      setStatus("published");
+      setError("");
+      setSaveLabel("Published");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Publish failed");
       setSaveLabel("Publish failed");
-      return;
     }
-    setStatus("published");
-    setSaveLabel("Published");
   }
 
   async function onUnpublish() {
-    const result = await unpublishCaseStudy(study.id);
-    if (result.error) {
-      setError(result.error);
-      return;
+    try {
+      const result = await unpublishCaseStudy(study.id);
+      if ("error" in result && result.error) {
+        setError(result.error);
+        return;
+      }
+      setStatus("draft");
+      setSaveLabel("Unpublished");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not unpublish");
     }
-    setStatus("draft");
-    setSaveLabel("Unpublished");
   }
 
   const stats = [...draft.stats, ...emptyStats].slice(0, 4);
@@ -152,7 +168,12 @@ export function CaseStudyForm({ study }: { study: EditorStudy }) {
           </label>
           <label className="text-sm">
             Theme color
-            <input type="color" value={draft.themeColor} onChange={(e) => patch({ themeColor: e.target.value })} className="mt-1 h-10 w-full rounded border border-zinc-300" />
+            <input
+              type="color"
+              value={/^#[0-9a-fA-F]{6}$/.test(draft.themeColor) ? draft.themeColor : "#F5C518"}
+              onChange={(e) => patch({ themeColor: e.target.value })}
+              className="mt-1 h-10 w-full rounded border border-zinc-300"
+            />
           </label>
           <label className="text-sm">
             Layout template

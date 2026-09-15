@@ -1,9 +1,11 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { actionError } from "@/lib/action-error";
 import { requireAdmin } from "@/lib/auth";
 import { parseMonth, type ExperienceDraft } from "@/lib/experience";
 import { prisma } from "@/lib/prisma";
+import { moveItem } from "@/lib/reorder";
 import { revalidatePublicContent } from "@/lib/revalidate";
 import { deleteStoredImages } from "./upload";
 
@@ -79,26 +81,23 @@ export async function deleteExperience(id: string) {
 }
 
 export async function moveExperience(id: string, direction: "up" | "down") {
-  await requireAdmin();
-  const entries = await prisma.experience.findMany({
-    orderBy: [{ order: "asc" }, { startDate: "desc" }],
-  });
-  const index = entries.findIndex((item) => item.id === id);
-  if (index < 0) return;
-  const swapWith = direction === "up" ? index - 1 : index + 1;
-  if (swapWith < 0 || swapWith >= entries.length) return;
-
-  const current = entries[index];
-  const other = entries[swapWith];
-  await prisma.$transaction([
-    prisma.experience.update({
-      where: { id: current.id },
-      data: { order: other.order },
-    }),
-    prisma.experience.update({
-      where: { id: other.id },
-      data: { order: current.order },
-    }),
-  ]);
-  revalidatePublicContent();
+  try {
+    await requireAdmin();
+    const entries = await prisma.experience.findMany({
+      orderBy: [{ order: "asc" }, { startDate: "desc" }],
+    });
+    const next = moveItem(entries, id, direction);
+    if (!next) return;
+    await prisma.$transaction(
+      next.map((entry, order) =>
+        prisma.experience.update({
+          where: { id: entry.id },
+          data: { order },
+        }),
+      ),
+    );
+    revalidatePublicContent();
+  } catch (error) {
+    return actionError(error, "Could not reorder experience.");
+  }
 }

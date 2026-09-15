@@ -231,7 +231,7 @@ export function asBody(value: unknown, fallbackDescription = ""): ContentBlock[]
     for (const item of value) {
       if (!item || typeof item !== "object") continue;
       const raw = item as Record<string, unknown>;
-      const id = String(raw.id || newBlockId());
+      const id = String(raw.id ?? "").trim() || `b-${blocks.length}`;
       switch (raw.type) {
         case "heading":
           blocks.push({

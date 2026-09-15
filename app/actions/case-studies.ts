@@ -2,6 +2,7 @@
 
 import { Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
+import { actionError } from "@/lib/action-error";
 import { requireAdmin } from "@/lib/auth";
 import {
   asBody,
@@ -11,6 +12,7 @@ import {
   type CaseStudyDraft,
 } from "@/lib/blocks";
 import { prisma } from "@/lib/prisma";
+import { moveItem } from "@/lib/reorder";
 import { revalidatePublicContent } from "@/lib/revalidate";
 import { parseStats, parseTags, slugify } from "@/lib/slug";
 import { deleteStoredImages } from "./upload";
@@ -67,52 +69,64 @@ export async function createDraftCaseStudy() {
 }
 
 export async function saveCaseStudyDraft(id: string, draft: CaseStudyDraft) {
-  await requireAdmin();
-  const existing = await prisma.caseStudy.findUnique({ where: { id } });
-  if (!existing) return { error: "Not found" };
+  try {
+    await requireAdmin();
+    const existing = await prisma.caseStudy.findUnique({ where: { id } });
+    if (!existing) return { error: "Not found" };
 
-  const data = draftToData(draft);
-  const oldImages = [existing.coverImage, ...imageUrlsFromBody(asBody(existing.body))];
-  const nextImages = new Set([data.coverImage, ...imageUrlsFromBody(asBody(data.body))]);
-  const orphaned = oldImages.filter((url) => url && !nextImages.has(url));
-  if (orphaned.length) {
-    await deleteStoredImages(orphaned);
-  }
+    const data = draftToData(draft);
+    const oldImages = [existing.coverImage, ...imageUrlsFromBody(asBody(existing.body))];
+    const nextImages = new Set([data.coverImage, ...imageUrlsFromBody(asBody(data.body))]);
+    const orphaned = oldImages.filter((url) => url && !nextImages.has(url));
+    if (orphaned.length) {
+      await deleteStoredImages(orphaned);
+    }
 
-  await prisma.caseStudy.update({ where: { id }, data });
-  if (existing.status === "published") {
-    revalidatePublicContent(existing.slug);
-    revalidatePublicContent(data.slug);
+    await prisma.caseStudy.update({ where: { id }, data });
+    if (existing.status === "published") {
+      revalidatePublicContent(existing.slug);
+      revalidatePublicContent(data.slug);
+    }
+    return { ok: true, savedAt: new Date().toISOString(), slug: data.slug };
+  } catch (error) {
+    return actionError(error, "Save failed. Try again.");
   }
-  return { ok: true, savedAt: new Date().toISOString(), slug: data.slug };
 }
 
 export async function publishCaseStudy(id: string, draft: CaseStudyDraft) {
-  await requireAdmin();
-  const existing = await prisma.caseStudy.findUnique({ where: { id } });
-  if (!existing) return { error: "Not found" };
-  const data = draftToData(draft);
-  if (!data.title || !data.slug) return { error: "Title is required" };
+  try {
+    await requireAdmin();
+    const existing = await prisma.caseStudy.findUnique({ where: { id } });
+    if (!existing) return { error: "Not found" };
+    const data = draftToData(draft);
+    if (!data.title || !data.slug) return { error: "Title is required" };
 
-  await prisma.caseStudy.update({
-    where: { id },
-    data: { ...data, status: "published" },
-  });
-  revalidatePublicContent(existing.slug);
-  revalidatePublicContent(data.slug);
-  return { ok: true };
+    await prisma.caseStudy.update({
+      where: { id },
+      data: { ...data, status: "published" },
+    });
+    revalidatePublicContent(existing.slug);
+    revalidatePublicContent(data.slug);
+    return { ok: true };
+  } catch (error) {
+    return actionError(error, "Publish failed. Try again.");
+  }
 }
 
 export async function unpublishCaseStudy(id: string) {
-  await requireAdmin();
-  const existing = await prisma.caseStudy.findUnique({ where: { id } });
-  if (!existing) return { error: "Not found" };
-  await prisma.caseStudy.update({
-    where: { id },
-    data: { status: "draft" },
-  });
-  revalidatePublicContent(existing.slug);
-  return { ok: true };
+  try {
+    await requireAdmin();
+    const existing = await prisma.caseStudy.findUnique({ where: { id } });
+    if (!existing) return { error: "Not found" };
+    await prisma.caseStudy.update({
+      where: { id },
+      data: { status: "draft" },
+    });
+    revalidatePublicContent(existing.slug);
+    return { ok: true };
+  } catch (error) {
+    return actionError(error, "Could not unpublish.");
+  }
 }
 
 export async function createCaseStudy(formData: FormData) {
@@ -215,28 +229,25 @@ export async function toggleCaseStudyFeatured(id: string) {
 }
 
 export async function moveCaseStudy(id: string, direction: "up" | "down") {
-  await requireAdmin();
-  const studies = await prisma.caseStudy.findMany({
-    orderBy: [{ order: "asc" }, { createdAt: "asc" }],
-  });
-  const index = studies.findIndex((item) => item.id === id);
-  if (index < 0) return;
-  const swapWith = direction === "up" ? index - 1 : index + 1;
-  if (swapWith < 0 || swapWith >= studies.length) return;
-
-  const current = studies[index];
-  const other = studies[swapWith];
-  await prisma.$transaction([
-    prisma.caseStudy.update({
-      where: { id: current.id },
-      data: { order: other.order },
-    }),
-    prisma.caseStudy.update({
-      where: { id: other.id },
-      data: { order: current.order },
-    }),
-  ]);
-  revalidatePublicContent();
+  try {
+    await requireAdmin();
+    const studies = await prisma.caseStudy.findMany({
+      orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+    });
+    const next = moveItem(studies, id, direction);
+    if (!next) return;
+    await prisma.$transaction(
+      next.map((study, order) =>
+        prisma.caseStudy.update({
+          where: { id: study.id },
+          data: { order },
+        }),
+      ),
+    );
+    revalidatePublicContent();
+  } catch (error) {
+    return actionError(error, "Could not reorder case studies.");
+  }
 }
 
 export async function saveCoverUrl(id: string, url: string) {

@@ -48,7 +48,7 @@ export async function getPublishedCaseStudy(slug: string) {
 
 export async function getAllCaseStudies() {
   return prisma.caseStudy.findMany({
-    orderBy: [{ order: "asc" }, { createdAt: "desc" }],
+    orderBy: [{ order: "asc" }, { createdAt: "asc" }],
   });
 }
 

@@ -18,19 +18,24 @@ export function ImageField({
   async function upload(file: File) {
     setBusy(true);
     setError("");
-    const data = new FormData();
-    data.set("file", file);
-    const result = await uploadCaseStudyImage(data);
-    setBusy(false);
-    if (result.error) {
-      setError(result.error);
-      return;
-    }
-    if (result.url) {
-      if (url && url !== result.url) {
-        void deleteStoredImages([url]);
+    try {
+      const data = new FormData();
+      data.set("file", file);
+      const result = await uploadCaseStudyImage(data);
+      if ("error" in result && result.error) {
+        setError(result.error);
+        return;
       }
-      onChange(result.url);
+      if ("url" in result && result.url) {
+        if (url && url !== result.url) {
+          void deleteStoredImages([url]);
+        }
+        onChange(result.url);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed. Try a smaller JPG or PNG.");
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -50,6 +55,7 @@ export function ImageField({
             type="file"
             accept="image/jpeg,image/png,image/webp,image/gif"
             className="sr-only"
+            disabled={busy}
             onChange={(e) => {
               const file = e.target.files?.[0];
               if (file) void upload(file);

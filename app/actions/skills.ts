@@ -1,8 +1,10 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { actionError } from "@/lib/action-error";
 import { requireAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { moveItem } from "@/lib/reorder";
 import { revalidatePublicContent } from "@/lib/revalidate";
 
 function readSkill(formData: FormData) {
@@ -40,26 +42,23 @@ export async function deleteSkill(id: string) {
 }
 
 export async function moveSkill(id: string, direction: "up" | "down") {
-  await requireAdmin();
-  const skills = await prisma.skill.findMany({
-    orderBy: [{ order: "asc" }, { createdAt: "asc" }],
-  });
-  const index = skills.findIndex((item) => item.id === id);
-  if (index < 0) return;
-  const swapWith = direction === "up" ? index - 1 : index + 1;
-  if (swapWith < 0 || swapWith >= skills.length) return;
-
-  const current = skills[index];
-  const other = skills[swapWith];
-  await prisma.$transaction([
-    prisma.skill.update({
-      where: { id: current.id },
-      data: { order: other.order },
-    }),
-    prisma.skill.update({
-      where: { id: other.id },
-      data: { order: current.order },
-    }),
-  ]);
-  revalidatePublicContent();
+  try {
+    await requireAdmin();
+    const skills = await prisma.skill.findMany({
+      orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+    });
+    const next = moveItem(skills, id, direction);
+    if (!next) return;
+    await prisma.$transaction(
+      next.map((skill, order) =>
+        prisma.skill.update({
+          where: { id: skill.id },
+          data: { order },
+        }),
+      ),
+    );
+    revalidatePublicContent();
+  } catch (error) {
+    return actionError(error, "Could not reorder skills.");
+  }
 }
