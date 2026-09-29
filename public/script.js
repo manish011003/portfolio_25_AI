@@ -3,8 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
     const avatar = document.getElementById('avatar');
-    const aiMessage = document.getElementById('ai-message');
+    const composer = document.getElementById('input-container');
     const loadingGhost = document.getElementById('loading-ghost');
+    const avatarStage = document.getElementById('avatar-container');
+    const clearBtn = document.getElementById('clear-chat');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const avatarImages = [
         'char8bit/9-removebg-preview.png',
@@ -19,8 +22,21 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => loadingGhost && loadingGhost.classList.add('hidden'), 500);
     });
 
-    if (avatar) avatar.src = avatarImages[0];
-    if (aiMessage) aiMessage.innerText = 'Hello! Ask me anything.';
+    function setAvatarFrame(src) {
+        document.querySelectorAll('[data-avatar]').forEach((img) => { img.src = src; });
+    }
+    setAvatarFrame(avatarImages[0]);
+
+    let sending = false;
+    function syncSendState() {
+        if (!sendBtn || !userInput) return;
+        sendBtn.disabled = sending || userInput.value.trim() === '';
+    }
+    function scrollThread() {
+        if (!chatLog) return;
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
+    syncSendState();
 
     /* ---------- Mobile nav toggle ---------- */
     const navToggle = document.getElementById('nav-toggle');
@@ -72,23 +88,32 @@ document.addEventListener('DOMContentLoaded', () => {
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
     /* ---------- Chat send ---------- */
-    if (sendBtn) sendBtn.addEventListener('click', sendMessage);
-    if (userInput) {
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
+    if (composer) {
+        composer.addEventListener('submit', (e) => {
+            e.preventDefault();
+            sendMessage();
         });
     }
+    if (userInput) {
+        userInput.addEventListener('input', syncSendState);
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    }
+    if (clearBtn) clearBtn.addEventListener('click', resetChat);
 
     /* ---------- Prompt chips ---------- */
     const promptContainer = document.getElementById('prompt-suggestions');
     if (promptContainer) {
         promptContainer.addEventListener('click', (e) => {
-            const target = e.target;
-            if (target.classList.contains('prompt-chip')) {
-                const promptText = target.getAttribute('data-prompt') || target.textContent;
-                userInput.value = promptText;
-                sendMessage();
-            }
+            const target = e.target.closest('.prompt-chip');
+            if (!target || sending) return;
+            const promptText = target.getAttribute('data-prompt') || target.textContent;
+            userInput.value = promptText;
+            sendMessage();
         });
     }
 
@@ -466,6 +491,7 @@ Full-stack platform built for Smart India Hackathon 2023 to formalize e-waste co
                     });
                 });
             }
+            requestAnimationFrame(() => syncCarousel());
         };
 
         if (animate && caseRow.children.length) {
@@ -488,9 +514,9 @@ Full-stack platform built for Smart India Hackathon 2023 to formalize e-waste co
 
         if (detail.github) {
             const githubBtnContainer = document.createElement('div');
-            githubBtnContainer.style.marginBottom = '16px';
+            githubBtnContainer.className = 'panel-github';
             githubBtnContainer.innerHTML = `
-                <div class="box-button alt" style="display: inline-block;">
+                <div class="box-button alt">
                     <a href="${escapeHtml(detail.github)}" target="_blank" class="github-btn button" rel="noopener noreferrer">
                         <span>View on GitHub</span>
                     </a>
@@ -548,73 +574,16 @@ Full-stack platform built for Smart India Hackathon 2023 to formalize e-waste co
 
     if (workPanelClose) workPanelClose.addEventListener('click', closeWorkPanel);
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeWorkPanel();
+        if (e.key !== 'Escape') return;
+        closeWorkPanel();
+        if (navMenu && navMenu.classList.contains('is-open')) {
+            navMenu.classList.remove('is-open');
+            navToggle?.classList.remove('is-open');
+            navToggle?.setAttribute('aria-expanded', 'false');
+        }
     });
 
     renderProjects(activeFilter, { animate: true });
-
-    /* ---------- X / Twitter feed ---------- */
-    const xFeed = document.getElementById('x-feed');
-
-    function renderXPosts(payload) {
-        if (!xFeed) return;
-        const posts = Array.isArray(payload?.posts) ? payload.posts : [];
-        if (!posts.length) {
-            xFeed.innerHTML = `<p class="x-feed-fallback">No posts loaded. Visit <a href="https://x.com/realmanishb" target="_blank" rel="noopener noreferrer">@realmanishb</a>.</p>`;
-            return;
-        }
-
-        xFeed.innerHTML = posts.map((post) => {
-            const href = escapeHtml(post.href || 'https://x.com/realmanishb');
-            const text = escapeHtml(post.text || '');
-            const extra = post.url
-                ? `<a class="x-post-link" href="${escapeHtml(post.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(post.url.replace(/^https?:\/\//, ''))}</a>`
-                : '';
-            return `
-                <article class="x-post">
-                    <div class="x-post-meta">
-                        <img class="x-post-avatar" src="char8bit/9-removebg-preview.png" alt="" width="36" height="36" loading="lazy">
-                        <div>
-                            <div class="x-post-name">Manish Biswas</div>
-                            <div class="x-post-handle">@realmanishb</div>
-                        </div>
-                    </div>
-                    <p class="x-post-text">${text}</p>
-                    <div class="x-post-actions">
-                        ${extra}
-                        <a href="${href}" target="_blank" rel="noopener noreferrer">View on X →</a>
-                    </div>
-                </article>
-            `;
-        }).join('');
-    }
-
-    async function loadXFeed() {
-        if (!xFeed) return;
-        try {
-            const resp = await fetch(`${getApiBaseUrl()}/api/twitter`);
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-            const data = await resp.json();
-            renderXPosts(data);
-        } catch (err) {
-            console.error('X feed error', err);
-            renderXPosts({
-                posts: [
-                    {
-                        text: 'I think engineers have a weird habit of asking: “Can we build this?” before asking: “Should this exist?” I’ve definitely been guilty of it. Spidey Tracker is probably evidence.',
-                        url: 'https://spidey-tracker-pi.vercel.app/',
-                        href: 'https://x.com/realmanishb'
-                    },
-                    {
-                        text: 'One thing I learnt while building Spidey Tracker: realtime data ≠ normal database data. Firestore handles the persistent stuff. RTDB handles presence, location and nudges.',
-                        href: 'https://x.com/realmanishb'
-                    }
-                ]
-            });
-        }
-    }
-
-    loadXFeed();
 
     /* ---------- API ---------- */
     function getApiBaseUrl() {
@@ -624,14 +593,29 @@ Full-stack platform built for Smart India Hackathon 2023 to formalize e-waste co
         return '';
     }
 
+    function resetChat() {
+        if (!chatLog) return;
+        typeToken += 1;
+        showTyping(false);
+        sending = false;
+        chatLog.innerHTML = '';
+        appendMessage('Hello! Ask me anything.', 'ai', { instant: true, keepFrame: true });
+        if (userInput) {
+            userInput.value = '';
+            userInput.focus();
+        }
+        syncSendState();
+    }
+
     async function sendMessage() {
         const messageText = userInput.value.trim();
-        if (messageText === '') return;
+        if (messageText === '' || sending) return;
 
         appendMessage(messageText, 'user');
         userInput.value = '';
+        sending = true;
+        syncSendState();
         showTyping(true);
-        sendBtn.disabled = true;
 
         try {
             const response = await fetch(`${getApiBaseUrl()}/api/chat`, {
@@ -645,56 +629,142 @@ Full-stack platform built for Smart India Hackathon 2023 to formalize e-waste co
                 throw new Error(`HTTP ${response.status} ${errText}`);
             }
             const data = await response.json();
+            showTyping(false);
             appendMessage(data.reply || 'No reply', 'ai');
         } catch (error) {
             console.error('Error:', error);
+            showTyping(false);
             appendMessage('Sorry, my brain glitched. Try again in a moment.', 'ai');
         } finally {
-            showTyping(false);
-            sendBtn.disabled = false;
+            sending = false;
+            syncSendState();
         }
     }
 
-    let typingTimer = null;
     function showTyping(isOn) {
-        if (!aiMessage) return;
-        if (typingTimer) { clearInterval(typingTimer); typingTimer = null; }
-        if (isOn) {
-            const dots = ['.', '..', '...'];
-            let i = 0;
-            aiMessage.innerText = 'thinking.';
-            typingTimer = setInterval(() => {
-                aiMessage.innerText = 'thinking' + dots[i++ % dots.length];
-            }, 400);
-        }
+        const existing = document.getElementById('typing-row');
+        if (existing) existing.remove();
+        avatarStage?.classList.toggle('is-talking', isOn);
+        if (!isOn || !chatLog) return;
+        const row = document.createElement('div');
+        row.className = 'msg msg-ai';
+        row.id = 'typing-row';
+        const img = document.createElement('img');
+        img.className = 'msg-avatar pixel';
+        img.alt = '';
+        img.width = 36;
+        img.height = 36;
+        img.src = avatar?.src || avatarImages[0];
+        const dots = document.createElement('div');
+        dots.className = 'typing';
+        dots.setAttribute('aria-label', 'AI twin is typing');
+        dots.innerHTML = '<span></span><span></span><span></span>';
+        row.append(img, dots);
+        chatLog.appendChild(row);
+        scrollThread();
     }
 
-    function appendMessage(text, sender) {
+    function appendMessage(text, sender, options = {}) {
+        if (!chatLog) return;
+        const row = document.createElement('div');
+        row.className = sender === 'user' ? 'msg msg-user' : 'msg msg-ai';
+        const bubble = document.createElement('div');
+        bubble.className = sender === 'user' ? 'bubble bubble-user' : 'bubble bubble-ai';
+
         if (sender === 'ai') {
-            typewriter(aiMessage, text);
-            const randomAvatar = avatarImages[Math.floor(Math.random() * avatarImages.length)];
-            avatar.src = randomAvatar;
+            const img = document.createElement('img');
+            img.className = 'msg-avatar pixel';
+            img.alt = '';
+            img.width = 36;
+            img.height = 36;
+            if (!options.keepFrame) {
+                const next = avatarImages[Math.floor(Math.random() * avatarImages.length)];
+                setAvatarFrame(next);
+            }
+            img.src = (document.querySelector('[data-avatar]') || {}).src || avatarImages[0];
+            row.append(img, bubble);
+            chatLog.appendChild(row);
+            if (options.instant || reduceMotion || text.length > 240) {
+                bubble.textContent = text;
+                scrollThread();
+            } else {
+                typewriter(bubble, text);
+            }
         } else {
-            chatLog.innerHTML = '';
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message', 'user-message');
-            messageElement.innerText = text;
-            chatLog.appendChild(messageElement);
-            chatLog.scrollTop = chatLog.scrollHeight;
+            bubble.textContent = text;
+            row.appendChild(bubble);
+            chatLog.appendChild(row);
+            scrollThread();
         }
     }
 
-    /* Simple typewriter for AI replies (skips on long text) */
+    let typeToken = 0;
     function typewriter(el, text) {
         if (!el) return;
-        if (text.length > 240) { el.innerText = text; return; }
-        el.innerText = '';
+        const token = ++typeToken;
+        el.textContent = '';
         let i = 0;
         const speed = 18;
         const tick = () => {
-            el.innerText = text.slice(0, i++);
+            if (token !== typeToken || !el.isConnected) return;
+            el.textContent = text.slice(0, i++);
+            scrollThread();
             if (i <= text.length) setTimeout(tick, speed);
         };
         tick();
+    }
+
+    /* ---------- Active nav section ---------- */
+    const navAnchors = [...document.querySelectorAll('#nav-menu a[href^="#"]')];
+    const spyTargets = navAnchors
+        .map((a) => document.querySelector(a.getAttribute('href')))
+        .filter(Boolean);
+    if ('IntersectionObserver' in window && spyTargets.length) {
+        const spy = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                navAnchors.forEach((a) => {
+                    const on = a.getAttribute('href') === `#${entry.target.id}`;
+                    a.classList.toggle('is-active', on);
+                    if (on) a.setAttribute('aria-current', 'true');
+                    else a.removeAttribute('aria-current');
+                });
+            });
+        }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+        spyTargets.forEach((section) => spy.observe(section));
+    }
+
+    /* ---------- Project carousel arrows ---------- */
+    const workScroller = document.getElementById('work-scroller');
+    const workPrev = document.getElementById('work-prev');
+    const workNext = document.getElementById('work-next');
+    function syncCarousel() {
+        if (!workScroller || !workPrev || !workNext) return;
+        const max = workScroller.scrollWidth - workScroller.clientWidth;
+        workPrev.disabled = workScroller.scrollLeft <= 2;
+        workNext.disabled = max <= 2 || workScroller.scrollLeft >= max - 2;
+    }
+    function scrollWork(dir) {
+        if (!workScroller) return;
+        const card = workScroller.querySelector('.work-card');
+        const delta = (card ? card.getBoundingClientRect().width + 16 : 320) * dir;
+        workScroller.scrollBy({ left: delta, behavior: reduceMotion ? 'auto' : 'smooth' });
+    }
+    if (workPrev) workPrev.addEventListener('click', () => scrollWork(-1));
+    if (workNext) workNext.addEventListener('click', () => scrollWork(1));
+    if (workScroller) {
+        workScroller.addEventListener('scroll', syncCarousel, { passive: true });
+        window.addEventListener('resize', syncCarousel);
+        setTimeout(syncCarousel, 200);
+    }
+
+    /* ---------- Back to top clears the footer ---------- */
+    const footer = document.querySelector('.site-footer');
+    if (footer && backToTop && 'IntersectionObserver' in window) {
+        const footerWatch = new IntersectionObserver(([entry]) => {
+            const lift = entry.isIntersecting ? Math.ceil(entry.intersectionRect.height) + 16 : 18;
+            document.documentElement.style.setProperty('--totop', `${lift}px`);
+        });
+        footerWatch.observe(footer);
     }
 });

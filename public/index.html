@@ -49,7 +49,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://github.com">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=10">
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -161,7 +161,6 @@
             <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-menu">
                 <span class="bar"></span>
                 <span class="bar"></span>
-                <span class="bar"></span>
             </button>
 
             <div class="nav-menu" id="nav-menu">
@@ -169,7 +168,6 @@
                     <div class="box-button"><a href="#about" class="nav-link button"><span>About</span></a></div>
                     <div class="box-button"><a href="#chat" class="nav-link button"><span>AI Chat</span></a></div>
                     <div class="box-button"><a href="#work" class="nav-link button"><span>Projects</span></a></div>
-                    <div class="box-button"><a href="#updates" class="nav-link button"><span>Updates</span></a></div>
                     <div class="box-button"><a href="#contact" class="nav-link button"><span>Contact</span></a></div>
                 </div>
                 <div class="nav-right">
@@ -349,30 +347,37 @@
         <section id="chat" class="reveal">
             <h2 class="section-title">Chat with my <span class="accent">AI twin</span></h2>
             <p class="section-subtitle">Ask anything — projects, skills, philosophy, snacks.</p>
-            <div id="game-container">
-                <div id="character-container">
-                    <div id="ai-bubble-container">
-                        <div id="ai-message" class="message ai-message" role="status" aria-live="polite"></div>
-                    </div>
-                    <div id="avatar-container">
-                        <img alt="8-bit avatar of Manish" id="avatar">
-                    </div>
+            <div class="chat-layout">
+                <div id="avatar-container" class="chat-stage">
+                    <img alt="8-bit avatar of Manish" id="avatar" class="avatar-lg pixel" width="240" height="240" data-avatar>
                 </div>
-                <div id="chat-log-container">
-                    <div id="chat-log" aria-label="Chat log"></div>
-                    <div id="prompt-suggestions" aria-label="Suggested prompts">
-                        <span class="prompt-chip" data-prompt="Tell me about yourself">Tell me about yourself</span>
-                        <span class="prompt-chip" data-prompt="What are your hobbies?">Hobbies?</span>
-                        <span class="prompt-chip" data-prompt="What are your main skills?">Main skills?</span>
-                        <span class="prompt-chip" data-prompt="Tell me about your projects">Your projects</span>
-                        <span class="prompt-chip" data-prompt="Why product management?">Why PM?</span>
+                <div id="game-container" class="chat-window px-notch">
+                    <div class="chat-bar">
+                        <img class="chat-badge pixel" id="avatar-badge" data-avatar alt="" width="36" height="36">
+                        <div class="chat-id">
+                            <p class="chat-name">AI Twin</p>
+                            <p class="chat-status"><span class="online-dot" aria-hidden="true"></span> online</p>
+                        </div>
+                        <button type="button" id="clear-chat" class="btn btn-ghost">Clear</button>
                     </div>
-                    <div id="input-container">
-                        <input type="text" id="user-input" placeholder="Chat with my AI self..." aria-label="Type your message">
-                        <div class="box-button">
-                            <button id="send-btn" class="button" aria-label="Send message"><span>Send</span></button>
+                    <div id="chat-log" class="chat-thread" role="log" aria-live="polite" aria-relevant="additions" aria-label="Chat log">
+                        <div class="msg msg-ai">
+                            <img class="msg-avatar pixel" src="char8bit/9-removebg-preview.png" alt="" width="36" height="36">
+                            <div class="bubble bubble-ai px-notch">Hello! Ask me anything.</div>
                         </div>
                     </div>
+                    <div id="prompt-suggestions" class="chip-row" aria-label="Suggested prompts">
+                        <button type="button" class="prompt-chip" data-prompt="Tell me about yourself">Tell me about yourself</button>
+                        <button type="button" class="prompt-chip" data-prompt="What are your hobbies?">Hobbies?</button>
+                        <button type="button" class="prompt-chip" data-prompt="What are your main skills?">Main skills?</button>
+                        <button type="button" class="prompt-chip" data-prompt="Tell me about your projects">Your projects</button>
+                        <button type="button" class="prompt-chip" data-prompt="Why product management?">Why PM?</button>
+                    </div>
+                    <form id="input-container" class="chat-composer" autocomplete="off">
+                        <label class="sr-only" for="user-input">Type your message</label>
+                        <textarea id="user-input" rows="1" placeholder="Chat with my AI self..." aria-label="Type your message"></textarea>
+                        <button type="submit" id="send-btn" class="btn btn-primary" aria-label="Send message" disabled>Send</button>
+                    </form>
                 </div>
             </div>
         </section>
@@ -390,40 +395,16 @@
                 <button type="button" class="work-filter" data-filter="devops" role="tab" aria-selected="false">DevOps</button>
                 <button type="button" class="work-filter" data-filter="games" role="tab" aria-selected="false">Games</button>
             </div>
-            <div class="work-row-scroll">
-                <div class="work-row" id="case-row" aria-live="polite"></div>
-            </div>
-            <nav class="seo-project-index" aria-label="Project index">
-                <h3 class="seo-project-index-title">Project index</h3>
-                <ul>
-                    <li><a href="https://github.com/manish011003/ironclad" rel="noopener noreferrer">Ironclad</a> — cross-platform fitness app (Expo + Firebase)</li>
-                    <li><a href="https://github.com/manish011003/geostocks-ai" rel="noopener noreferrer">GeoStocks AI</a> — geopolitical stock intelligence (Next.js + Three.js)</li>
-                    <li><a href="https://github.com/manish011003/ai-cicd-log-analyzer" rel="noopener noreferrer">AI CI/CD Log Analyzer</a> — RAG failure diagnosis for Jenkins</li>
-                    <li><a href="https://github.com/manish011003/benevolve-AI" rel="noopener noreferrer">Benevolve AI</a> — agency site for in-house software &amp; LLM products</li>
-                    <li><a href="https://github.com/manish011003/spidey_tracker" rel="noopener noreferrer">Spidey Tracker</a> — private map presence &amp; adventure HUD</li>
-                    <li><a href="https://github.com/manish011003/AI-task-manager-agent-main" rel="noopener noreferrer">Task Manager Agent</a> — WebSocket AI agent for tasks</li>
-                    <li><a href="https://github.com/manish011003/push-up-counter" rel="noopener noreferrer">Push-Up Counter</a> — MediaPipe + OpenCV form tracking</li>
-                    <li><a href="https://github.com/manish011003/panipurirush" rel="noopener noreferrer">Pani Puri Rush</a> — Pac-Man style browser game</li>
-                    <li><a href="https://github.com/manish011003/Superstorewise" rel="noopener noreferrer">Superstorewise</a> — Expo / React Native storefront</li>
-                    <li><a href="https://github.com/manish011003/DECOYwebsrc" rel="noopener noreferrer">DECOY Website</a> — official organization site</li>
-                    <li><a href="https://github.com/manish011003/aasaan" rel="noopener noreferrer">Aasaan</a> — landing &amp; order funnel</li>
-                    <li><a href="https://github.com/manish011003/sih2023final" rel="noopener noreferrer">Hungry for E-Waste</a> — SIH 2023 finalist platform</li>
-                </ul>
-            </nav>
-        </section>
-
-        <!-- TWITTER / X UPDATES -->
-        <section id="updates" class="reveal">
-            <h2 class="section-title">Latest <span class="accent">Updates</span></h2>
-            <p class="section-subtitle">Live posts from <a class="inline-x-link" href="https://x.com/realmanishb" target="_blank" rel="me noopener noreferrer">@realmanishb</a> on X.</p>
-            <div class="x-feed-shell">
-                <div class="x-feed-bar">
-                    <span>x.com/realmanishb</span>
-                    <a href="https://x.com/realmanishb" target="_blank" rel="me noopener noreferrer">Open profile →</a>
+            <div class="carousel">
+                <button type="button" class="carousel-btn" id="work-prev" aria-label="Previous projects">
+                    <span class="px-arrow px-arrow-left" aria-hidden="true"></span>
+                </button>
+                <div class="work-row-scroll" id="work-scroller">
+                    <div class="work-row" id="case-row" aria-live="polite"></div>
                 </div>
-                <div class="x-feed-frame" id="x-feed" aria-live="polite">
-                    <p class="x-feed-status">Loading posts…</p>
-                </div>
+                <button type="button" class="carousel-btn" id="work-next" aria-label="Next projects">
+                    <span class="px-arrow px-arrow-right" aria-hidden="true"></span>
+                </button>
             </div>
         </section>
 
@@ -498,7 +479,6 @@
             <div class="footer-links" aria-label="Footer">
                 <a href="#about">About</a>
                 <a href="#work">Projects</a>
-                <a href="#updates">Updates</a>
                 <a href="blog.html">Blog</a>
                 <a href="/pm">PM</a>
                 <a href="#contact">Contact</a>
