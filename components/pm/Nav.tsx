@@ -46,7 +46,7 @@ export function Nav() {
             </Link>
           ))}
           <a
-            href="mailto:me@manishb.in"
+            href="mailto:m4n15hb2@gmail.com"
             className="mt-1 inline-flex items-center justify-center whitespace-nowrap border-2 border-ink bg-ink px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-cream lg:mt-0"
             onClick={() => setOpen(false)}
           >

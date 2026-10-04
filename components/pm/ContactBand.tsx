@@ -11,7 +11,7 @@ export function ContactBand() {
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
-            href="mailto:me@manishb.in"
+            href="mailto:m4n15hb2@gmail.com"
             className="inline-flex items-center justify-center border-2 border-[#111] bg-[#111] px-5 py-3 font-mono text-xs uppercase tracking-[0.16em] text-[#fff8ee]"
           >
             Email me
