@@ -30,8 +30,8 @@ export default async function CaseStudiesIndexPage() {
       </a>
       <Nav />
       <main id="main">
-        <section className="paper-grid border-b-2 border-ink px-4 py-12 sm:px-6 sm:py-16">
-          <div className="mx-auto max-w-6xl">
+        <section className="paper-grid border-b-2 border-ink py-12 sm:py-16">
+          <div className="page-shell">
             <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-muted">
               All files
             </p>

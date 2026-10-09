@@ -24,7 +24,7 @@ export function Nav() {
 
   return (
     <header className="sticky top-0 z-40 border-b-2 border-ink bg-paper/95 backdrop-blur-sm">
-      <nav className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
+      <nav className="page-shell flex items-center gap-3 py-3">
         <Link
           href="/"
           className="shrink-0 font-mono text-sm font-semibold tracking-[0.18em] uppercase"

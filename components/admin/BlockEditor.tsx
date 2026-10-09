@@ -12,6 +12,7 @@ import {
   type HeadingBlock,
   type ImageBlock,
   type ParagraphBlock,
+  type PersonaBlock,
   type QuoteBlock,
   type UiBlock,
 } from "@/lib/blocks";
@@ -38,6 +39,7 @@ const BLOCK_TYPES: { type: ContentBlock["type"]; label: string }[] = [
   { type: "ui", label: "UI" },
   { type: "chart", label: "Chart" },
   { type: "quote", label: "Quote" },
+  { type: "persona", label: "Persona" },
   { type: "divider", label: "Divider" },
 ];
 
@@ -80,7 +82,7 @@ export function BlockEditor({
       </div>
       {blocks.length === 0 ? (
         <p className="rounded border border-dashed border-zinc-300 px-3 py-6 text-sm text-zinc-500">
-          Add a heading, paragraph, image, UI screenshot, chart, quote, or divider.
+          Add a heading, paragraph, image, UI screenshot, chart, quote, persona, or divider.
         </p>
       ) : null}
       {blocks.map((block, index) => (
@@ -277,6 +279,38 @@ function BlockFields({
           value={quote.attribution ?? ""}
           onChange={(e) => onChange({ ...quote, attribution: e.target.value })}
           placeholder="Attribution (optional)"
+          className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+        />
+        <p className="text-xs text-zinc-500">
+          Tip: for interview personas, use a Persona block — or write “Name, Role — insight” in a quote.
+        </p>
+      </div>
+    );
+  }
+
+  if (block.type === "persona") {
+    const persona = block as PersonaBlock;
+    return (
+      <div className="space-y-2">
+        <div className="grid gap-2 sm:grid-cols-2">
+          <input
+            value={persona.name}
+            onChange={(e) => onChange({ ...persona, name: e.target.value })}
+            placeholder="Name"
+            className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+          />
+          <input
+            value={persona.role}
+            onChange={(e) => onChange({ ...persona, role: e.target.value })}
+            placeholder="Role / title"
+            className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+          />
+        </div>
+        <textarea
+          value={persona.text}
+          onChange={(e) => onChange({ ...persona, text: e.target.value })}
+          rows={3}
+          placeholder="What this persona needs or said"
           className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
         />
       </div>

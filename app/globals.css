@@ -75,6 +75,29 @@ body {
   line-height: 0.86;
 }
 
+/* Shared content width for PM / case-study pages */
+.page-shell {
+  width: 100%;
+  max-width: 1400px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 4rem);
+}
+
+.page-shell-wide {
+  width: 100%;
+  max-width: 1480px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 4rem);
+}
+
+.prose-measure {
+  max-width: 42rem;
+}
+
+.prose-measure-wide {
+  max-width: 48rem;
+}
+
 .admin-body {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   background: #f4f4f5;

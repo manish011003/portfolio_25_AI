@@ -1,7 +1,7 @@
 export function Footer() {
   return (
-    <footer className="bg-ink px-4 py-8 text-cream sm:px-6">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <footer className="bg-ink py-8 text-cream">
+      <div className="page-shell flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-cream/70">
           © {new Date().getFullYear()} Manish Biswas. Product management portfolio.
         </p>

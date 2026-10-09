@@ -71,6 +71,14 @@ export type QuoteBlock = {
   attribution?: string;
 };
 
+export type PersonaBlock = {
+  id: string;
+  type: "persona";
+  name: string;
+  role: string;
+  text: string;
+};
+
 export type DividerBlock = {
   id: string;
   type: "divider";
@@ -83,7 +91,16 @@ export type ContentBlock =
   | UiBlock
   | ChartBlock
   | QuoteBlock
+  | PersonaBlock
   | DividerBlock;
+
+export type CaseStudySection = {
+  id: string;
+  heading: HeadingBlock | null;
+  narrative: ContentBlock[];
+  asides: ContentBlock[];
+  media: ContentBlock[];
+};
 
 export type CaseStudyDraft = {
   title: string;
@@ -138,6 +155,8 @@ export function createBlock(type: ContentBlock["type"]): ContentBlock {
       };
     case "quote":
       return { id, type, text: "", attribution: "" };
+    case "persona":
+      return { id, type, name: "", role: "", text: "" };
     case "divider":
       return { id, type };
   }
@@ -284,6 +303,15 @@ export function asBody(value: unknown, fallbackDescription = ""): ContentBlock[]
             attribution: String(raw.attribution ?? ""),
           });
           break;
+        case "persona":
+          blocks.push({
+            id,
+            type: "persona",
+            name: String(raw.name ?? ""),
+            role: String(raw.role ?? ""),
+            text: String(raw.text ?? ""),
+          });
+          break;
         case "divider":
           blocks.push({ id, type: "divider" });
           break;
@@ -305,6 +333,9 @@ export function bodyToPlainText(body: ContentBlock[]) {
     .map((block) => {
       if (block.type === "paragraph" || block.type === "heading" || block.type === "quote") {
         return block.text.trim();
+      }
+      if (block.type === "persona") {
+        return [block.name, block.role, block.text].filter(Boolean).join(" — ").trim();
       }
       return "";
     })
@@ -331,4 +362,82 @@ export function collectChartBlocks(body: ContentBlock[]) {
 
 export function collectNarrativeBlocks(body: ContentBlock[]) {
   return body.filter((block) => block.type !== "chart");
+}
+
+function isAsideBlock(block: ContentBlock) {
+  return block.type === "quote" || block.type === "persona";
+}
+
+function isMediaBlock(block: ContentBlock) {
+  return block.type === "image" || block.type === "ui" || block.type === "chart";
+}
+
+/** Group CMS blocks into editorial sections keyed by H2 headings. */
+export function groupCaseStudySections(blocks: ContentBlock[]): CaseStudySection[] {
+  const sections: CaseStudySection[] = [];
+  let current: CaseStudySection = {
+    id: "lead",
+    heading: null,
+    narrative: [],
+    asides: [],
+    media: [],
+  };
+
+  function pushCurrent() {
+    if (current.heading || current.narrative.length || current.asides.length || current.media.length) {
+      sections.push(current);
+    }
+  }
+
+  for (const block of blocks) {
+    if (block.type === "heading" && block.level === 2) {
+      pushCurrent();
+      current = {
+        id: block.id,
+        heading: block,
+        narrative: [],
+        asides: [],
+        media: [],
+      };
+      continue;
+    }
+
+    if (block.type === "divider") {
+      current.media.push(block);
+      continue;
+    }
+
+    if (isAsideBlock(block)) {
+      current.asides.push(block);
+      continue;
+    }
+
+    if (isMediaBlock(block)) {
+      current.media.push(block);
+      continue;
+    }
+
+    current.narrative.push(block);
+  }
+
+  pushCurrent();
+  return sections;
+}
+
+/** Parse legacy persona quotes stored as "Name, Role — insight". */
+export function parsePersonaFromQuote(text: string): {
+  name: string;
+  role: string;
+  body: string;
+} | null {
+  const match = text.match(/^([^—\n]+)—\s*([\s\S]+)$/);
+  if (!match) return null;
+  const head = match[1].trim();
+  const body = match[2].trim();
+  if (!head || !body) return null;
+  const parts = head.match(/^(.+?),\s*(.+)$/);
+  if (parts) {
+    return { name: parts[1].trim(), role: parts[2].trim(), body };
+  }
+  return { name: head, role: "", body };
 }

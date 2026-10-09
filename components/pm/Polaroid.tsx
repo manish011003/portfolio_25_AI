@@ -16,7 +16,7 @@ export function Polaroid({
 }) {
   return (
     <figure
-      className={`relative mx-auto w-full bg-cream p-2.5 pb-10 shadow-[0_16px_40px_rgba(17,17,17,0.14)] ${wide ? "max-w-3xl" : "max-w-[420px]"}`}
+      className={`relative mx-auto w-full bg-cream p-2.5 pb-10 shadow-[0_16px_40px_rgba(17,17,17,0.14)] ${wide ? "max-w-xl lg:max-w-none" : "max-w-[420px]"}`}
       style={{ transform: `rotate(${rotate})` }}
     >
       <Tape />
