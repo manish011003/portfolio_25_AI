@@ -3,6 +3,10 @@ import type { CSSProperties } from "react";
 const FONTS =
   "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&family=DM+Sans:wght@400;500&family=Raleway:wght@500;600&display=swap";
 
+/** Runs before paint: add the `js` flag and apply the saved (or system) colour scheme. */
+const THEME_INIT =
+  'var d=document.documentElement;d.classList.add("js");try{var t=localStorage.getItem("blog-theme");if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";d.setAttribute("data-blog-theme",t)}catch(e){}';
+
 const del = (value: string) => ({ "--del": value }) as CSSProperties;
 
 /** Stylesheets and the `js` flag the blog design needs; plain tags so they unmount with the page. */
@@ -12,7 +16,7 @@ export function BlogHead() {
       {/* eslint-disable-next-line @next/next/no-page-custom-font */}
       <link rel="stylesheet" href={FONTS} />
       <link rel="stylesheet" href="/blog.css" />
-      <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("js")' }} />
+      <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
     </>
   );
 }
@@ -30,6 +34,15 @@ export function BlogHeader({ search = false }: { search?: boolean }) {
             </span>
           </a>
         </div>
+        <button type="button" className="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode" title="Toggle dark mode">
+          <svg className="ti-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+          </svg>
+          <svg className="ti-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+          </svg>
+        </button>
         <button className="blog-nav-toggle" id="blog-nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="blog-nav-links">
           <span></span>
           <span></span>

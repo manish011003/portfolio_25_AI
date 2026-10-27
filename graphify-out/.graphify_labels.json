@@ -1,9 +1,9 @@
 {
-  "0": "blocks.ts",
+  "0": "CaseChart.tsx",
   "1": "case-studies.ts",
   "2": "queries.ts",
   "3": "dependencies",
-  "4": "experience/page.tsx",
+  "4": "AdminShell.tsx",
   "5": "compilerOptions",
   "6": "CaseStudyArticle.tsx",
   "7": "devDependencies",
@@ -12,7 +12,7 @@
   "10": "Hero.tsx",
   "11": "script.js",
   "12": "app/layout.tsx",
-  "13": "upload.ts",
+  "13": "BlogListPage.tsx",
   "14": "AI Portfolio of Manish Biswas",
   "15": "make-og.js",
   "16": "pm-portfolio.js",
@@ -22,5 +22,12 @@
   "20": "robots.ts",
   "21": "next.config.ts",
   "22": "postcss.config.mjs",
-  "23": "blog.js"
+  "23": "blog.js",
+  "24": "actions/blog.ts",
+  "25": "BlockEditor.tsx",
+  "26": "blocks.ts",
+  "27": "CaseStudyBlocks.tsx",
+  "28": "BlogBlocks.tsx",
+  "29": "ImageLightbox.tsx",
+  "30": "CLAUDE.md"
 }

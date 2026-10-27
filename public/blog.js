@@ -1,3 +1,35 @@
+/* ---------- Dark mode toggle (initial theme is set by an inline script before paint) ---------- */
+(function () {
+    const root = document.documentElement;
+    const KEY = 'blog-theme';
+    const current = () => (root.getAttribute('data-blog-theme') === 'dark' ? 'dark' : 'light');
+    const sync = () => {
+        const btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        const dark = current() === 'dark';
+        btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+        btn.setAttribute('aria-pressed', String(dark));
+    };
+    const apply = (t, save) => {
+        root.classList.add('theme-anim');
+        root.setAttribute('data-blog-theme', t);
+        if (save) { try { localStorage.setItem(KEY, t); } catch (e) { /* storage blocked */ } }
+        sync();
+        setTimeout(() => root.classList.remove('theme-anim'), 400);
+    };
+    document.addEventListener('click', (e) => {
+        if (e.target.closest && e.target.closest('#theme-toggle')) apply(current() === 'dark' ? 'light' : 'dark', true);
+    });
+    // follow the OS setting until the visitor picks one explicitly
+    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        let saved = null;
+        try { saved = localStorage.getItem(KEY); } catch (err) { /* ignore */ }
+        if (saved !== 'dark' && saved !== 'light') apply(e.matches ? 'dark' : 'light', false);
+    });
+    sync();
+    window.addEventListener('load', sync);
+})();
+
 // Wait for the window load event so a server-rendered React page has finished hydrating
 // before this script touches the DOM.
 function initBlog() {
