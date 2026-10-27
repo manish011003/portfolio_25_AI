@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#1e40af">
+    <meta name="theme-color" content="#360568">
 
     <title>Blog — Manish Biswas | AI, Product &amp; Engineering</title>
     <meta name="description" content="Blog by Manish Biswas on AI engineering, product management, and shipping — notes on LLM agents, SIH case studies, and building in public.">
@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="blog.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&family=DM+Sans:wght@400;500&family=Raleway:wght@500;600&display=swap" rel="stylesheet">
 
     <script type="application/ld+json">
     {
@@ -60,52 +60,77 @@
       ]
     }
     </script>
+    <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="blog-header">
         <nav class="blog-nav" aria-label="Primary">
-            <div class="nav-brand">
-                <a href="index.html">Manish Biswas</a>
+            <div class="nav-brand" data-anim="slide-from-top" style="--dur:2s;--del:.25s">
+                <a href="index.html"><img src="brand-logo.png" alt="" width="36" height="36"><span><b>Manish</b> Biswas</span></a>
             </div>
             <button class="blog-nav-toggle" id="blog-nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="blog-nav-links">
                 <span></span><span></span><span></span>
             </button>
             <div class="nav-links" id="blog-nav-links">
-                <a href="index.html">Portfolio</a>
-                <a href="/pm">PM Portfolio</a>
-                <a href="#posts">Posts</a>
+                <a href="index.html" data-anim="fade-in" style="--del:.55s">Portfolio</a>
+                <a href="/pm" data-anim="fade-in" style="--del:.65s">PM Portfolio</a>
+                <a href="#posts" class="active" aria-current="location" data-anim="fade-in" style="--del:.75s">Posts</a>
+                <div class="blog-search" data-anim="fade-in" style="--dur:1.5s;--del:.85s">
+                    <input type="search" id="blog-search" placeholder="Search posts..." aria-label="Search posts">
+                    <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span>
+                </div>
             </div>
         </nav>
     </header>
 
     <main class="blog-main" id="main">
-        <div class="blog-hero">
-            <div class="blog-hero-inner">
-                <p class="blog-eyebrow">THE NOTEBOOK</p>
-                <h1 class="blog-title">Thoughts &amp; Insights</h1>
-                <p class="blog-subtitle">Exploring AI, product management, and engineering — one essay at a time.</p>
-            </div>
-            <div class="blog-hero-deco" aria-hidden="true">
-                <span></span><span></span><span></span>
-            </div>
+        <div class="zone-top">
+            <section class="blog-hero">
+                <div class="blog-container">
+                    <i class="deco dots d1" data-parallax="y" data-speed="-.08" aria-hidden="true"></i>
+                    <i class="deco ring r1" data-parallax="x" data-speed=".05" aria-hidden="true"></i>
+                    <i class="deco ring r2" data-parallax="y" data-speed=".06" aria-hidden="true"></i>
+                    <i class="deco dots d2" data-parallax="y" data-speed=".07" aria-hidden="true"></i>
+                    <div class="hero-grid">
+                        <div class="hero-image" data-anim="zoom-in"><img src="og-image.png" alt="Manish Biswas — AI Engineer × Product Manager" width="1200" height="630"></div>
+                        <div class="hero-left">
+                            <div class="hero-card" data-anim="fade-in-left" style="--dur:1.5s;--del:.5s">
+                            <p class="blog-eyebrow hero-meta">THE NOTEBOOK</p>
+                            <h1 class="blog-title">Thoughts &amp; Insights</h1>
+                        </div>
+                        <p class="blog-subtitle hero-excerpt" data-anim="fade-in-up" style="--del:.9s">Exploring AI, product management, and engineering — one essay at a time.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="featured" aria-label="Featured posts">
+                <div class="blog-container">
+                    <div class="sec-head on-dark"><div class="sec-title" data-anim="slide-from-bottom"><h2>Featured Posts</h2></div><i class="sec-line" aria-hidden="true"></i><a class="sec-more" href="#posts" data-anim="fade-in">View All Posts <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 4 8 8-8 8"/></svg></a><span class="car-arrows head-arrows"><button type="button" class="car-prev" aria-label="Previous posts"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4-8 8 8 8"/></svg></button><button type="button" class="car-next" aria-label="Next posts"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 4 8 8-8 8"/></svg></button></span></div>
+                </div>
+                <div class="carousel bleed" data-carousel data-anim="fade-in" style="--del:.5s">
+                    <div class="car-track" id="featured-track"></div>
+                </div>
+            </section>
         </div>
 
-        <div class="blog-container" id="posts">
-            <div class="blog-toolbar">
-                <div class="blog-search">
-                    <span class="search-icon" aria-hidden="true">🔍</span>
-                    <input type="search" id="blog-search" placeholder="Search posts..." aria-label="Search posts">
-                </div>
-                <div class="blog-filters" role="tablist" aria-label="Filter posts">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="ai">AI/ML</button>
-                    <button class="filter-btn" data-filter="pm">Product</button>
-                    <button class="filter-btn" data-filter="engineering">Engineering</button>
+        <section class="recent" aria-label="Latest posts">
+            <div class="blog-container">
+                <div class="sec-head "><div class="sec-title" data-anim="slide-from-bottom"><h2>Latest Notes</h2></div><i class="sec-line" aria-hidden="true"></i></div>
+                <div class="recent-panel" data-anim="fade-in" style="--del:.35s">
+                    <i class="deco dots d3" data-parallax="y" data-speed=".05" aria-hidden="true"></i>
+                    <i class="deco dots d3b" aria-hidden="true"></i>
+                    <div class="recent-big" id="recent-big" data-anim="scale-down"></div>
+                    <div class="recent-list" id="recent-list"></div>
                 </div>
             </div>
+        </section>
 
-            <div class="blog-posts">
+        <div class="blog-container" id="posts">
+            <div class="posts-grid">
+                <div class="posts-col">
+                    <div class="sec-head "><div class="sec-title" data-anim="slide-from-bottom"><h2>All Posts</h2></div><i class="sec-line" aria-hidden="true"></i></div>
+<div class="blog-posts">
                 <article class="blog-post" data-category="ai">
                     <div class="post-image">
                         <div class="post-image-placeholder">🤖</div>
@@ -186,30 +211,95 @@
                     </div>
                 </article>
             </div>
-
-            <p class="blog-empty" id="blog-empty" hidden>No posts match your search yet — try a different keyword.</p>
+                    <p class="blog-empty" id="blog-empty" hidden>No posts match your search yet — try a different keyword.</p>
+                </div>
+                <aside class="side-col" aria-label="More to read">
+                    <div class="sec-head "><div class="sec-title" data-anim="slide-from-bottom"><h2>More To Read</h2></div><i class="sec-line" aria-hidden="true"></i></div>
+                    <div class="popular" id="popular-list"></div>
+                </aside>
+            </div>
         </div>
+
+        <section class="topics" aria-label="Browse by topic">
+            <div class="topics-panel">
+                <i class="deco dots d4" data-parallax="y" data-speed=".05" aria-hidden="true"></i>
+                <div class="topics-text">
+                    <div class="sec-head on-dark"><div class="sec-title" data-anim="slide-from-bottom"><h2>Browse By Topic</h2></div><i class="sec-line" aria-hidden="true"></i></div>
+                    <p data-anim="fade-in" style="--del:.5s">Filter the notebook by what you care about.</p>
+                    <div class="car-arrows" data-anim="fade-in" style="--del:.7s">
+                        <button type="button" class="car-prev" aria-label="Previous topics"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4-8 8 8 8"/></svg></button>
+                        <button type="button" class="car-next" aria-label="Next topics"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 4 8 8-8 8"/></svg></button>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel topics-carousel" data-carousel data-anim="fade-in" style="--del:.4s">
+                <div class="car-track filter-track" role="tablist" aria-label="Filter posts">
+                    <button class="filter-btn topic-card active" data-filter="all"><span class="art art-all">✨</span><b>All</b></button>
+                    <button class="filter-btn topic-card" data-filter="ai"><span class="art art-ai">🤖</span><b>AI/ML</b></button>
+                    <button class="filter-btn topic-card" data-filter="pm"><span class="art art-pm">🎯</span><b>Product</b></button>
+                    <button class="filter-btn topic-card" data-filter="engineering"><span class="art art-engineering">💪</span><b>Engineering</b></button>
+                </div>
+            </div>
+        </section>
+
+        <section class="spotlight" aria-label="Spotlight">
+            <div class="blog-container">
+                <div class="sec-head "><div class="sec-title" data-anim="slide-from-bottom"><h2>Spotlight</h2></div><i class="sec-line" aria-hidden="true"></i></div>
+                <div class="spot-grid" id="spot-grid"></div>
+            </div>
+        </section>
 
         <section class="blog-newsletter">
             <div class="blog-container">
-                <div class="newsletter-card">
-                    <h2>Subscribe to the notebook</h2>
-                    <p>Occasional essays on AI, products, and the messy middle of building things.</p>
-                    <form class="newsletter-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed ✓';">
-                        <input type="email" placeholder="you@example.com" aria-label="Your email" required>
-                        <button type="submit">Subscribe</button>
-                    </form>
+                <div class="newsletter-wrap" data-anim="fade-in-up" style="--del:.3s">
+                    <i class="deco dots-red nd1" aria-hidden="true"></i>
+                    <div class="newsletter-card">
+                        <div class="nl-copy">
+                            <h2>Subscribe to the notebook</h2>
+                            <p>Occasional essays on AI, products, and the messy middle of building things.</p>
+                            <form class="newsletter-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed ✓';">
+                                <input type="email" placeholder="you@example.com" aria-label="Your email" required>
+                                <button type="submit">Subscribe</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="blog-footer">
-        <p>&copy; <span id="blog-year"></span> Manish Biswas. All rights reserved.</p>
-        <div class="footer-links">
-            <a href="index.html">AI Portfolio</a>
-            <a href="/pm">PM Portfolio</a>
-            <a href="https://github.com/manish011003" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <div class="blog-container">
+            <div class="foot-top">
+                    <div class="foot-brand">
+                        <a href="index.html" class="foot-logo"><img src="brand-logo.png" alt="" width="36" height="36"><span><b>Manish</b> Biswas</span></a>
+                        <p>AI Engineer × Product Manager</p>
+                    </div>
+                    <i class="dots-row" aria-hidden="true"></i>
+                </div>
+                <div class="foot-grid">
+                <div class="foot-col">
+                    <h3>Categories</h3>
+                    <div class="foot-links row"><a href="#posts">AI/ML</a><a href="#posts">Product</a><a href="#posts">Engineering</a></div>
+                </div>
+                <div class="foot-col">
+                    <h3>Explore</h3>
+                    <div class="footer-links foot-links">
+                        <a href="index.html">AI Portfolio</a>
+                        <a href="/pm">PM Portfolio</a>
+                        <a href="https://github.com/manish011003" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    </div>
+                </div>
+                <div class="foot-col">
+                    <h3>Join Us</h3>
+                    <div class="socials">
+                        <a href="https://github.com/manish011003" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.42c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg></a>
+                        <a href="https://x.com/realmanishb" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18.9 2H22l-7.3 8.3L23 22h-6.7l-5.2-6.8L5 22H2l7.8-8.9L1.5 2h6.9l4.7 6.2L18.9 2Zm-1.2 18h1.8L7.4 3.9H5.5L17.7 20Z"/></svg></a>
+                    </div>
+                </div>
+            </div>
+            <div class="foot-line"></div>
+            <p class="foot-copy">&copy; <span id="blog-year"></span> Manish Biswas. All rights reserved.</p>
         </div>
     </footer>
 

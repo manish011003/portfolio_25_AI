@@ -84,7 +84,41 @@ export type DividerBlock = {
   type: "divider";
 };
 
+export type GalleryBlock = {
+  id: string;
+  type: "gallery";
+  images: { url: string; alt: string }[];
+  caption?: string;
+};
+
+export type CodeBlock = {
+  id: string;
+  type: "code";
+  language: string;
+  code: string;
+};
+
+export type VideoBlock = {
+  id: string;
+  type: "video";
+  url: string;
+  caption?: string;
+};
+
+export type CtaBlock = {
+  id: string;
+  type: "cta";
+  heading: string;
+  text: string;
+  label: string;
+  url: string;
+};
+
 export type ContentBlock =
+  | GalleryBlock
+  | CodeBlock
+  | VideoBlock
+  | CtaBlock
   | HeadingBlock
   | ParagraphBlock
   | ImageBlock
@@ -159,7 +193,21 @@ export function createBlock(type: ContentBlock["type"]): ContentBlock {
       return { id, type, name: "", role: "", text: "" };
     case "divider":
       return { id, type };
+    case "gallery":
+      return { id, type, images: [{ url: "", alt: "" }, { url: "", alt: "" }], caption: "" };
+    case "code":
+      return { id, type, language: "", code: "" };
+    case "video":
+      return { id, type, url: "", caption: "" };
+    case "cta":
+      return { id, type, heading: "", text: "", label: "", url: "" };
   }
+}
+
+/** Only http(s), mailto, site-relative and in-page links are allowed in CMS-authored URLs. */
+export function safeHref(value: unknown): string {
+  const url = String(value ?? "").trim();
+  return /^(https?:\/\/|mailto:|\/(?!\/)|#)/i.test(url) ? url : "";
 }
 
 export function descriptionToBody(description: string, prefix = "p"): ContentBlock[] {
@@ -315,6 +363,45 @@ export function asBody(value: unknown, fallbackDescription = ""): ContentBlock[]
         case "divider":
           blocks.push({ id, type: "divider" });
           break;
+        case "gallery":
+          blocks.push({
+            id,
+            type: "gallery",
+            images: Array.isArray(raw.images)
+              ? raw.images.map((img) => {
+                  const row = (img ?? {}) as Record<string, unknown>;
+                  return { url: String(row.url ?? ""), alt: String(row.alt ?? "") };
+                })
+              : [],
+            caption: String(raw.caption ?? ""),
+          });
+          break;
+        case "code":
+          blocks.push({
+            id,
+            type: "code",
+            language: String(raw.language ?? ""),
+            code: String(raw.code ?? ""),
+          });
+          break;
+        case "video":
+          blocks.push({
+            id,
+            type: "video",
+            url: String(raw.url ?? ""),
+            caption: String(raw.caption ?? ""),
+          });
+          break;
+        case "cta":
+          blocks.push({
+            id,
+            type: "cta",
+            heading: String(raw.heading ?? ""),
+            text: String(raw.text ?? ""),
+            label: String(raw.label ?? ""),
+            url: String(raw.url ?? ""),
+          });
+          break;
         default:
           break;
       }
@@ -337,6 +424,9 @@ export function bodyToPlainText(body: ContentBlock[]) {
       if (block.type === "persona") {
         return [block.name, block.role, block.text].filter(Boolean).join(" — ").trim();
       }
+      if (block.type === "cta") {
+        return [block.heading, block.text].filter(Boolean).join(" — ").trim();
+      }
       return "";
     })
     .filter(Boolean)
@@ -344,9 +434,10 @@ export function bodyToPlainText(body: ContentBlock[]) {
 }
 
 export function imageUrlsFromBody(body: ContentBlock[]) {
-  return body.flatMap((block) =>
-    (block.type === "image" || block.type === "ui") && block.url ? [block.url] : [],
-  );
+  return body.flatMap((block) => {
+    if (block.type === "gallery") return block.images.map((img) => img.url).filter(Boolean);
+    return (block.type === "image" || block.type === "ui") && block.url ? [block.url] : [];
+  });
 }
 
 export function asTemplate(value: unknown): CaseStudyTemplate {

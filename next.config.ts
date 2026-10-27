@@ -22,10 +22,15 @@ const nextConfig: NextConfig = {
     ];
   },
   async rewrites() {
-    return [
-      { source: "/", destination: "/index.html" },
-      { source: "/health", destination: "/api/health" },
-    ];
+    return {
+      // Serve the CMS-driven blog at the original URL; it wins over public/blog.html.
+      beforeFiles: [{ source: "/blog.html", destination: "/blog" }],
+      afterFiles: [
+        { source: "/", destination: "/index.html" },
+        { source: "/health", destination: "/api/health" },
+      ],
+      fallback: [],
+    };
   },
   images: {
     remotePatterns: [

@@ -94,3 +94,22 @@ export async function getAllSettings() {
   const rows = await prisma.siteSetting.findMany();
   return Object.fromEntries(rows.map((row) => [row.key, row.value]));
 }
+
+export async function getPublishedBlogPosts() {
+  return prisma.blogPost.findMany({
+    where: { status: "published" },
+    orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
+  });
+}
+
+export async function getPublishedBlogPost(slug: string) {
+  return prisma.blogPost.findFirst({ where: { slug, status: "published" } });
+}
+
+export async function getAllBlogPosts() {
+  return prisma.blogPost.findMany({ orderBy: [{ createdAt: "desc" }] });
+}
+
+export async function getBlogPostById(id: string) {
+  return prisma.blogPost.findUnique({ where: { id } });
+}

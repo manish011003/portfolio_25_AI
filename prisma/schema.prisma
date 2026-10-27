@@ -42,6 +42,31 @@ model CaseStudy {
   updatedAt     DateTime        @updatedAt
 }
 
+enum BlogPostStatus {
+  draft
+  published
+}
+
+model BlogPost {
+  id              String         @id @default(cuid())
+  slug            String         @unique
+  title           String
+  excerpt         String         @default("") @db.Text
+  category        String         @default("ai")
+  tags            String[]
+  emoji           String?
+  coverImage      String?
+  body            Json           @default("[]")
+  status          BlogPostStatus @default(draft)
+  publishedAt     DateTime?
+  readMinutes     Int            @default(0)
+  metaTitle       String?
+  metaDescription String?
+  externalUrl     String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
 model Experience {
   id          String    @id @default(cuid())
   role        String

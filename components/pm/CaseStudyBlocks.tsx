@@ -157,7 +157,12 @@ function BlockView({
     return <QuoteView block={block} />;
   }
 
-  return <hr className="border-ink/30" />;
+  if (block.type === "divider") {
+    return <hr className="border-ink/30" />;
+  }
+
+  // Blog-only block types (gallery, code, video, cta) are not offered in the case-study editor.
+  return null;
 }
 
 function PersonaCard({ block }: { block: PersonaBlock }) {

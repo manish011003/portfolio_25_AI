@@ -2,7 +2,7 @@
   "name": "portfolio-ai-backend",
   "version": "1.0.0",
   "private": true,
-  "description": "Portfolio of Manish Biswas — AI twin, blog, and dynamic PM case-study CMS",
+  "description": "Portfolio of Manish Biswas \u2014 AI twin, blog, and dynamic PM case-study CMS",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
@@ -12,7 +12,8 @@
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:seed:blog": "tsx prisma/seed-blog.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.22.0",

@@ -13,3 +13,14 @@ export function revalidatePublicContent(slug?: string) {
     console.error("revalidatePublicContent failed", error);
   }
 }
+
+export function revalidateBlog(slug?: string) {
+  try {
+    revalidatePath("/blog");
+    revalidatePath("/blog/[slug]", "page");
+    revalidatePath("/admin", "layout");
+    if (slug) revalidatePath(`/blog/${slug}`);
+  } catch (error) {
+    console.error("revalidateBlog failed", error);
+  }
+}

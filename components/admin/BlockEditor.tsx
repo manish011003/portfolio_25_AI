@@ -8,14 +8,19 @@ import {
   type ChartBlock,
   type ChartDatum,
   type ChartKind,
+  type CodeBlock,
   type ContentBlock,
+  type CtaBlock,
+  type GalleryBlock,
   type HeadingBlock,
   type ImageBlock,
   type ParagraphBlock,
   type PersonaBlock,
   type QuoteBlock,
   type UiBlock,
+  type VideoBlock,
 } from "@/lib/blocks";
+import { toEmbedUrl } from "@/lib/video";
 import dynamic from "next/dynamic";
 import { ImageField } from "./ImageField";
 
@@ -41,14 +46,30 @@ const BLOCK_TYPES: { type: ContentBlock["type"]; label: string }[] = [
   { type: "quote", label: "Quote" },
   { type: "persona", label: "Persona" },
   { type: "divider", label: "Divider" },
+  { type: "gallery", label: "Gallery" },
+  { type: "code", label: "Code" },
+  { type: "video", label: "Video" },
+  { type: "cta", label: "Call to action" },
+];
+
+/** The block palette case studies have always had; the blog editor opts in to the rest. */
+export const CASE_STUDY_BLOCK_TYPES: ContentBlock["type"][] = [
+  "heading", "paragraph", "image", "ui", "chart", "quote", "persona", "divider",
+];
+export const BLOG_BLOCK_TYPES: ContentBlock["type"][] = [
+  "heading", "paragraph", "image", "gallery", "quote", "code", "video", "cta", "divider", "ui", "chart",
 ];
 
 export function BlockEditor({
   blocks,
   onChange,
+  allowed = CASE_STUDY_BLOCK_TYPES,
+  title = "Write-up",
 }: {
   blocks: ContentBlock[];
   onChange: (blocks: ContentBlock[]) => void;
+  allowed?: ContentBlock["type"][];
+  title?: string;
 }) {
   function update(index: number, next: ContentBlock) {
     onChange(blocks.map((block, i) => (i === index ? next : block)));
@@ -77,12 +98,12 @@ export function BlockEditor({
   return (
     <div className="space-y-3">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-lg font-semibold">Write-up</h2>
-        <AddBlock onAdd={(type) => insert(blocks.length, type)} />
+        <h2 className="text-lg font-semibold">{title}</h2>
+        <AddBlock allowed={allowed} onAdd={(type) => insert(blocks.length, type)} />
       </div>
       {blocks.length === 0 ? (
         <p className="rounded border border-dashed border-zinc-300 px-3 py-6 text-sm text-zinc-500">
-          Add a heading, paragraph, image, UI screenshot, chart, quote, persona, or divider.
+          Add your first element: {allowed.join(", ")}.
         </p>
       ) : null}
       {blocks.map((block, index) => (
@@ -115,7 +136,7 @@ export function BlockEditor({
           </div>
           <BlockFields block={block} onChange={(next) => update(index, next)} />
           <div className="mt-3 border-t border-zinc-100 pt-3">
-            <AddBlock label="Add below" onAdd={(type) => insert(index + 1, type)} />
+            <AddBlock allowed={allowed} label="Add below" onAdd={(type) => insert(index + 1, type)} />
           </div>
         </article>
       ))}
@@ -125,15 +146,17 @@ export function BlockEditor({
 
 function AddBlock({
   onAdd,
+  allowed,
   label = "Add block",
 }: {
   onAdd: (type: ContentBlock["type"]) => void;
+  allowed: ContentBlock["type"][];
   label?: string;
 }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
       <span className="text-xs text-zinc-500">{label}</span>
-      {BLOCK_TYPES.map((item) => (
+      {BLOCK_TYPES.filter((item) => allowed.includes(item.type)).map((item) => (
         <button
           key={item.type}
           type="button"
@@ -317,7 +340,147 @@ function BlockFields({
     );
   }
 
+  if (block.type === "gallery") {
+    return <GalleryFields gallery={block} onChange={onChange} />;
+  }
+
+  if (block.type === "code") {
+    const code = block as CodeBlock;
+    return (
+      <div className="space-y-2">
+        <input
+          value={code.language}
+          onChange={(e) => onChange({ ...code, language: e.target.value })}
+          placeholder="Language label (e.g. ts, python, bash)"
+          className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+        />
+        <textarea
+          value={code.code}
+          onChange={(e) => onChange({ ...code, code: e.target.value })}
+          rows={8}
+          spellCheck={false}
+          placeholder="Paste code"
+          className="w-full rounded border border-zinc-300 px-3 py-2 font-mono text-xs"
+        />
+      </div>
+    );
+  }
+
+  if (block.type === "video") {
+    const video = block as VideoBlock;
+    const embeddable = !video.url.trim() || Boolean(toEmbedUrl(video.url));
+    return (
+      <div className="space-y-2">
+        <input
+          value={video.url}
+          onChange={(e) => onChange({ ...video, url: e.target.value })}
+          placeholder="YouTube or Vimeo link"
+          className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+        />
+        {embeddable ? null : (
+          <p className="text-xs text-red-600">
+            Only YouTube and Vimeo links can be embedded; this will show as a plain link.
+          </p>
+        )}
+        <input
+          value={video.caption ?? ""}
+          onChange={(e) => onChange({ ...video, caption: e.target.value })}
+          placeholder="Caption (optional)"
+          className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+        />
+      </div>
+    );
+  }
+
+  if (block.type === "cta") {
+    const cta = block as CtaBlock;
+    return (
+      <div className="space-y-2">
+        <input
+          value={cta.heading}
+          onChange={(e) => onChange({ ...cta, heading: e.target.value })}
+          placeholder="Heading"
+          className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+        />
+        <textarea
+          value={cta.text}
+          onChange={(e) => onChange({ ...cta, text: e.target.value })}
+          rows={2}
+          placeholder="Supporting text"
+          className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+        />
+        <div className="grid gap-2 sm:grid-cols-2">
+          <input
+            value={cta.label}
+            onChange={(e) => onChange({ ...cta, label: e.target.value })}
+            placeholder="Button label"
+            className="rounded border border-zinc-300 px-3 py-2 text-sm"
+          />
+          <input
+            value={cta.url}
+            onChange={(e) => onChange({ ...cta, url: e.target.value })}
+            placeholder="https://… or /path"
+            className="rounded border border-zinc-300 px-3 py-2 text-sm"
+          />
+        </div>
+      </div>
+    );
+  }
+
   return <p className="text-sm text-zinc-500">Horizontal rule. No settings.</p>;
+}
+
+function GalleryFields({
+  gallery,
+  onChange,
+}: {
+  gallery: GalleryBlock;
+  onChange: (block: ContentBlock) => void;
+}) {
+  function setImages(images: GalleryBlock["images"]) {
+    onChange({ ...gallery, images });
+  }
+  return (
+    <div className="space-y-3">
+      {gallery.images.map((image, i) => (
+        <div key={`${gallery.id}-img-${i}`} className="space-y-2 rounded border border-zinc-200 p-3">
+          <ImageField
+            label={`Image ${i + 1}`}
+            url={image.url}
+            onChange={(url) => setImages(gallery.images.map((img, n) => (n === i ? { ...img, url } : img)))}
+          />
+          <input
+            value={image.alt}
+            onChange={(e) =>
+              setImages(gallery.images.map((img, n) => (n === i ? { ...img, alt: e.target.value } : img)))
+            }
+            placeholder="Alt text"
+            className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+          />
+          <button
+            type="button"
+            className="rounded border border-zinc-300 px-2 py-1 text-xs"
+            onClick={() => setImages(gallery.images.filter((_, n) => n !== i))}
+          >
+            Remove image
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        className="rounded border border-zinc-300 px-3 py-1.5 text-xs"
+        onClick={() => setImages([...gallery.images, { url: "", alt: "" }])}
+      >
+        + Image
+      </button>
+      <input
+        value={gallery.caption ?? ""}
+        onChange={(e) => onChange({ ...gallery, caption: e.target.value })}
+        placeholder="Caption (optional)"
+        className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+      />
+    </div>
+  );
 }
 
 function rowValues(row: ChartDatum, count: number) {

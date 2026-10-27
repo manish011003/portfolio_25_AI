@@ -24,6 +24,9 @@ export function AdminShell({
           <Link className="rounded border border-zinc-300 bg-white px-3 py-1.5" href="/admin/case-studies">
             Case studies
           </Link>
+          <Link className="rounded border border-zinc-300 bg-white px-3 py-1.5" href="/admin/blog">
+            Blog
+          </Link>
           <Link className="rounded border border-zinc-300 bg-white px-3 py-1.5" href="/admin/skills">
             Skills
           </Link>
