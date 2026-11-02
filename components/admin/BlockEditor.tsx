@@ -1,10 +1,13 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import {
   CHART_KINDS,
   chartSeriesNames,
   createBlock,
   isPolarChart,
+  newGalleryImage,
+  newListItem,
   type ChartBlock,
   type ChartDatum,
   type ChartKind,
@@ -14,6 +17,8 @@ import {
   type GalleryBlock,
   type HeadingBlock,
   type ImageBlock,
+  type ListBlock,
+  type ListItem,
   type ParagraphBlock,
   type PersonaBlock,
   type QuoteBlock,
@@ -40,6 +45,7 @@ const CHART_TYPE_LABELS: Record<ChartKind, string> = {
 const BLOCK_TYPES: { type: ContentBlock["type"]; label: string }[] = [
   { type: "heading", label: "Heading" },
   { type: "paragraph", label: "Paragraph" },
+  { type: "list", label: "List" },
   { type: "image", label: "Image" },
   { type: "ui", label: "UI" },
   { type: "chart", label: "Chart" },
@@ -57,49 +63,77 @@ export const CASE_STUDY_BLOCK_TYPES: ContentBlock["type"][] = [
   "heading", "paragraph", "image", "ui", "chart", "quote", "persona", "divider",
 ];
 export const BLOG_BLOCK_TYPES: ContentBlock["type"][] = [
-  "heading", "paragraph", "image", "gallery", "quote", "code", "video", "cta", "divider", "ui", "chart",
+  "heading", "paragraph", "list", "image", "gallery", "quote", "code", "video", "cta", "divider", "ui", "chart",
 ];
+
+/** Applies a change to one block's latest state; null means its target no longer exists. */
+export type BlockPatch = (change: (block: ContentBlock) => ContentBlock | null) => boolean;
 
 export function BlockEditor({
   blocks,
   onChange,
   allowed = CASE_STUDY_BLOCK_TYPES,
   title = "Write-up",
+  keepImagesUntilSaved = false,
 }: {
   blocks: ContentBlock[];
   onChange: (blocks: ContentBlock[]) => void;
   allowed?: ContentBlock["type"][];
   title?: string;
+  /** Posts: never delete a stored image before the document that stops using it is saved. */
+  keepImagesUntilSaved?: boolean;
 }) {
-  function update(index: number, next: ContentBlock) {
-    onChange(blocks.map((block, i) => (i === index ? next : block)));
+  // Handlers can outlive the render they were created in (an upload finishing seconds later), so
+  // they read the newest blocks from here and find their target by id, never by position.
+  const live = useRef(blocks);
+  const onChangeRef = useRef(onChange);
+  useEffect(() => {
+    live.current = blocks;
+    onChangeRef.current = onChange;
+  });
+
+  function emit(next: ContentBlock[]) {
+    live.current = next;
+    onChangeRef.current(next);
   }
 
-  function move(index: number, direction: "up" | "down") {
+  const patchBlock = (id: string, change: (block: ContentBlock) => ContentBlock | null): boolean => {
+    const current = live.current;
+    const target = current.find((block) => block.id === id);
+    if (!target) return false;
+    const next = change(target);
+    if (!next) return false;
+    emit(current.map((block) => (block.id === id ? next : block)));
+    return true;
+  };
+
+  function move(id: string, direction: "up" | "down") {
+    const current = live.current;
+    const index = current.findIndex((block) => block.id === id);
     const swap = direction === "up" ? index - 1 : index + 1;
-    if (swap < 0 || swap >= blocks.length) return;
-    const next = [...blocks];
-    const current = next[index];
-    next[index] = next[swap];
-    next[swap] = current;
-    onChange(next);
+    if (index < 0 || swap < 0 || swap >= current.length) return;
+    const next = [...current];
+    [next[index], next[swap]] = [next[swap], next[index]];
+    emit(next);
   }
 
-  function remove(index: number) {
-    onChange(blocks.filter((_, i) => i !== index));
+  function remove(id: string) {
+    emit(live.current.filter((block) => block.id !== id));
   }
 
-  function insert(index: number, type: ContentBlock["type"]) {
-    const next = [...blocks];
-    next.splice(index, 0, createBlock(type));
-    onChange(next);
+  function insertAfter(id: string | null, type: ContentBlock["type"]) {
+    const current = live.current;
+    const at = id === null ? current.length : current.findIndex((block) => block.id === id) + 1;
+    const next = [...current];
+    next.splice(at, 0, createBlock(type));
+    emit(next);
   }
 
   return (
     <div className="space-y-3">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-lg font-semibold">{title}</h2>
-        <AddBlock allowed={allowed} onAdd={(type) => insert(blocks.length, type)} />
+        <AddBlock allowed={allowed} onAdd={(type) => insertAfter(null, type)} />
       </div>
       {blocks.length === 0 ? (
         <p className="rounded border border-dashed border-zinc-300 px-3 py-6 text-sm text-zinc-500">
@@ -107,7 +141,7 @@ export function BlockEditor({
         </p>
       ) : null}
       {blocks.map((block, index) => (
-        <article key={block.id} className="rounded border border-zinc-200 bg-white p-3">
+        <article key={block.id} data-block-id={block.id} className="rounded border border-zinc-200 bg-white p-3">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">
               {block.type}
@@ -117,7 +151,7 @@ export function BlockEditor({
                 type="button"
                 className="rounded border border-zinc-300 px-2 py-1 text-xs disabled:opacity-40"
                 disabled={index === 0}
-                onClick={() => move(index, "up")}
+                onClick={() => move(block.id, "up")}
               >
                 Up
               </button>
@@ -125,18 +159,23 @@ export function BlockEditor({
                 type="button"
                 className="rounded border border-zinc-300 px-2 py-1 text-xs disabled:opacity-40"
                 disabled={index === blocks.length - 1}
-                onClick={() => move(index, "down")}
+                onClick={() => move(block.id, "down")}
               >
                 Down
               </button>
-              <button type="button" className="rounded border border-red-200 px-2 py-1 text-xs text-red-700" onClick={() => remove(index)}>
+              <button type="button" className="rounded border border-red-200 px-2 py-1 text-xs text-red-700" onClick={() => remove(block.id)}>
                 Remove
               </button>
             </div>
           </div>
-          <BlockFields block={block} onChange={(next) => update(index, next)} />
+          <BlockFields
+            block={block}
+            keepImagesUntilSaved={keepImagesUntilSaved}
+            onChange={(next) => patchBlock(block.id, () => next)}
+            patch={(change) => patchBlock(block.id, change)}
+          />
           <div className="mt-3 border-t border-zinc-100 pt-3">
-            <AddBlock allowed={allowed} label="Add below" onAdd={(type) => insert(index + 1, type)} />
+            <AddBlock allowed={allowed} label="Add below" onAdd={(type) => insertAfter(block.id, type)} />
           </div>
         </article>
       ))}
@@ -173,9 +212,13 @@ function AddBlock({
 function BlockFields({
   block,
   onChange,
+  patch,
+  keepImagesUntilSaved,
 }: {
   block: ContentBlock;
   onChange: (block: ContentBlock) => void;
+  patch: BlockPatch;
+  keepImagesUntilSaved: boolean;
 }) {
   if (block.type === "heading") {
     const heading = block as HeadingBlock;
@@ -221,8 +264,17 @@ function BlockFields({
         <ImageField
           label="Image"
           url={image.url}
-          onChange={(url) => onChange({ ...image, url })}
+          deleteOnReplace={!keepImagesUntilSaved}
+          onChange={(url) => patch((latest) => (latest.type === "image" ? { ...latest, url } : null))}
         />
+        <label className="block text-sm">
+          Figure title <span className="text-xs text-zinc-500">(optional, shown above the image)</span>
+          <input
+            value={image.title ?? ""}
+            onChange={(e) => onChange({ ...image, title: e.target.value })}
+            className="mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm"
+          />
+        </label>
         <label className="block text-sm">
           Alt text
           <input
@@ -261,7 +313,8 @@ function BlockFields({
         <ImageField
           label="UI screenshot"
           url={shot.url}
-          onChange={(url) => onChange({ ...shot, url })}
+          deleteOnReplace={!keepImagesUntilSaved}
+          onChange={(url) => patch((latest) => (latest.type === "ui" ? { ...latest, url } : null))}
         />
         <label className="block text-sm">
           Alt text
@@ -341,7 +394,11 @@ function BlockFields({
   }
 
   if (block.type === "gallery") {
-    return <GalleryFields gallery={block} onChange={onChange} />;
+    return <GalleryFields gallery={block} patch={patch} keepImagesUntilSaved={keepImagesUntilSaved} />;
+  }
+
+  if (block.type === "list") {
+    return <ListFields list={block} patch={patch} />;
   }
 
   if (block.type === "code") {
@@ -432,27 +489,40 @@ function BlockFields({
 
 function GalleryFields({
   gallery,
-  onChange,
+  patch,
+  keepImagesUntilSaved,
 }: {
   gallery: GalleryBlock;
-  onChange: (block: ContentBlock) => void;
+  patch: BlockPatch;
+  keepImagesUntilSaved: boolean;
 }) {
-  function setImages(images: GalleryBlock["images"]) {
-    onChange({ ...gallery, images });
+  function setImages(change: (images: GalleryBlock["images"]) => GalleryBlock["images"] | null) {
+    return patch((latest) => {
+      if (latest.type !== "gallery") return null;
+      const images = change(latest.images);
+      return images ? { ...latest, images } : null;
+    });
   }
   return (
     <div className="space-y-3">
       {gallery.images.map((image, i) => (
-        <div key={`${gallery.id}-img-${i}`} className="space-y-2 rounded border border-zinc-200 p-3">
+        <div key={image.id} className="space-y-2 rounded border border-zinc-200 p-3">
           <ImageField
             label={`Image ${i + 1}`}
             url={image.url}
-            onChange={(url) => setImages(gallery.images.map((img, n) => (n === i ? { ...img, url } : img)))}
+            deleteOnReplace={!keepImagesUntilSaved}
+            onChange={(url) =>
+              setImages((images) =>
+                images.some((img) => img.id === image.id)
+                  ? images.map((img) => (img.id === image.id ? { ...img, url } : img))
+                  : null,
+              )
+            }
           />
           <input
             value={image.alt}
             onChange={(e) =>
-              setImages(gallery.images.map((img, n) => (n === i ? { ...img, alt: e.target.value } : img)))
+              setImages((images) => images.map((img) => (img.id === image.id ? { ...img, alt: e.target.value } : img)))
             }
             placeholder="Alt text"
             className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
@@ -460,7 +530,7 @@ function GalleryFields({
           <button
             type="button"
             className="rounded border border-zinc-300 px-2 py-1 text-xs"
-            onClick={() => setImages(gallery.images.filter((_, n) => n !== i))}
+            onClick={() => setImages((images) => images.filter((img) => img.id !== image.id))}
           >
             Remove image
           </button>
@@ -469,16 +539,170 @@ function GalleryFields({
       <button
         type="button"
         className="rounded border border-zinc-300 px-3 py-1.5 text-xs"
-        onClick={() => setImages([...gallery.images, { url: "", alt: "" }])}
+        onClick={() => setImages((images) => [...images, newGalleryImage()])}
       >
         + Image
       </button>
       <input
         value={gallery.caption ?? ""}
-        onChange={(e) => onChange({ ...gallery, caption: e.target.value })}
+        onChange={(e) =>
+          patch((latest) => (latest.type === "gallery" ? { ...latest, caption: e.target.value } : null))
+        }
         placeholder="Caption (optional)"
         className="w-full rounded border border-zinc-300 px-3 py-2 text-sm"
       />
+    </div>
+  );
+}
+
+function ListFields({ list, patch }: { list: ListBlock; patch: BlockPatch }) {
+  const fields = useRef(new Map<string, HTMLTextAreaElement>());
+  const focusId = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!focusId.current) return;
+    fields.current.get(focusId.current)?.focus();
+    focusId.current = null;
+  });
+
+  function setItems(change: (items: ListItem[]) => ListItem[]) {
+    patch((latest) => (latest.type === "list" ? { ...latest, items: change(latest.items) } : null));
+  }
+
+  function insertAfter(id: string, texts: string[]) {
+    const created = texts.map((text) => newListItem(text));
+    focusId.current = created[created.length - 1]?.id ?? null;
+    setItems((items) => {
+      const at = items.findIndex((item) => item.id === id) + 1;
+      return [...items.slice(0, at), ...created, ...items.slice(at)];
+    });
+  }
+
+  function moveItem(id: string, direction: "up" | "down") {
+    setItems((items) => {
+      const index = items.findIndex((item) => item.id === id);
+      const swap = direction === "up" ? index - 1 : index + 1;
+      if (index < 0 || swap < 0 || swap >= items.length) return items;
+      const next = [...items];
+      [next[index], next[swap]] = [next[swap], next[index]];
+      return next;
+    });
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="flex flex-wrap gap-4 text-sm" role="radiogroup" aria-label="List style">
+        <label className="flex items-center gap-2">
+          <input
+            type="radio"
+            name={`${list.id}-style`}
+            checked={!list.ordered}
+            onChange={() => patch((latest) => (latest.type === "list" ? { ...latest, ordered: false } : null))}
+          />
+          Bulleted
+        </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="radio"
+            name={`${list.id}-style`}
+            checked={list.ordered}
+            onChange={() => patch((latest) => (latest.type === "list" ? { ...latest, ordered: true } : null))}
+          />
+          Numbered
+        </label>
+      </div>
+      <p className="text-xs text-zinc-500">
+        **bold**, *italic*, [link](https://…) work inside items. Enter adds an item; pasting several lines makes several items.
+      </p>
+      <ol className="space-y-2">
+        {list.items.map((item, index) => (
+          <li key={item.id} className="flex flex-wrap items-start gap-x-2 gap-y-1 sm:flex-nowrap">
+            <span className="w-6 shrink-0 pt-2 text-right text-sm text-zinc-500" aria-hidden="true">
+              {list.ordered ? `${index + 1}.` : "•"}
+            </span>
+            <textarea
+              ref={(el) => {
+                if (el) fields.current.set(item.id, el);
+                else fields.current.delete(item.id);
+              }}
+              value={item.text}
+              rows={2}
+              aria-label={`Item ${index + 1}`}
+              onChange={(e) =>
+                setItems((items) =>
+                  items.map((entry) => (entry.id === item.id ? { ...entry, text: e.target.value.replace(/\n/g, " ") } : entry)),
+                )
+              }
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+                  e.preventDefault();
+                  insertAfter(item.id, [""]);
+                } else if (e.key === "Backspace" && item.text === "" && list.items.length > 1) {
+                  e.preventDefault();
+                  const previous = list.items[index - 1] ?? list.items[index + 1];
+                  focusId.current = previous?.id ?? null;
+                  setItems((items) => items.filter((entry) => entry.id !== item.id));
+                }
+              }}
+              onPaste={(e) => {
+                const lines = e.clipboardData
+                  .getData("text")
+                  .split(/\r?\n/)
+                  .map((line) => line.replace(/^\s*(?:[-*•]|\d+[.)])\s+/, "").trim())
+                  .filter(Boolean);
+                if (lines.length < 2) return;
+                e.preventDefault();
+                const [first, ...rest] = lines;
+                setItems((items) => {
+                  const at = items.findIndex((entry) => entry.id === item.id);
+                  const created = rest.map((text) => newListItem(text));
+                  const merged = items.map((entry) =>
+                    entry.id === item.id ? { ...entry, text: entry.text ? `${entry.text} ${first}` : first } : entry,
+                  );
+                  return [...merged.slice(0, at + 1), ...created, ...merged.slice(at + 1)];
+                });
+              }}
+              className="min-w-0 flex-1 basis-[calc(100%-2rem)] rounded border border-zinc-300 px-3 py-2 text-sm [field-sizing:content] sm:basis-0"
+            />
+            <div className="flex shrink-0 gap-1 pl-8 sm:pl-0">
+              <button
+                type="button"
+                className="rounded border border-zinc-300 px-2 py-1 text-xs disabled:opacity-40"
+                disabled={index === 0}
+                aria-label={`Move item ${index + 1} up`}
+                onClick={() => moveItem(item.id, "up")}
+              >
+                Up
+              </button>
+              <button
+                type="button"
+                className="rounded border border-zinc-300 px-2 py-1 text-xs disabled:opacity-40"
+                disabled={index === list.items.length - 1}
+                aria-label={`Move item ${index + 1} down`}
+                onClick={() => moveItem(item.id, "down")}
+              >
+                Down
+              </button>
+              <button
+                type="button"
+                className="rounded border border-red-200 px-2 py-1 text-xs text-red-700 disabled:opacity-40"
+                disabled={list.items.length === 1}
+                aria-label={`Remove item ${index + 1}`}
+                onClick={() => setItems((items) => items.filter((entry) => entry.id !== item.id))}
+              >
+                Remove
+              </button>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <button
+        type="button"
+        className="rounded border border-zinc-300 px-3 py-1.5 text-xs"
+        onClick={() => insertAfter(list.items[list.items.length - 1]?.id ?? "", [""])}
+      >
+        + Item
+      </button>
     </div>
   );
 }

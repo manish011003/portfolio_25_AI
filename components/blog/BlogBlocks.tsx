@@ -7,11 +7,24 @@ import { ImageLightbox } from "@/components/pm/ImageLightbox";
 
 const reveal = { "--del": "0s" } as CSSProperties;
 
-function Figure({ url, alt, caption, className }: { url: string; alt: string; caption?: string; className: string }) {
+function Figure({
+  url,
+  alt,
+  title,
+  caption,
+  className,
+}: {
+  url: string;
+  alt: string;
+  title?: string;
+  caption?: string;
+  className: string;
+}) {
   if (!url) return null;
   const label = alt || caption || "Blog image";
   return (
     <figure className={className}>
+      {title?.trim() ? <p className="bb-figtitle">{title}</p> : null}
       <ImageLightbox src={url} alt={label} caption={caption} className="bb-lightbox">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={url} alt="" loading="lazy" />
@@ -32,7 +45,21 @@ function BlockView({ block }: { block: ContentBlock }) {
         </p>
       );
     case "image":
-      return <Figure url={block.url} alt={block.alt} caption={block.caption} className={`bb-figure ${block.size === "inline" ? "bb-inline" : "bb-full"}`} />;
+      return <Figure url={block.url} alt={block.alt} title={block.title} caption={block.caption} className={`bb-figure ${block.size === "inline" ? "bb-inline" : "bb-full"}`} />;
+    case "list": {
+      const items = block.items.filter((item) => item.text.trim());
+      if (!items.length) return null;
+      const List = block.ordered ? "ol" : "ul";
+      return (
+        <List className={`bb-list ${block.ordered ? "bb-ol" : "bb-ul"}`}>
+          {items.map((item) => (
+            <li key={item.id}>
+              <InlineText text={item.text} />
+            </li>
+          ))}
+        </List>
+      );
+    }
     case "ui":
       return <Figure url={block.url} alt={block.alt} caption={block.caption} className="bb-figure bb-full bb-ui" />;
     case "gallery": {

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { BlogPostForm } from "@/components/admin/BlogPostForm";
 import { toDateInput } from "@/lib/blog";
+import { postRevision } from "@/lib/blog-persist";
 import { getBlogPostById } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
@@ -18,6 +19,7 @@ export default async function EditBlogPostPage({ params }: { params: Promise<{ i
           ...post,
           publishedAt: toDateInput(post.publishedAt),
         }}
+        revision={postRevision(post)}
       />
     </AdminShell>
   );

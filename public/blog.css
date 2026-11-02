@@ -461,6 +461,13 @@ h1, h2, h3 { font-family: 'Poppins', sans-serif; }
 .bb-h3 { font-size: 22px; line-height: 1.3; font-weight: 600; color: var(--ptext); }
 .bb-p { font-size: 18px; line-height: 31px; color: var(--text); white-space: pre-line; }
 .bb-p a { color: var(--red); text-decoration: underline; text-underline-offset: 3px; }
+.bb-list { display: grid; gap: 10px; padding-left: 1.6em; font-size: 18px; line-height: 31px; color: var(--text); }
+.bb-ul { list-style: disc; }
+.bb-ol { list-style: decimal; }
+.bb-list li { padding-left: 4px; }
+.bb-list li::marker { color: var(--red); font-weight: 600; }
+.bb-list a { color: var(--red); text-decoration: underline; text-underline-offset: 3px; }
+.bb-figtitle { margin: 0 0 14px; text-align: center; font-family: 'Poppins', sans-serif; font-size: 20px; line-height: 1.35; font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
 .bb-figure { margin: 6px 0; }
 .bb-figure img, .bb-gallery img { width: 100%; height: auto; border-radius: 10px; display: block; box-shadow: var(--shadow-img); }
 .bb-full { margin-inline: min(0px, 0px); }

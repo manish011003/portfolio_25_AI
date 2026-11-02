@@ -4,33 +4,12 @@ import { Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { actionError } from "@/lib/action-error";
 import { requireAdmin } from "@/lib/auth";
-import { asBody, bodyToPlainText, imageUrlsFromBody } from "@/lib/blocks";
-import { asBlogCategory, estimateReadMinutes, type BlogDraft } from "@/lib/blog";
+import { asBody, imageUrlsFromBody } from "@/lib/blocks";
+import type { BlogDraft } from "@/lib/blog";
+import { persistBlogDraft } from "@/lib/blog-persist";
 import { prisma } from "@/lib/prisma";
 import { revalidateBlog } from "@/lib/revalidate";
-import { parseTags, slugify } from "@/lib/slug";
 import { deleteStoredImages } from "./upload";
-
-function draftToData(draft: BlogDraft) {
-  const title = draft.title.trim() || "Untitled post";
-  const slug = slugify(draft.slug || title) || `untitled-${Date.now()}`;
-  const body = asBody(draft.body);
-  const published = draft.publishedAt ? new Date(`${draft.publishedAt}T00:00:00.000Z`) : null;
-  return {
-    title,
-    slug,
-    excerpt: draft.excerpt.trim() || bodyToPlainText(body).slice(0, 180),
-    category: asBlogCategory(draft.category),
-    tags: parseTags(draft.tags.join(",")),
-    emoji: draft.emoji?.trim() || null,
-    coverImage: draft.coverImage?.trim() || null,
-    body: body as Prisma.InputJsonValue,
-    publishedAt: published && !Number.isNaN(published.getTime()) ? published : null,
-    readMinutes: Number(draft.readMinutes) > 0 ? Math.round(Number(draft.readMinutes)) : estimateReadMinutes(body),
-    metaTitle: draft.metaTitle.trim() || null,
-    metaDescription: draft.metaDescription.trim() || null,
-  };
-}
 
 function slugTaken(error: unknown) {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
@@ -72,44 +51,42 @@ export async function createDraftBlogPost() {
   redirect(`/admin/blog/${created.id}`);
 }
 
-export async function saveBlogDraft(id: string, draft: BlogDraft) {
+/**
+ * Writes the editor's draft. `baseRevision` is the revision token the editor last received; a
+ * stale one gets `{ conflict: true }` back instead of silently replacing newer content.
+ */
+export async function saveBlogDraft(id: string, draft: BlogDraft, baseRevision: string, force = false) {
   try {
     await requireAdmin();
-    const existing = await prisma.blogPost.findUnique({ where: { id } });
-    if (!existing) return { error: "Not found" };
+    const result = await persistBlogDraft(prisma, id, draft, { baseRevision, force });
+    if ("notFound" in result) return { error: "Not found" };
+    if ("conflict" in result) return { conflict: true as const, revision: result.revision };
 
-    const data = draftToData(draft);
-    const nextImages = new Set([data.coverImage, ...imageUrlsFromBody(asBody(data.body))]);
-    const orphaned = [existing.coverImage, ...imageUrlsFromBody(asBody(existing.body))].filter(
+    const nextImages = new Set([result.stored.coverImage, ...imageUrlsFromBody(asBody(result.stored.body))]);
+    const orphaned = [result.previous.coverImage, ...imageUrlsFromBody(asBody(result.previous.body))].filter(
       (url) => url && !nextImages.has(url),
     );
-
-    await prisma.blogPost.update({ where: { id }, data });
     await deleteUnusedImages(orphaned, id);
-    if (existing.status === "published") {
-      revalidateBlog(existing.slug);
-      revalidateBlog(data.slug);
+    if (result.previous.status === "published") {
+      revalidateBlog(result.previous.slug);
+      revalidateBlog(result.slug);
     }
-    return { ok: true, savedAt: new Date().toISOString(), slug: data.slug };
+    return { ok: true as const, savedAt: result.savedAt, slug: result.slug, revision: result.revision };
   } catch (error) {
     if (slugTaken(error)) return { error: "That slug is already used by another post." };
     return actionError(error, "Save failed. Try again.");
   }
 }
 
-export async function publishBlogPost(id: string, draft: BlogDraft) {
+export async function publishBlogPost(id: string, draft: BlogDraft, baseRevision: string, force = false) {
   try {
     await requireAdmin();
-    const existing = await prisma.blogPost.findUnique({ where: { id } });
-    if (!existing) return { error: "Not found" };
-    const data = draftToData(draft);
-    await prisma.blogPost.update({
-      where: { id },
-      data: { ...data, status: "published", publishedAt: data.publishedAt ?? existing.publishedAt ?? new Date() },
-    });
-    revalidateBlog(existing.slug);
-    revalidateBlog(data.slug);
-    return { ok: true };
+    const result = await persistBlogDraft(prisma, id, draft, { baseRevision, force, publish: true });
+    if ("notFound" in result) return { error: "Not found" };
+    if ("conflict" in result) return { conflict: true as const, revision: result.revision };
+    revalidateBlog(result.previous.slug);
+    revalidateBlog(result.slug);
+    return { ok: true as const, revision: result.revision, slug: result.slug };
   } catch (error) {
     if (slugTaken(error)) return { error: "That slug is already used by another post." };
     return actionError(error, "Publish failed. Try again.");

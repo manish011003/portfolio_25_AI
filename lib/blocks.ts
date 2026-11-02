@@ -40,6 +40,8 @@ export type ImageBlock = {
   type: "image";
   url: string;
   alt: string;
+  /** Optional heading shown above the image; the caption stays below it. */
+  title?: string;
   caption?: string;
   size: ImageSize;
 };
@@ -84,11 +86,31 @@ export type DividerBlock = {
   type: "divider";
 };
 
+export type GalleryImage = {
+  /** Stable key for editing; older posts get one assigned when they are loaded. */
+  id: string;
+  url: string;
+  alt: string;
+};
+
 export type GalleryBlock = {
   id: string;
   type: "gallery";
-  images: { url: string; alt: string }[];
+  images: GalleryImage[];
   caption?: string;
+};
+
+export type ListItem = {
+  id: string;
+  /** Supports the same **bold**, *italic* and [link](https://…) markup as paragraphs. */
+  text: string;
+};
+
+export type ListBlock = {
+  id: string;
+  type: "list";
+  ordered: boolean;
+  items: ListItem[];
 };
 
 export type CodeBlock = {
@@ -116,6 +138,7 @@ export type CtaBlock = {
 
 export type ContentBlock =
   | GalleryBlock
+  | ListBlock
   | CodeBlock
   | VideoBlock
   | CtaBlock
@@ -162,6 +185,14 @@ export function newBlockId() {
   return `b-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+export function newGalleryImage(): GalleryImage {
+  return { id: newBlockId(), url: "", alt: "" };
+}
+
+export function newListItem(text = ""): ListItem {
+  return { id: newBlockId(), text };
+}
+
 export function createBlock(type: ContentBlock["type"]): ContentBlock {
   const id = newBlockId();
   switch (type) {
@@ -170,7 +201,7 @@ export function createBlock(type: ContentBlock["type"]): ContentBlock {
     case "paragraph":
       return { id, type, text: "" };
     case "image":
-      return { id, type, url: "", alt: "", caption: "", size: "full" };
+      return { id, type, url: "", alt: "", title: "", caption: "", size: "full" };
     case "ui":
       return { id, type, url: "", alt: "", caption: "" };
     case "chart":
@@ -194,7 +225,9 @@ export function createBlock(type: ContentBlock["type"]): ContentBlock {
     case "divider":
       return { id, type };
     case "gallery":
-      return { id, type, images: [{ url: "", alt: "" }, { url: "", alt: "" }], caption: "" };
+      return { id, type, images: [newGalleryImage(), newGalleryImage()], caption: "" };
+    case "list":
+      return { id, type, ordered: false, items: [newListItem()] };
     case "code":
       return { id, type, language: "", code: "" };
     case "video":
@@ -292,13 +325,48 @@ function asChartData(value: unknown): ChartDatum[] {
     .filter((row): row is ChartDatum => Boolean(row));
 }
 
+/**
+ * Block ids must be unique inside a post: they are React keys and the target of every edit.
+ * Posts saved before ids existed (or with colliding ids) get a deterministic fallback so the
+ * same stored body always loads with the same ids.
+ */
+function uniqueId(raw: unknown, fallback: string, used: Set<string>) {
+  let id = String(raw ?? "").trim() || fallback;
+  for (let n = 2; used.has(id); n += 1) id = `${fallback}-${n}`;
+  used.add(id);
+  return id;
+}
+
+function asGalleryImages(value: unknown, blockId: string): GalleryImage[] {
+  if (!Array.isArray(value)) return [];
+  const used = new Set<string>();
+  return value.map((img, index) => {
+    const row = (img ?? {}) as Record<string, unknown>;
+    return {
+      id: uniqueId(row.id, `${blockId}-i${index}`, used),
+      url: String(row.url ?? ""),
+      alt: String(row.alt ?? ""),
+    };
+  });
+}
+
+function asListItems(value: unknown, blockId: string): ListItem[] {
+  if (!Array.isArray(value)) return [];
+  const used = new Set<string>();
+  return value.map((item, index) => {
+    const row = typeof item === "string" ? { text: item } : ((item ?? {}) as Record<string, unknown>);
+    return { id: uniqueId(row.id, `${blockId}-l${index}`, used), text: String(row.text ?? "") };
+  });
+}
+
 export function asBody(value: unknown, fallbackDescription = ""): ContentBlock[] {
   if (Array.isArray(value) && value.length > 0) {
     const blocks: ContentBlock[] = [];
+    const usedIds = new Set<string>();
     for (const item of value) {
       if (!item || typeof item !== "object") continue;
       const raw = item as Record<string, unknown>;
-      const id = String(raw.id ?? "").trim() || `b-${blocks.length}`;
+      const id = uniqueId(raw.id, `b-${blocks.length}`, usedIds);
       switch (raw.type) {
         case "heading":
           blocks.push({
@@ -317,6 +385,7 @@ export function asBody(value: unknown, fallbackDescription = ""): ContentBlock[]
             type: "image",
             url: String(raw.url ?? ""),
             alt: String(raw.alt ?? ""),
+            title: String(raw.title ?? ""),
             caption: String(raw.caption ?? ""),
             size: raw.size === "inline" ? "inline" : "full",
           });
@@ -367,13 +436,16 @@ export function asBody(value: unknown, fallbackDescription = ""): ContentBlock[]
           blocks.push({
             id,
             type: "gallery",
-            images: Array.isArray(raw.images)
-              ? raw.images.map((img) => {
-                  const row = (img ?? {}) as Record<string, unknown>;
-                  return { url: String(row.url ?? ""), alt: String(row.alt ?? "") };
-                })
-              : [],
+            images: asGalleryImages(raw.images, id),
             caption: String(raw.caption ?? ""),
+          });
+          break;
+        case "list":
+          blocks.push({
+            id,
+            type: "list",
+            ordered: raw.ordered === true,
+            items: asListItems(raw.items, id),
           });
           break;
         case "code":
@@ -420,6 +492,9 @@ export function bodyToPlainText(body: ContentBlock[]) {
     .map((block) => {
       if (block.type === "paragraph" || block.type === "heading" || block.type === "quote") {
         return block.text.trim();
+      }
+      if (block.type === "list") {
+        return block.items.map((item) => item.text.trim()).filter(Boolean).join("\n");
       }
       if (block.type === "persona") {
         return [block.name, block.role, block.text].filter(Boolean).join(" — ").trim();
