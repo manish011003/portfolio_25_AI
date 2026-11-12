@@ -12,6 +12,7 @@ import {
   FALLBACK_SKILLS,
   FALLBACK_STUDIES,
 } from "@/lib/fallback";
+import { DEFAULT_OG_IMAGE, JsonLd, PERSON_ID, SITE, SITE_NAME, breadcrumbs } from "@/lib/seo";
 import { getExperiences, getFeaturedCaseStudies, getHeroStats, getSkills } from "@/lib/queries";
 
 export const revalidate = 60;
@@ -21,6 +22,34 @@ export const metadata: Metadata = {
   description:
     "Product management portfolio by Manish Biswas — Ironclad, Claro AI, SIH e-waste platform, and AI task agent.",
   alternates: { canonical: "/pm" },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: "PM Portfolio — Manish Biswas",
+    description: "Product case studies by Manish Biswas — Ironclad, Claro AI, SIH e-waste platform, and AI task agent.",
+    url: `${SITE}/pm`,
+    images: [DEFAULT_OG_IMAGE],
+  },
+  twitter: { card: "summary_large_image", title: "PM Portfolio — Manish Biswas", description: "Product case studies: Ironclad, Claro AI, SIH e-waste platform and more.", images: [DEFAULT_OG_IMAGE.url] },
+};
+
+const pmJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfilePage",
+      "@id": `${SITE}/pm#webpage`,
+      url: `${SITE}/pm`,
+      name: "PM Portfolio — Manish Biswas",
+      isPartOf: { "@id": `${SITE}/#website` },
+      about: { "@id": PERSON_ID },
+      inLanguage: "en",
+    },
+    breadcrumbs([
+      { name: "Home", path: "/" },
+      { name: "PM Portfolio", path: "/pm" },
+    ]),
+  ],
 };
 
 export default async function PmPage() {
@@ -47,6 +76,7 @@ export default async function PmPage() {
 
   return (
     <div className="paper-lines min-h-screen text-ink">
+      <JsonLd data={pmJsonLd} />
       <a className="skip-link" href="#main">
         Skip to content
       </a>
