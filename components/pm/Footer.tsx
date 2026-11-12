@@ -3,7 +3,7 @@ export function Footer() {
     <footer className="bg-ink py-8 text-cream">
       <div className="page-shell flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-cream/70">
-          © {new Date().getFullYear()} Manish Biswas. Product management portfolio.
+          © {new Date().getFullYear()} Manish Biswas — AI Engineer &amp; Product Manager. Product management portfolio.
         </p>
         <div className="flex flex-wrap gap-4 font-mono text-[11px] uppercase tracking-[0.16em]">
           <a href="/" className="hover:text-yellow">
